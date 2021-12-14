@@ -1,0 +1,72 @@
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+
+<!-- Font-awesome -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="/app.css">
+
+<!-- bootstrap javascript -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+
+<!-- page content -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="col-lg-1">
+        <img class="xfel_image" src='3.78595.512.Logo_XFEL_positiv_.jpg' alt="XFEL photo">
+    </div>
+    <a class="navbar-brand title" href="">Targeter Database</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav ms-auto">
+            <li class="navbar-item">
+                <a class="nav-link" href="#manual_insert">Insert Data Manually</a>
+            </li>
+            <li class="navbar-item">
+                <a class="nav-link" href="#xml_insert">Insert Data via XML File</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row title">
+        <div class="row">
+            <div class="col-lg-12">
+                <!--<h1>Targeter Database</h1>-->
+                <h1 class="site_msg"><em>There are </em><strong>
+                        <%=data%>
+                    </strong><em> Subframe Information Available in the Database</em></h1>
+                <br>
+                <!--<h1 class="site_dev"><em>Website Under Developement...</em></h1>-->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="POST" action='/submitXMLFile'>
+                <div class="form-group">
+                    <label class="label-text" id="xml_insert" for="xmlFileLoad">Submit the Experiment (XML file): </label>
+                    <input type="file" class="form-control-file" id="xmlFileLoad" name="xmlFile">
+                </div>
+                <button class="btn btn-secondary">Load the Data from XML File</button>
+            </form>
+            <form method="POST" action='/submitDataManually'>
+                <div class="form-group">
+                    <label class="label-text" id="manual_insert">Do you like to insert the data manually?</label>
+                </div>
+                <button class="btn btn-secondary">Insert the Data Manually</button>
+            </form>
+        </div>
+    </div>
+</div>

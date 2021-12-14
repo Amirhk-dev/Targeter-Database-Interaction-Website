@@ -1,0 +1,157 @@
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+
+<!-- Font-awesome -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="/app.css">
+
+<!-- bootstrap javascript -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+
+<!-- page content -->
+<Route path=‘/‘ component={Homepage} />
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="col-lg-1">
+        <img class="xfel_image" src='3.78595.512.Logo_XFEL_positiv_.jpg' alt="XFEL photo">
+    </div>
+    <a class="navbar-brand title" href="">Targeter Database</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav ms-auto">
+            <li class="navbar-item">
+                <a class="nav-link" href="#manual_insert">Insert Data Manually</a>
+            </li>
+            <li class="navbar-item">
+                <a class="nav-link" href="#xml_insert">Insert Data via XML File</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row title">
+        <div class="row">
+            <div class="col-lg-12">
+                <!--<h1>Targeter Database</h1>-->
+                <h1 class="site_msg"><em>There are </em><strong>
+                        <%=data%>
+                    </strong><em> Subframe Information Available in the Database</em></h1>
+                <br>
+                <!--<h1 class="site_dev"><em>Website Under Developement...</em></h1>-->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="POST" action='/submitExperimentXML'>
+                <!--<div class="form-group">
+                    <label for="xmlFileLoad">Submit the Experiment (XML file)</label>
+                    <input type="file" class="form-control-file" id="xmlFileLoad" name="xmlFile">
+                </div>-->
+                <div class="form-group">
+                    <p class="lead_text">Subframe Data From the XML File: </p>
+                    <label class="label-text" margin-top=20>Group Name: </label>
+                    <input type="text" name="GroupName" value=<%=groupname%>>
+                    <br>
+                    <label class="label-text">Subframe Type Name: </label>
+                    <input type="text" name="SubframeTypeName" value=<%=subframetypename%>>
+                    <br>
+                    <label class="label-text">Facility Name: </label>
+                    <input type="text" name="FacilityName" value=<%=facilityname%>>
+                    <br>
+                    <label class="label-text">Serial Number: </label>
+                    <input type="text" name="SerialNumber" value=<%=serialnumber%>>
+                    <br>
+                    <label class="label-text">Size X: </label>
+                    <input type="text" name="SizeX" value=<%=sizex%>>
+                    <br>
+                    <label class="label-text">Size Y: </label>
+                    <input type="text" name="SizeY" value=<%=sizey%>>
+                    <br>
+                    <label class="label-text">Comment: </label>
+                    <input type="text" name="Comment" value="<%=comment%>">
+                    <br>
+                    <p class="lead_text">Fiducial Points Data From the XML File: </p>
+                    <p class="label-text"><em>Fiducial 1: </em></p>
+                    <label class="label-text">Validity: </label>
+                    <input type="text" name="fid1_Validity" value=<%=fid1_validity%>>
+                    <br>
+                    <label class="label-text">Psition Name: </label>
+                    <input type="text" name="fid1_PositionName" value=<%=fid1_positionname%>>
+                    <br>
+                    <label class="label-text">X Position: </label>
+                    <input type="text" name="fid1_X_position" value=<%=fid1_xposition%>>
+                    <br>
+                    <label class="label-text">Y Position: </label>
+                    <input type="text" name="fid1_Y_position" value=<%=fid1_yposition%>>
+                    <br>
+                    <label class="label-text">Z Position: </label>
+                    <input type="text" name="fid1_Z_position" value=<%=fid1_zposition%>>
+                    <br>
+                    <p class="label-text"><em>Fiducial 2: </em></p>
+                    <label class="label-text">Validity: </label>
+                    <input type="text" name="fid2_Validity" value=<%=fid2_validity%>>
+                    <br>
+                    <label class="label-text">Psition Name: </label>
+                    <input type="text" name="fid2_PositionName" value=<%=fid2_positionname%>>
+                    <br>
+                    <label class="label-text">X Position: </label>
+                    <input type="text" name="fid2_X_position" value=<%=fid2_xposition%>>
+                    <br>
+                    <label class="label-text">Y Position: </label>
+                    <input type="text" name="fid2_Y_position" value=<%=fid2_yposition%>>
+                    <br>
+                    <label class="label-text">Z Position: </label>
+                    <input type="text" name="fid2_Z_position" value=<%=fid2_zposition%>>
+                    <br>
+                    <p class="label-text"><em>Fiducial 3: </em></p>
+                    <label class="label-text">Validity: </label>
+                    <input type="text" name="fid3_Validity" value=<%=fid3_validity%>>
+                    <br>
+                    <label class="label-text">Psition Name: </label>
+                    <input type="text" name="fid3_PositionName" value=<%=fid3_positionname%>>
+                    <br>
+                    <label class="label-text">X Position: </label>
+                    <input type="text" name="fid3_X_position" value=<%=fid3_xposition%>>
+                    <br>
+                    <label class="label-text">Y Position: </label>
+                    <input type="text" name="fid3_Y_position" value=<%=fid3_yposition%>>
+                    <br>
+                    <label class="label-text">Z Position: </label>
+                    <input type="text" name="fid3_Z_position" value=<%=fid3_zposition%>>
+                    <br>
+                    <p class="label-text"><em>Fiducial 4: </em></p>
+                    <label class="label-text">Validity: </label>
+                    <input type="text" name="fid4_Validity" value=<%=fid4_validity%>>
+                    <br>
+                    <label class="label-text">Psition Name: </label>
+                    <input type="text" name="fid4_PositionName" value=<%=fid4_positionname%>>
+                    <br>
+                    <label class="label-text">X Position: </label>
+                    <input type="text" name="fid4_X_position" value=<%=fid4_xposition%>>
+                    <br>
+                    <label class="label-text">Y Position: </label>
+                    <input type="text" name="fid4_Y_position" value=<%=fid4_yposition%>>
+                    <br>
+                    <label class="label-text">Z Position: </label>
+                    <input type="text" name="fid4_Z_position" value=<%=fid4_zposition%>>
+                </div>
+                <br>
+                <button class="btn btn-secondary">Submit the Data</button>
+            </form>
+        </div>
+    </div>
+</div>

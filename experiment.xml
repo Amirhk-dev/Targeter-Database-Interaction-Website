@@ -1,0 +1,40 @@
+<experiment>
+    <subframe>
+        <GroupName>HED</GroupName>
+        <SubframeTypeName>FOI</SubframeTypeName>
+        <FacilityName>ELIBL</FacilityName>
+        <SizeX>200</SizeX>
+        <SizeY>200</SizeY>
+        <Comment>Insertion Demo 1</Comment>
+    </subframe>
+    <fiducials>
+        <fiducial1>    
+            <Validity>1</Validity>
+            <PositionName>bottom-left</PositionName>
+            <X_position>0</X_position>
+            <Y_position>0</Y_position>
+            <Z_position>0</Z_position>
+        </fiducial1>
+        <fiducial2>
+            <Validity>1</Validity>
+            <PositionName>bottom-right</PositionName>
+            <X_position>190</X_position>
+            <Y_position>0</Y_position>
+            <Z_position>0</Z_position>
+        </fiducial2>
+        <fiducial3>    
+            <Validity>1</Validity>
+            <PositionName>top-left</PositionName>
+            <X_position>0</X_position>
+            <Y_position>190</Y_position>
+            <Z_position>0</Z_position>
+        </fiducial3>
+        <fiducial4>    
+            <Validity>1</Validity>
+            <PositionName>top-right</PositionName>
+            <X_position>190</X_position>
+            <Y_position>190</Y_position>
+            <Z_position>0</Z_position>
+        </fiducial4>
+    </fiducials>    
+</experiment>

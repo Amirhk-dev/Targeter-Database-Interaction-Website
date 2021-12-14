@@ -1,0 +1,162 @@
+/*body {
+  text-align: center;
+  text-shadow: 0 .05rem .1rem rgba(1,0,0,.5);
+  font-family: 'Roboto', sans-serif;
+  color: rgb(0, 0, 0);
+  height: 100%;
+  background-image: url('http://i.imgur.com/BJP2Q1j.jpg');
+  background-size: cover;
+  font-weight: 0.1rem;
+}
+*/
+
+hr {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 5px solid rgba(0, 0, 0, 0.1);
+}
+
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/*.flex-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+}*/
+
+.container-fluid {
+  padding: 2% 0%;
+}
+
+.container-fluid.button {
+  padding: 0% 20% 10% 45%;
+}
+
+.site_msg {
+  font-family: "Montserrat Extra-light 200";
+  font-size: 1.4rem;
+  line-height: 1.0rem;
+  margin: 100 0 50 0;
+  /*margin: 100 0;
+  font-size: 1.5rem;
+  line-height: 0.5rem;*/
+  /*font-weight: 10;*/
+}
+
+.site_dev {
+  font-family: "Montserrat Extra-light 100";
+  font-size: 1.2rem;
+  line-height: 1.0rem;
+  margin: 0 0 50 0;
+}
+
+.lead_text_fiducial {
+  margin: 20 10 0 0;
+  font-family: "Montserrat-Bold";
+  font-size: 1.5rem;
+}
+
+p {
+  margin: 10 0;
+  font-size: 1rem;
+}
+
+a.title {
+  font-family: "Montserrat Extra-light 200";
+  font-size: 1.8rem;
+  margin-left: 32%;
+}
+
+a {
+  font-family: "Montserrat Extra-light 200";
+  font-size: 1.5rem;
+}
+
+button {
+  margin: 2% 0%;
+}
+
+.nav-link {
+  font-family: "Montserrat Extra-light 200";
+  font-size: 1.0rem;
+}
+
+.nav-item.dropdown {
+  margin: 0% 0% 10% 0%;
+}
+
+/*.form {
+	line-height: 1.5;
+	border: none;
+	border-bottom: 3px solid #ebebeb;
+	margin-top: 100px;
+	width: 700px;
+	font-size: 1.0rem;
+	color: black;
+	padding: 5px 10px;
+	background: transparent;
+}
+*/
+
+.row {
+  padding: 0% 15%;
+}
+
+.row.title {
+  text-align: center;
+}
+
+/*button {
+    margin: 50 0;
+    line-height: 1.0;
+    border: none;
+    border:3px solid blue;
+    font-size: 1.2rem;
+    color: rgb(255, 255, 255);
+    padding: 5px 30px;
+    background: rgb(0, 4, 255);
+    border-radius: 5px;
+    opacity: 0.5;
+}
+*/
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: rgba(163, 154, 154, 0.8);
+}
+
+input[type=text]:focus {
+  outline: none;
+}
+
+button:hover{
+  opacity: 1;
+}
+
+.xfel_image {
+  width: 60px;
+  height: 60px;
+  margin-left: 30%;
+}
+
+.label-text {
+  font-family: "Montserrat Extra-light 100";
+  font-size: 1.2rem;
+}
+
+.btn.btn-secondary {
+  font-family: "Montserrat-Bold";
+  font-size: 1.0rem;
+}
+
+.lead_text {
+  margin: 40 0 0 0;
+  font-family: "Montserrat-Bold";
+  font-size: 1.5rem;
+  text-align: center;
+}
+
