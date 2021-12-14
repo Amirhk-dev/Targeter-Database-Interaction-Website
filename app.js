@@ -3,6 +3,7 @@ var React = require("react");
 var ReactDom = require("react-dom");
 
 var fs = require('fs'),
+
         xml2js = require('xml2js');
 var xmlParser = new xml2js.Parser();
 
