@@ -18,7 +18,9 @@ let connection = mysql.createConnection({
     multipleStatements: true
 });
 
-const fiducialPoints = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
+let fiducialCounter = 0;
+const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4", "Fiducial 5", "Fiducial 6", "Fiducial 7", "Fiducial 8"];
+const fiducialPoints = [];
 const regionsOfInterest = ["ROI 1"];
 const samples = ["Sample 1"];
 const targets = ["Target 1"];
@@ -35,33 +37,41 @@ app.get("/", function(req, res){
             throw err;
         else            
             var count = results[0].count;
-            res.render("home_xml", {data:count}); 
+        res.render("home", {data:count}); 
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
 app.post("/submitDataManually", function(req, res){
-    var q = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
-    connection.query(q, function(err, results){
-        if(err) throw err;
-        var count = results[0][0].count;
-        var max_sr = results[1][0].max_sr; // maximum serial number + 1
-        //res.send("<strong>We have </strong>" + count + " <strong>Subframes in our database.</strong>");
-        
-        // Looks for "home_xml.ejs", and by default it is looking in "view"
+    let query = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
+    connection.query(query, function(err, results){
+        if(err) 
+            throw err;
+        else
+            var count = results[0][0].count;
+        var max_sr = results[1][0].max_sr;        
         res.render("home_manually_subframe", {data: count, serialnumber: max_sr});
     });
 });
+
+app.post("/submitSubframeInfoManually", function(req, res){
+    if (fiducialCounter < 8) {
+        fiducialPoints.push(fiducialList[fiducialCounter]);
+        fiducialCounter += 1;
+    }
+    res.render("manually_fiducial", {listFiducials:fiducialPoints});
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.post("/submitXMLFile", function(req, res){
     // Find count of Subframes in DB and Respond with that count
@@ -115,83 +125,7 @@ app.post("/submitXMLFile", function(req, res){
     });
 });
 
-// Main
-app.post("/submitSubframeInfoManually", function(req, res){
-    
-    console.log(req.body);
-    
-    /*
-    var GroupName = req.body.GroupName;
-    var Subframe_Type = req.body.SubframeTypeName;
-    var FacilityName = req.body.FacilityName;
-    var SerialNumber = req.body.SerialNumber;
-    var sizeX = req.body.SizeX;
-    var sizeY = req.body.SizeY;
-    var comments = req.body.Comment;
-    
-    var fid1_validity = req.body.fid1_Validity;
-    var fid1_positionName = req.body.fid1_PositionName;
-    var fid1_xposition = req.body.fid1_X_position;
-    var fid1_yposition = req.body.fid1_Y_position;
-    var fid1_zposition = req.body.fid1_Z_position;
-    var fid2_validity = req.body.fid2_Validity;
-    var fid2_positionName = req.body.fid2_PositionName;
-    var fid2_xposition = req.body.fid2_X_position;
-    var fid2_yposition = req.body.fid2_Y_position;
-    var fid2_zposition = req.body.fid2_Z_position;
-    var fid3_validity = req.body.fid3_Validity;
-    var fid3_positionName = req.body.fid3_PositionName;
-    var fid3_xposition = req.body.fid3_X_position;
-    var fid3_yposition = req.body.fid3_Y_position;
-    var fid3_zposition = req.body.fid3_Z_position;
-    var fid4_validity = req.body.fid4_Validity;
-    var fid4_positionName = req.body.fid4_PositionName;
-    var fid4_xposition = req.body.fid4_X_position;
-    var fid4_yposition = req.body.fid4_Y_position;
-    var fid4_zposition = req.body.fid4_Z_position;
 
-    var q = "INSERT INTO Subframe (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments)" +
-    " VALUES ((SELECT ID FROM Group_Information WHERE GroupName='" + GroupName +
-    "'), (SELECT ID FROM Subframe_Type WHERE Type='" + Subframe_Type + "'), " +
-    "(SELECT ID FROM Facility WHERE CodeName='" + FacilityName + "'), " + 
-    SerialNumber + ", " + sizeX + ", " +  sizeY + ", '" + comments + "'); " 
-    
-    
-    +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid1_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid1_positionName +"'), " + 
-    fid1_xposition + ", " + fid1_yposition + ", " + fid1_zposition + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid2_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid2_positionName +"'), " + 
-    fid2_xposition + ", " + fid2_yposition + ", " + fid2_zposition + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid3_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid3_positionName +"'), " + 
-    fid3_xposition + ", " + fid3_yposition + ", " + fid3_zposition + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid4_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid4_positionName +"'), " + 
-    fid4_xposition + ", " + fid4_yposition + ", " + fid4_zposition + "); "; 
-
-    console.log(q);
-    */
-
-    res.redirect("/");
-    
-    /*
-    connection.query(q, function (error, result) {
-        if (error) throw error;
-        console.log(result);
-        res.redirect("/");
-    });
-    */
-    //console.log(req.body);
-    //console.log(req.body);
-    //console.log("POST REQUEST SENT TO /SUBMITEXPERIMENT email is " + req.body.email); 
-    // "email" is the same name used in the home.ejs file 
-});
 
 app.post("/submitExperimentXML", function(req, res){
     console.log(req.body);
