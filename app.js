@@ -3,12 +3,20 @@
 var fs = require('fs'),
 xml2js = require('xml2js');
 var xmlParser = new xml2js.Parser();
-var express = require('express');
-//var mysql = require('mysql'); 
-var bodyParser = require("body-parser");
-var numOfSubframes = require(__dirname + "/num_of_subframes.js");
-var date = require(__dirname + "/date.js");
+const express = require('express');
+const bodyParser = require("body-parser");
+const database_connect = require(__dirname + "/database_connection.js");
+const date = require(__dirname + "/date.js");
 var app = express();
+
+let mysql = require('mysql'); 
+let connection = mysql.createConnection({
+    host	 : 'mydevadmin.xfel.eu',
+    user	 : 'euxfeltargets_dev',
+    database : 'euxfeltargets_dev',
+    password : 'L*-bQyK,JU&[',
+    multipleStatements: true
+});
 
 const fiducialPoints = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
 const regionsOfInterest = ["ROI 1"];
@@ -21,9 +29,26 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/imgs"));    
 
 app.get("/", function(req, res){
-    let count = numOfSubframes.getNumberOfFrames();
-    res.render("home_xml", {data:count._eventsCount}); 
+    let query = "SELECT COUNT(*) as count FROM Subframe";
+    connection.query(query, function(err, results){
+        if(err) 
+            throw err;
+        else            
+            var count = results[0].count;
+            res.render("home_xml", {data:count}); 
+    });
 });
+
+
+
+
+
+
+
+
+
+
+
 
 app.post("/submitDataManually", function(req, res){
     var q = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
