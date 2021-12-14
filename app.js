@@ -1,43 +1,28 @@
-
-var React = require("react");
-var ReactDom = require("react-dom");
+//jshint esversion:6
 
 var fs = require('fs'),
-
-        xml2js = require('xml2js');
+xml2js = require('xml2js');
 var xmlParser = new xml2js.Parser();
-
 var express = require('express');
-var mysql = require('mysql'); 
+//var mysql = require('mysql'); 
 var bodyParser = require("body-parser");
+var numOfSubframes = require(__dirname + "/num_of_subframes.js");
+var date = require(__dirname + "/date.js");
 var app = express();
 
-// Configuration lines
+const fiducialPoints = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
+const regionsOfInterest = ["ROI 1"];
+const samples = ["Sample 1"];
+const targets = ["Target 1"];
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
-app.use(express.static(__dirname + "/imgs"));
-
-// connection to the database
-var connection = mysql.createConnection({
-    host	 : 'mydevadmin.xfel.eu',
-    user	 : 'euxfeltargets_dev',
-    database : 'euxfeltargets_dev',
-    password : 'L*-bQyK,JU&[',
-    multipleStatements: true
-    });    
+app.use(express.static(__dirname + "/imgs"));    
 
 app.get("/", function(req, res){
-    // Find count of Subframes in DB and Respond with that count
-    var q = "SELECT COUNT(*) as count FROM Subframe";
-    connection.query(q, function(err, results){
-        if(err) throw err;
-        var count = results[0].count;
-        //res.send("<strong>We have </strong>" + count + " <strong>Subframes in our database.</strong>");
-        
-        // Looks for "home_xml.ejs", and by default it is looking in "view"
-        res.render("home_xml", {data: count});
-    });
+    let count = numOfSubframes.getNumberOfFrames();
+    res.render("home_xml", {data:count._eventsCount}); 
 });
 
 app.post("/submitDataManually", function(req, res){
