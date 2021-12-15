@@ -19,21 +19,24 @@ let connection = mysql.createConnection({
 });
 
 let fiducialCounter = 0;
-const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4", "Fiducial 5", "Fiducial 6", "Fiducial 7", "Fiducial 8"];
+const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
 const fiducialPoints = [];
 
 let roiCounter = 0;
-const roiList = ["ROI 1", "ROI 2", "ROI 3", "ROI 4", "ROI 5"];
+const roiList = ["ROI 1", "ROI 2"];
 const rois = [];
 
-let sampleCounterROI1 = 0;
-let sampleCounterROI2 = 0;
-let sampleCounterROI3 = 0;
-let sampleCounterROI4 = 0;
-let sampleCounterROI5 = 0;
+let roi1_counter = 0;
 
-const samples = ["Sample 1"];
-const targets = ["Target 1"];
+
+
+
+
+
+
+
+
+
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -64,7 +67,7 @@ app.post("/submitDataManually", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
-    if (fiducialCounter < 8) {
+    if (fiducialCounter < 4) {
         fiducialPoints.push(fiducialList[fiducialCounter]);
         fiducialCounter += 1;
     }
@@ -76,7 +79,15 @@ app.post("/submitFiducialsInfoManually", function(req, res){
 });
 
 app.post("/submitOverviewImageManually", function(req, res){
-    if (roiCounter < 15) {
+    if (roiCounter < 2) {
+        rois.push(roiList[roiCounter]);
+        roiCounter += 1;
+    }
+    res.render("manually_roi_images", {listROIs:rois});
+});
+
+app.post("/submitOverviewImageManually", function(req, res){
+    if (roiCounter < 2) {
         rois.push(roiList[roiCounter]);
         roiCounter += 1;
     }
