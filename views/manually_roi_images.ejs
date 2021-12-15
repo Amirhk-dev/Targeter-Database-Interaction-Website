@@ -1,0 +1,36 @@
+<%- include("header") -%>
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="enterSampleData" method="POST" action='/submitFiducialsInfoManually'></form>
+            <form id="addROI" method="POST" action='/submitOverviewImageManually'></form>
+                <br>
+                <br>
+                <p class="lead_text">Enter ROI Data</p>
+                <div class="form-group">
+                    <label class="label-text" for="ROImicroscopeDateSelect">Microscope Type</label>
+                    <select class="form-control" id="ROImicroscopeDateSelect" name="microscopeData">
+                        <option selected>Choose...</option>
+                        <option>Keyence</option>
+                        <option>Nanofocus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="label-text" for="ROIdetectionMethodSelect">Detection (Imaging) Method</label>
+                    <select class="form-control" id="ROIdetectionMethodSelect" name="detectionMethod">
+                        <option selected>Choose...</option>
+                        <option>Hough Circle Transform</option>
+                        <option>Mask R-CNN</option>
+                    </select>
+                </div>
+                <% for (var i=0; i<listROIs.length; i++) { %>
+                <div>
+                    <label for="ROIoverviewImageLoad" class="form-label label-text">Insert the <%- listROIs[i] %></label>
+                    <input class="form-control" type="file" id="ROIoverviewImageLoad">
+                </div>
+                <% } %>  
+                <button class="btn btn-secondary" type="submit" form="addROI">Add ROI +</button>
+                <br>
+                <button class="btn btn-secondary" type="submit" form="enterSampleData">Enter the Sample Information</button>
+        </div>
+    </div>
+<%- include("footer") -%>

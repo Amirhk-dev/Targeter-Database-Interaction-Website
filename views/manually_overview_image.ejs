@@ -1,0 +1,36 @@
+<%- include("header") -%>
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="POST" action='/submitOverviewImageManually'>
+            <br>
+            <br>
+            <p class="lead_text">Enter Overview Image Information </p>
+                <div class="form-group">
+                    <label class="label-text" for="microscopeDateSelect">Microscope Type</label>
+                    <select class="form-control" id="microscopeDateSelect" name="microscopeData">
+                        <option selected>Choose...</option>
+                        <option>Keyence</option>
+                        <option>Nanofocus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="label-text" for="detectionMethodSelect">Detection (Imaging) Method</label>
+                    <select class="form-control" id="detectionMethodSelect" name="detectionMethod">
+                        <option selected>Choose...</option>
+                        <option>Hough Circle Transform</option>
+                        <option>Mask R-CNN</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="overviewImageLoad" class="form-label label-text">Insert the Overview Image</label>
+                    <input class="form-control" type="file" id="overviewImageLoad">
+                </div>
+                <!-- <form class="item" action="/submitFiducialsInfoManually" method="post">
+                    <button class="btn btn-secondary" type="submit" name="list">Add Overveiw Image +</button>    
+                </form> -->
+                <br>
+                <button class="btn btn-secondary">Enter the ROI Image</button>
+                </form>
+            </div>
+        </div>
+    <%- include("footer") -%>

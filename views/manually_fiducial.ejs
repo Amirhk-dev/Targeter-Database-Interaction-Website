@@ -1,56 +1,55 @@
 <%- include("header") -%>
     <div class="row">
         <div class="col-lg-12">
-            <form method="POST" action='/submitFiducialsInfoManually'></form>
-            <br>
-            <br>
-            <p class="lead_text">Enter Fiducial Points Information</p>
-            <% for (var i=0; i<listFiducials.length; i++) {  %>
-            <p class="label-text" style="text-align: center;"><em>Information for <%- listFiducials[i] %> : </em></p>
-            <div class="form-check">
-                <label class="form-check-label" for="fid1_validity">Validity</label>
-                <input type="checkbox" class="form-check-input" id="fid1_validity">
-            </div>
-            <div class="form-group">
-                <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial Point</label>
-                <select class="form-control" id="fid1_FiducialPoistionSelect" name="fid1_PositionName">
-                    <option selected>Choose...</option>
-                    <option>top-left</option>
-                    <option>top-right</option>
-                    <option>bottom-left</option>
-                    <option>bottom-right</option>
-                    <option>top-center</option>
-                    <option>bottom-center</option>
-                    <option>left-center</option>
-                    <option>right-center</option>
-                    <option>center</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="label-text">Enter the X Position of the Fiducial Point (in mm) <strong>(Double Values
-                        Accepted)</strong></label>
-                <input type="number" name="fid1_X_position" class="form-control"
-                    placeholder="X Position of the Fiducial Point" min="1" max="800">
-            </div>
-            <div class="form-group">
-                <label class="label-text">Enter the Y Position of the Fiducial Point (in mm) <strong>(Double Values
-                        Accepted)</strong></label>
-                <input type="number" name="fid1_Y_position" class="form-control"
-                    placeholder="Y Position of the Fiducial Point" min="1" max="800">
-            </div>
-            <div class="form-group">
-                <label class="label-text">Enter the Z Position of the Fiducial Point (in mm) <strong>(Double Values
-                        Accepted)</strong></label>
-                <input type="number" name="fid1_Z_position" class="form-control"
-                    placeholder="Z Position of the Fiducial Point" min="1" max="800">
-            </div>
-            <% } %>
-            <form class="item" action="/submitSubframeInfoManually" method="post">
-                <button class="btn btn-secondary" type="submit" name="list">Add Fiducial +</button>    
-            </form>
-            <br>
-            <button class="btn btn-secondary">Enter the Overview Image Data</button>
-            </form>
+            <form id="enterOverviewImage" method="POST" action='/submitFiducialsInfoManually'></form>
+            <form id="addFiducial" method="POST" action='/submitSubframeInfoManually'></form>
+                <br>
+                <br>
+                <p class="lead_text">Enter Fiducial Points Information</p>
+                <% for (var i=0; i<listFiducials.length; i++) { %>
+                    <p class="label-text" style="text-align: center;"><em>Information for <%- listFiducials[i] %> : </em>
+                    </p>
+                    <div class="form-check">
+                        <label class="form-check-label" for="fid1_validity">Validity</label>
+                        <input type="checkbox" class="form-check-input" id="fid1_validity">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial Point</label>
+                        <select class="form-control" id="fid1_FiducialPoistionSelect" name="fid1_PositionName">
+                            <option selected>Choose...</option>
+                            <option>top-left</option>
+                            <option>top-right</option>
+                            <option>bottom-left</option>
+                            <option>bottom-right</option>
+                            <option>top-center</option>
+                            <option>bottom-center</option>
+                            <option>left-center</option>
+                            <option>right-center</option>
+                            <option>center</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">Enter the X Position of the Fiducial Point (in mm) <strong>(Double Values
+                                Accepted)</strong></label>
+                        <input type="number" name="fid1_X_position" class="form-control"
+                            placeholder="X Position of the Fiducial Point" min="1" max="800">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">Enter the Y Position of the Fiducial Point (in mm) <strong>(Double Values
+                                Accepted)</strong></label>
+                        <input type="number" name="fid1_Y_position" class="form-control"
+                            placeholder="Y Position of the Fiducial Point" min="1" max="800">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">Enter the Z Position of the Fiducial Point (in mm) <strong>(Double Values
+                                Accepted)</strong></label>
+                        <input type="number" name="fid1_Z_position" class="form-control"
+                            placeholder="Z Position of the Fiducial Point" min="1" max="800">
+                    </div>
+                <% } %>    
+                <button class="btn btn-secondary" type="submit" form="addFiducial">Add Fiducial +</button>
+                <br>
+                <button class="btn btn-secondary" type="submit" form="enterOverviewImage">Enter the Overview Image Data</button>
         </div>
     </div>
 <%- include("footer") -%>
