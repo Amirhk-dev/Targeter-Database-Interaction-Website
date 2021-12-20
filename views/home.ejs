@@ -23,10 +23,16 @@
             <form method="POST" action='/submitDataManually'>
                 <div class="form-group">
                     <label class="label-text" id="manual_insert">Do you like to insert the data manually?</label>
+                    <% var test = 101; %> 
+                    <script>
+                      var getTest = <%= test  %>;  //var test is now assigned to getTest which will only work on browsers
+                      console.log(getTest);  // successfully prints 101 on browser
+                   </script>
                 </div>
                 <button class="btn btn-secondary">Insert the Data Manually</button>
             </form>
         </div>
     </div>
 </div>
+
 <%- include("footer") -%>

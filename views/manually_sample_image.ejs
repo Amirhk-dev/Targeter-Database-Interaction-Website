@@ -1,0 +1,106 @@
+<%- include("header") -%>
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="enterTargetData" method="POST" action='/submitSampleImageManually'></form>
+            <br>
+            <br>
+            <p class="lead_text">Enter Sample Information</p>
+            <div class="form-group">
+                <label class="label-text">Enter Pixel Size X (Width)</label>
+                <input type="number" name="PixelSizeX" class="form-control" placeholder="Pixel Width" min="1" max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter Pixel Size Y (Height)</label>
+                <input type="number" name="PixelSizeY" class="form-control" placeholder="Pixel Height" min="1"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box X Position <em>(Top-Left Corner
+                        Position)</em></label>
+                <input type="number" name="BBXPosition" class="form-control" placeholder="Bounding Box X Position"
+                    min="1" max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box Y Position <em>(Top-Left Corner
+                        Position)</em></label>
+                <input type="number" name="BBYPosition" class="form-control" placeholder="Bounding Box Y Position"
+                    min="1" max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box Width</label>
+                <input type="number" name="BBWidth" class="form-control" placeholder="Bounding Box Width" min="1"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box Height</label>
+                <input type="number" name="BBHeight" class="form-control" placeholder="Bounding Box Height" min="1"
+                    max="800">
+            </div>
+            <div>
+                <label for="MaskImageLoad" class="form-label label-text">Insert the Mask Image</label>
+                <input class="form-control" type="file" id="MaskImageLoad">
+            </div>
+            <div class="form-group">
+                <label for="sampleComments">Enter Comments Related to the Sample</label>
+                <textarea class="form-control" id="SampleComments" rows="2" minlength="0" maxlength="200"></textarea>
+            </div>
+            <hr />
+
+            <!-- SampleImage Related Data -->
+            <p class="lead_text">Enter Sample Image Information</p>
+            <div class="form-group">
+                <label class="label-text" for="SAMPLEmicroscopeDateSelect">Microscope Type</label>
+                <select class="form-control" id="SAMPLEmicroscopeDateSelect" name="SAMPLEmicroscopeData">
+                    <option selected>Choose...</option>
+                    <option>Keyence</option>
+                    <option>Nanofocus</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label-text" for="SAMPLEdetectionMethodSelect">Detection (Imaging)
+                    Method</label>
+                <select class="form-control" id="SAMPLEdetectionMethodSelect" name="SAMPLEdetectionMethod">
+                    <option selected>Choose...</option>
+                    <option>Hough Circle Transform</option>
+                    <option>Mask R-CNN</option>
+                </select>
+            </div>
+            <div>
+                <label for="ROImageLoad" class="form-label label-text">Insert the ROI Image</label>
+                <input class="form-control" type="file" id="ROIImageLoad">
+            </div>
+            <div class="form-group">
+                <label class="label-text" for="imagetype">Image Type</label>
+                <select class="form-control" id="imagetype" name="ImageType">
+                    <option selected>Choose...</option>
+                    <option>PNG</option>
+                    <option>JPG</option>
+                    <option>JPEG</option>
+                    <option>TIFF</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label-text">Image Width</label>
+                <input type="number" name="ImageWidth" class="form-control" placeholder="Image Width" min="1" max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Image Height</label>
+                <input type="number" name="ImageHeight" class="form-control" placeholder="Image Height" min="1"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Image Size (in MB)</label>
+                <input type="number" name="ImageSize" class="form-control" placeholder="Image Size" min="0" max="500">
+            </div>
+            <div class="form-group">
+                <label for="ImageComments">Enter Comments Related to the Image</label>
+                <textarea class="form-control" id="ImageComments" rows="2" minlength="0" maxlength="200"></textarea>
+            </div>
+            <div>
+                <label for="ImageLoad" class="form-label label-text">Insert the Image</label>
+                <input class="form-control" type="file" id="ImageLoad">
+            </div>
+            <button class="btn btn-secondary" type="submit" form="enterTargetData">Enter the Target Information</button>
+        </div>
+    </div>
+<%- include("footer") -%>

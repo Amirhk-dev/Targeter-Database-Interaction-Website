@@ -22,22 +22,6 @@ let fiducialCounter = 0;
 const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
 const fiducialPoints = [];
 
-let roiCounter = 0;
-const roiList = ["ROI 1", "ROI 2"];
-const rois = [];
-
-let roi1_counter = 0;
-
-
-
-
-
-
-
-
-
-
-
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
@@ -79,20 +63,29 @@ app.post("/submitFiducialsInfoManually", function(req, res){
 });
 
 app.post("/submitOverviewImageManually", function(req, res){
-    if (roiCounter < 2) {
-        rois.push(roiList[roiCounter]);
-        roiCounter += 1;
-    }
-    res.render("manually_roi_images", {listROIs:rois});
+    res.render("manually_roi_image");
 });
 
-app.post("/submitOverviewImageManually", function(req, res){
-    if (roiCounter < 2) {
-        rois.push(roiList[roiCounter]);
-        roiCounter += 1;
-    }
-    res.render("manually_roi_images", {listROIs:rois});
+app.post("/submitROIImageManually", function(req, res){
+    res.render("manually_sample_image");
 });
+
+app.post("/submitSampleImageManually", function(req, res){
+    res.render("manually_target_data");
+});
+
+app.post("/submitAllData", function(req, res){
+    //let query = "SELECT COUNT(*) as count FROM Subframe";
+    //connection.query(query, function (err, results) {
+    //    if (err)
+    //        throw err;
+    //    else
+    //        var count = results[0].count;
+    //    res.render("home", { data: count });
+    //});
+    res.render("datetimepick");
+});
+
 
 
 

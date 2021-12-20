@@ -5,6 +5,10 @@
                 <br>
                 <br>
                 <p class="lead_text">Enter the Subframe Information</p>
+                <div class="form-check">
+                    <label class="form-check-label" for="subframe_validity">Validity</label>
+                    <input type="checkbox" class="form-check-input" id="subframe_validity">
+                </div>
                 <div class="form-group">
                     <label class="label-text" for="FacilityNameSelect">Select the Facility Name</label>
                     <select class="form-control" id="FacilityNameSelect" name="FacilityName">
@@ -52,6 +56,10 @@
                     <label for="subfraneComments" class="label-text">Enter Comments Related to the Subframe</label>
                     <textarea class="form-control" id="subfraneComments" rows="2" minlength="0"
                         maxlength="200"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="label-text">Enter the Date the Experiment of the Subframe is Done</strong></label>
+                    <input class="form-control" type="date" id="experiment_date" name="experiment_date" min="2012-01-01" max="2040-12-31">
                 </div>
                 <p class="lead_text">Any Event Has Happened to the Subframe? </p>
                 <div class="form-group">

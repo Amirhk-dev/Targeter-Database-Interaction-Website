@@ -1,0 +1,94 @@
+<%- include("header") -%>
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="submitTheData" method="POST" action='/submitAllData'></form>
+            <br>
+            <br>
+            <!-- Target Related Data -->
+            <p class="lead_text">Enter Target Information</p>
+            <div class="form-group">
+                <label class="label-text" for="targetstatus">Target Status</label>
+                <select class="form-control" id="targetstatus" name="TargetStatus">
+                    <option selected>Choose...</option>
+                    <option>Mounted</option>
+                    <option>Unmounted</option>
+                    <option>Mounted Somewhere Else</option>
+                    <option>Shot</option>
+                    <option>Broken</option>
+                    <option>Archived</option>
+                    <option>Destroyed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label-text">Theta Angle (angle with respect to XY coordinates)</label>
+                <input type="number" name="ThetaAngle" class="form-control" placeholder="Theta Angle" min="-180"
+                    max="180">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Phi Angle (angle with respect to XZ coordinates)</label>
+                <input type="number" name="PhiAngle" class="form-control" placeholder="Phi Angle" min="-180" max="180">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Rho Angle (angle with respect to YZ coordinates)</label>
+                <input type="number" name="RhoAngle" class="form-control" placeholder="Rho Angle" min="-180" max="180">
+            </div>
+            <div class="form-group">
+                <label for="targetComments">Enter Comments Related to the Target</label>
+                <textarea class="form-control" id="targetComments" rows="2" minlength="0" maxlength="200"></textarea>
+            </div>
+            <hr />
+
+            <!-- Position Data Information -->
+            <p class="lead_text">Enter the Target Position Information</p>
+            <div class="form-check">
+                <label class="form-check-label" for="target_validity">Validity</label>
+                <input type="checkbox" class="form-check-input" id="target_validity">
+            </div>
+            <div class="form-group">
+                <label class="label-text">X Position</label>
+                <input type="number" name="targetXPosition" class="form-control" placeholder="Target X Position" min="1"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Y Position</label>
+                <input type="number" name="targetYPosition" class="form-control" placeholder="Target Y Position" min="1"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Z Position</label>
+                <input type="number" name="targetZPosition" class="form-control" placeholder="Target Z Position" min="1"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">In-Plane Accuracy</label>
+                <input type="number" name="inplaneAccuracy" class="form-control" placeholder="In-Plane Accuracy" min="0"
+                    max="1">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Out-of-Plane Accuracy</label>
+                <input type="number" name="outofplaneAccuracy" class="form-control" placeholder="Out-of-Plane Accuracy"
+                    min="0" max="1">
+            </div>
+            <hr />
+
+            <!-- XFEL_Data Related Information -->
+            <p class="lead_text">XFEL Instrument Information</p>
+            <div class="form-group">
+                <label class="label-text" for="instrumentUsed">Instrument Used for Shooting</label>
+                <select class="form-control" id="instrumentUsed" name="instrumentUsed">
+                    <option selected>Choose...</option>
+                    <option>HED</option>
+                    <option>SPB/SFX</option>
+                    <option>SCS</option>
+                    <option>MID</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="targetInstrumentComments">Enter Comments Related to the Shooting</label>
+                <textarea class="form-control" id="targetInstrumentComments" rows="2" minlength="0"
+                    maxlength="200"></textarea>
+            </div>
+            <button class="btn btn-secondary" type="submit" form="submitTheData">Submit the Data</button>
+        </div>
+    </div>
+<%- include("footer") -%>

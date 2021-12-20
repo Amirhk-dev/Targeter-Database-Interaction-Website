@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <script src="http://trentrichardson.com/examples/timepicker/js/jquery-1.7.1.min.js">     </script>
+        <script src="http://trentrichardson.com/examples/timepicker/js/jquery-ui-1.8.16.custom.min.js"></script>
+        <script src="http://trentrichardson.com/examples/timepicker/js/jquery-ui-sliderAccess.js"></script>
+        <script src="http://trentrichardson.com/examples/timepicker/js/jquery-ui-timepicker-addon.js"></script>
+        <link type="text/css" href="http://trentrichardson.com/examples/timepicker/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    </head>
+    <body>
+        <div class="col-12">
+            <label for="date" class="col-sm-1 col-form-label">Date</label>
+            <%= new Date().getDate();%>
+            <div class="input-group date" id="datepicker">
+                <input type="text" class="form-control">
+                <span class="input-group-append">
+                <span class="input-group-text bg-white d-block">
+                <i class="fa fa-calendar"></i>
+                </span>
+                </span>
+            </div>
+        </div>    
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#datepicker').datepicker();
+                
+            });
+        </script>   
+    </body>
+</html>
+
+
