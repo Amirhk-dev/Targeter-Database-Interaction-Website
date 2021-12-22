@@ -6,6 +6,10 @@
             <br>
             <!-- Target Related Data -->
             <p class="lead_text">Enter Target Information</p>
+            <div class="form-check">
+                <label class="form-check-label" for="target_image_validity">Validity</label>
+                <input type="checkbox" class="form-check-input" id="target_image_validity">
+            </div>
             <div class="form-group">
                 <label class="label-text" for="targetstatus">Target Status</label>
                 <select class="form-control" id="targetstatus" name="TargetStatus">
@@ -31,6 +35,15 @@
             <div class="form-group">
                 <label class="label-text">Rho Angle (angle with respect to YZ coordinates)</label>
                 <input type="number" name="RhoAngle" class="form-control" placeholder="Rho Angle" min="-180" max="180">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Date the Target Information is Inserted</strong></label>
+                <input class="form-control" type="date" id="targetinfo_experiment_date" name="targetinfo_experiment_date"
+                    min="2012-01-01" max="2040-12-31">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Time the Target Information is Inserted</strong></label>
+                <input class="form-control" type="time" id="targetinfo_experiment_time" name="targetinfo_experiment_time">
             </div>
             <div class="form-group">
                 <label for="targetComments">Enter Comments Related to the Target</label>
@@ -69,8 +82,16 @@
                 <input type="number" name="outofplaneAccuracy" class="form-control" placeholder="Out-of-Plane Accuracy"
                     min="0" max="1">
             </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Date the Target Position Information is Inserted</strong></label>
+                <input class="form-control" type="date" id="targetpositioninfo_experiment_date" name="targetpositioninfo_experiment_date"
+                    min="2012-01-01" max="2040-12-31">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Time the Target Position Information is Inserted</strong></label>
+                <input class="form-control" type="time" id="targetpositioninfo_experiment_time" name="targetpositioninfo_experiment_time">
+            </div>
             <hr />
-
             <!-- XFEL_Data Related Information -->
             <p class="lead_text">XFEL Instrument Information</p>
             <div class="form-group">
@@ -82,6 +103,15 @@
                     <option>SCS</option>
                     <option>MID</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Date the XFEL Data Information is Inserted</strong></label>
+                <input class="form-control" type="date" id="xfeldata_experiment_date" name="xfeldata_experiment_date"
+                    min="2012-01-01" max="2040-12-31">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Time the XFEL Data Information is Inserted</strong></label>
+                <input class="form-control" type="time" id="xfeldata_experiment_time" name="xfeldata_experiment_time">
             </div>
             <div class="form-group">
                 <label for="targetInstrumentComments">Enter Comments Related to the Shooting</label>

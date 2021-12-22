@@ -5,6 +5,10 @@
             <br>
             <br>
             <p class="lead_text">Enter ROI Data</p>
+            <div class="form-check">
+                <label class="form-check-label" for="roi_image_validity">Validity</label>
+                <input type="checkbox" class="form-check-input" id="roi_image_validity">
+            </div>
             <div class="form-group">
                 <label class="label-text" for="ROImicroscopeDateSelect">Microscope Type</label>
                 <select class="form-control" id="ROImicroscopeDateSelect" name="microscopeData">
@@ -24,9 +28,18 @@
             <div>
                 <label for="ROIoverviewImageLoad" class="form-label label-text">Insert the ROI</label>
                 <input class="form-control" type="file" id="ROIoverviewImageLoad">
-                <button class="btn btn-secondary" type="submit" form="enterSampleData">Enter the Sample
-                    Information</button>
             </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Date the Experiment of the ROI Image is Done</strong></label>
+                <input class="form-control" type="date" id="roi_experiment_date" name="roi_experiment_date"
+                    min="2012-01-01" max="2040-12-31">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Time the Experiment of the ROI Image is Done</strong></label>
+                <input class="form-control" type="time" id="roi_experiment_time" name="roi_experiment_time">
+            </div>
+            <button class="btn btn-secondary" type="submit" form="enterSampleData">Enter the Sample
+                Information</button>
         </div>
-    </div>  
-<%- include("footer") -%>
+    </div>
+    <%- include("footer") -%>

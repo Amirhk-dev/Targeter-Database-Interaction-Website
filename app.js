@@ -1,5 +1,4 @@
 //jshint esversion:6
-
 var fs = require('fs'),
 xml2js = require('xml2js');
 var xmlParser = new xml2js.Parser();
@@ -51,6 +50,7 @@ app.post("/submitDataManually", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
+    console.log(req.body);
     if (fiducialCounter < 4) {
         fiducialPoints.push(fiducialList[fiducialCounter]);
         fiducialCounter += 1;
@@ -75,15 +75,14 @@ app.post("/submitSampleImageManually", function(req, res){
 });
 
 app.post("/submitAllData", function(req, res){
-    //let query = "SELECT COUNT(*) as count FROM Subframe";
-    //connection.query(query, function (err, results) {
-    //    if (err)
-    //        throw err;
-    //    else
-    //        var count = results[0].count;
-    //    res.render("home", { data: count });
-    //});
-    res.render("datetimepick");
+    let query = "SELECT COUNT(*) as count FROM Subframe";
+    connection.query(query, function (err, results) {
+        if (err)
+            throw err;
+        else
+            var count = results[0].count;
+        res.render("home", { data: count });
+    });
 });
 
 
