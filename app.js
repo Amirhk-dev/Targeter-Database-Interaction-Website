@@ -21,6 +21,10 @@ let fiducialCounter = 0;
 const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
 const fiducialPoints = [];
 
+var subframe_itemNamesData = {"SubframeValidity":"", "FacilityNameSelect":"", "SubframeTypeSelect":"",
+    "GroupName":"", "SizeX":"", "SizeY":"", "SubframeComments":"", "SubframeExperimentDate":"", 
+    "SubframeExperimentTime":"", "SubframeEventTypeName":""};
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
@@ -50,7 +54,17 @@ app.post("/submitDataManually", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
-    console.log(req.body);
+    subframe_itemNamesData.SubframeValidity = (req.body.subframe_validity ? true:false);
+    subframe_itemNamesData.FacilityNameSelect = req.body.facility_name_select;
+    subframe_itemNamesData.SubframeTypeSelect = req.body.subframe_type_select;
+    subframe_itemNamesData.GroupName = req.body.group_name;
+    subframe_itemNamesData.SizeX = req.body.size_x;
+    subframe_itemNamesData.SizeY = req.body.size_y;
+    subframe_itemNamesData.SubframeComments = req.body.subframe_comments;
+    subframe_itemNamesData.SubframeExperimentDate = req.body.subframe_experiment_date;
+    subframe_itemNamesData.SubframeExperimentTime = req.body.subframe_experiment_time;
+    subframe_itemNamesData.SubframeEventTypeName = req.body.subframe_event_type_name;
+
     if (fiducialCounter < 4) {
         fiducialPoints.push(fiducialList[fiducialCounter]);
         fiducialCounter += 1;

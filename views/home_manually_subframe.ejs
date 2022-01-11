@@ -7,19 +7,19 @@
                 <p class="lead_text">Enter the Subframe Information</p>
                 <div class="form-check">
                     <label class="form-check-label" for="subframe_validity">Validity</label>
-                    <input type="checkbox" class="form-check-input" id="subframe_validity">
+                    <input type="checkbox" class="form-check-input" id="subframe_validity" name="subframe_validity">
                 </div>
                 <div class="form-group">
-                    <label class="label-text" for="FacilityNameSelect">Select the Facility Name</label>
-                    <select class="form-control" id="FacilityNameSelect" name="FacilityName">
+                    <label class="label-text" for="facility_name_select">Select the Facility Name</label>
+                    <select class="form-control" id="facility_name_select" name="facility_name_select">
                         <option selected>Choose...</option>
                         <option>EXFEL</option>
                         <option>ELIBL</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="label-text" for="SubframeTypeSelect">Select the Subframe Type</label>
-                    <select class="form-control" id="SubframeTypeSelect" name="SubframeType">
+                    <label class="label-text" for="subframe_type_select">Select the Subframe Type</label>
+                    <select class="form-control" id="subframe_type_select" name="subframe_type_select">
                         <option selected>Choose...</option>
                         <option>4IN</option>
                         <option>9X9</option>
@@ -27,8 +27,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="label-text" for="GroupSelect">Select the Group</label>
-                    <select class="form-control" id="GroupSelect" name="GroupName">
+                    <label class="label-text" for="group_select">Select the Group</label>
+                    <select class="form-control" id="group_select" name="group_name">
                         <option selected>Choose...</option>
                         <option>SEC</option>
                         <option>HED</option>
@@ -37,24 +37,24 @@
                 </div>
                 <div class="form-group">
                     <label class="label-text">Serial Number</label>
-                    <input type="text" name="SerialNumber" class="form-control" id="SerialNumber"
+                    <input type="text" name="serial_number" class="form-control" id="serial_number"
                         value=<%=serialnumber%> disabled>
                 </div>
                 <div class="form-group">
                     <label class="label-text">Enter the Width (SizeX) of the Subframe (in mm) <strong>(Double Values
                             Accepted)</strong></label>
-                    <input type="number" name="SizeX" class="form-control" placeholder="Width of Subframe" min="10"
+                    <input type="number" name="size_x" class="form-control" placeholder="Width of Subframe" min="10"
                         max="800">
                 </div>
                 <div class="form-group">
                     <label class="label-text">Enter the Height (SizeY) of the Subframe (in mm) <strong>(Double Values
                             Accepted)</strong></label>
-                    <input type="number" name="SizeY" class="form-control" placeholder="Height of Subframe" min="10"
+                    <input type="number" name="size_y" class="form-control" placeholder="Height of Subframe" min="10"
                         max="800">
                 </div>
                 <div class="form-group">
-                    <label for="subfraneComments" class="label-text">Enter Comments Related to the Subframe</label>
-                    <textarea class="form-control" id="subfraneComments" rows="2" minlength="0"
+                    <label for="subframe_comments" class="label-text">Enter Comments Related to the Subframe</label>
+                    <textarea class="form-control" id="subframe_comments" name="subframe_comments" rows="2" minlength="0"
                         maxlength="200"></textarea>
                 </div>
                 <div class="form-group">
@@ -67,9 +67,9 @@
                 </div>
                 <p class="lead_text">Any Event Has Happened to the Subframe? </p>
                 <div class="form-group">
-                    <label class="label-text" for="SubframeEventTypeSelect">Select the Event Type <em>(if there is
+                    <label class="label-text" for="subframe_event_type_name">Select the Event Type <em>(if there is
                             any)</em></label>
-                    <select class="form-control" id="SubframeEventTypeSelect" name="SubframeEventTypeName">
+                    <select class="form-control" id="subframe_event_type_name" name="subframe_event_type_name">
                         <option selected>Choose...</option>
                         <option>Created</option>
                         <option>Fiducial Change</option>
