@@ -34,6 +34,13 @@ var fiducials_itemNamesData = {"Fid1Validity":"", "Fid1PositionName":"", "Fid1XP
 var overviewimage_itemNamesData = {"OverviewImageValidity":"", "MicroscopeData":"", "DetectionMethod":"", 
     "OverviewImageLoad":"", "OverviewImageExperimentDate":"", "OverviewImageExperimentTime":""};
 
+var roi_itemNamesData = {"ROIImageValidity":"", "MicroscopeData":"", "DetectionMethod":"", 
+    "ROIOverviewImageLoad":"", "ROIExperimentDate":"", "ROIExperimentTime":""};
+
+
+
+
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
@@ -129,6 +136,16 @@ app.post("/submitOverviewImageManually", function(req, res){
 });
 
 app.post("/submitROIImageManually", function(req, res){
+    
+    roi_itemNamesData.ROIImageValidity = req.body.roi_image_validity;
+    roi_itemNamesData.MicroscopeData = req.body.microscope_data;
+    roi_itemNamesData.DetectionMethod = req.body.detection_method;
+    roi_itemNamesData.ROIOverviewImageLoad = req.body.roi_overviewimage_load;
+    roi_itemNamesData.ROIExperimentDate = req.body.roi_experiment_date;
+    roi_itemNamesData.ROIExperimentTime = req.body.roi_experiment_time;
+
+    console.log(roi_itemNamesData);
+
     res.render("manually_sample_image");
 });
 
