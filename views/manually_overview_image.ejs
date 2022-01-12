@@ -7,11 +7,11 @@
                 <p class="lead_text">Enter Overview Image Information </p>
                 <div class="form-check">
                     <label class="form-check-label" for="overview_image_validity">Validity</label>
-                    <input type="checkbox" class="form-check-input" id="overview_image_validity">
+                    <input type="checkbox" class="form-check-input" id="overview_image_validity" name="overview_image_validity">
                 </div>
                 <div class="form-group">
                     <label class="label-text" for="microscopeDateSelect">Microscope Type</label>
-                    <select class="form-control" id="microscopeDateSelect" name="microscopeData">
+                    <select class="form-control" id="microscopeDateSelect" name="microscope_data">
                         <option selected>Choose...</option>
                         <option>Keyence</option>
                         <option>Nanofocus</option>
@@ -19,7 +19,7 @@
                 </div>
                 <div class="form-group">
                     <label class="label-text" for="detectionMethodSelect">Detection (Imaging) Method</label>
-                    <select class="form-control" id="detectionMethodSelect" name="detectionMethod">
+                    <select class="form-control" id="detectionMethodSelect" name="detection_method">
                         <option selected>Choose...</option>
                         <option>Hough Circle Transform</option>
                         <option>Mask R-CNN</option>
@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <label for="overviewImageLoad" class="form-label label-text">Insert the Overview Image</label>
-                    <input class="form-control" type="file" id="overviewImageLoad">
+                    <input class="form-control" type="file" id="overviewImageLoad" name="overview_image_load">
                 </div>
                 <div class="form-group">
                     <label class="label-text">Enter the Date the Experiment of the Overview Image is Done</strong></label>

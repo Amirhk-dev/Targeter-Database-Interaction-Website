@@ -19,11 +19,20 @@ let connection = mysql.createConnection({
 
 let fiducialCounter = 0;
 const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
-const fiducialPoints = [];
+const fiducialPoints = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
 
 var subframe_itemNamesData = {"SubframeValidity":"", "FacilityNameSelect":"", "SubframeTypeSelect":"",
     "GroupName":"", "SizeX":"", "SizeY":"", "SubframeComments":"", "SubframeExperimentDate":"", 
     "SubframeExperimentTime":"", "SubframeEventTypeName":""};
+
+var fiducials_itemNamesData = {"Fid1Validity":"", "Fid1PositionName":"", "Fid1XPosition":"", 
+    "Fid1YPosition":"", "Fid1ZPosition":"", "Fid2Validity":"", "Fid2PositionName":"", "Fid2XPosition":"", 
+    "Fid2YPosition":"", "Fid2ZPosition":"", "Fid3Validity":"", "Fid3PositionName":"", "Fid3XPosition":"", 
+    "Fid3YPosition":"", "Fid3ZPosition":"", "Fid4Validity":"", "Fid4PositionName":"", "Fid4XPosition":"", 
+    "Fid4YPosition":"", "Fid4ZPosition":""};
+
+var overviewimage_itemNamesData = {"OverviewImageValidity":"", "MicroscopeData":"", "DetectionMethod":"", 
+    "OverviewImageLoad":"", "OverviewImageExperimentDate":"", "OverviewImageExperimentTime":""};
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -65,18 +74,57 @@ app.post("/submitSubframeInfoManually", function(req, res){
     subframe_itemNamesData.SubframeExperimentTime = req.body.subframe_experiment_time;
     subframe_itemNamesData.SubframeEventTypeName = req.body.subframe_event_type_name;
 
-    if (fiducialCounter < 4) {
-        fiducialPoints.push(fiducialList[fiducialCounter]);
-        fiducialCounter += 1;
-    }
-    res.render("manually_fiducial", {listFiducials:fiducialPoints});
+    console.log(subframe_itemNamesData);
+
+    //if (fiducialCounter < 4) {
+    //    fiducialPoints.push(fiducialList[fiducialCounter]);
+    //    fiducialCounter += 1;
+    //}
+
+    //res.render("manually_fiducial", {listFiducials:fiducialPoints});
+    res.render("manually_fiducial");
 });
 
 app.post("/submitFiducialsInfoManually", function(req, res){
+    fiducials_itemNamesData.Fid1Validity = req.body.fid1_validity;
+    fiducials_itemNamesData.Fid1PositionName = req.body.fid1_position_name;
+    fiducials_itemNamesData.Fid1XPosition = req.body.fid1_x_position;
+    fiducials_itemNamesData.Fid1YPosition = req.body.fid1_y_position;
+    fiducials_itemNamesData.Fid1ZPosition = req.body.fid1_z_position;
+
+    fiducials_itemNamesData.Fid2Validity = req.body.fid2_validity;
+    fiducials_itemNamesData.Fid2PositionName = req.body.fid2_position_name;
+    fiducials_itemNamesData.Fid2XPosition = req.body.fid2_x_position;
+    fiducials_itemNamesData.Fid2YPosition = req.body.fid2_y_position;
+    fiducials_itemNamesData.Fid2ZPosition = req.body.fid2_z_position;
+
+    fiducials_itemNamesData.Fid3Validity = req.body.fid3_validity;
+    fiducials_itemNamesData.Fid3PositionName = req.body.fid3_position_name;
+    fiducials_itemNamesData.Fid3XPosition = req.body.fid3_x_position;
+    fiducials_itemNamesData.Fid3YPosition = req.body.fid3_y_position;
+    fiducials_itemNamesData.Fid3ZPosition = req.body.fid3_z_position;
+
+    fiducials_itemNamesData.Fid4Validity = req.body.fid4_validity;
+    fiducials_itemNamesData.Fid4PositionName = req.body.fid4_position_name;
+    fiducials_itemNamesData.Fid4XPosition = req.body.fid4_x_position;
+    fiducials_itemNamesData.Fid4YPosition = req.body.fid4_y_position;
+    fiducials_itemNamesData.Fid4ZPosition = req.body.fid4_z_position;
+
+    console.log(fiducials_itemNamesData);
+
     res.render("manually_overview_image");
 });
 
 app.post("/submitOverviewImageManually", function(req, res){
+    overviewimage_itemNamesData.OverviewImageValidity = req.body.overview_image_validity;
+    overviewimage_itemNamesData.MicroscopeData = req.body.microscope_data;
+    overviewimage_itemNamesData.DetectionMethod = req.body.detection_method;
+    overviewimage_itemNamesData.OverviewImageLoad = req.body.overview_image_load;
+    overviewimage_itemNamesData.OverviewImageExperimentDate = req.body.overviewimage_experiment_date;
+    overviewimage_itemNamesData.OverviewImageExperimentTime = req.body.overviewimage_experiment_time;
+    
+    console.log(overviewimage_itemNamesData);
+
     res.render("manually_roi_image");
 });
 
