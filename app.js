@@ -49,6 +49,12 @@ var target_itemNamesData = {"TargetImageValidity":"", "TargetStatus":"", "ThetaA
     "OutOfPlaneAccuracy":"", "TargetpositioninfoExperimentDate":"", "TargetpositioninfoExperimentTime":"", 
     "InstrumentUsed":"", "XFELDataExperimentDate":"", "XFELDataExperimentTime":"", "TargetInstrumentComments":""};
 
+var xml_data = [];
+
+function assignTheValues(value) {
+    xml_data = value;
+}
+
 function checkEmpty(term, page_name) {
     var result = false;
 
@@ -343,16 +349,6 @@ app.post("/submitAllData", function(req, res){
     }
 });
 
-
-
-
-
-
-
-
-
-
-
 app.post("/submitXMLFile", function(req, res){
     // Find count of Subframes in DB and Respond with that count
     var q = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
@@ -360,11 +356,12 @@ app.post("/submitXMLFile", function(req, res){
         if(err) throw err;
         var count = results[0][0].count;
         var max_sr = results[1][0].max_sr; // maximum serial number + 1
-        //console.log(results[0][0].count);
-        //console.log(results[1][0].max_sr);
         
         fs.readFile(req.body.xmlFile,function(err, data){
+            xml_data = data;
             xmlParser.parseString(data, function(err, result){
+                console.dir(result);
+                assignTheValues(result);
                 //console.dir(result.experiment.subframe[0].GroupName);
                 //console.dir(result.experiment.fiducials[0].fiducial1[0].Validity);
                 //console.dir(result.experiment.fiducials[0].fiducial1);
@@ -373,12 +370,16 @@ app.post("/submitXMLFile", function(req, res){
                 res.render("home_xml_data", {
                     data: count,
                     serialnumber: max_sr, 
-                    groupname: result.experiment.subframe[0].GroupName,
-                    subframetypename: result.experiment.subframe[0].SubframeTypeName,
-                    facilityname: result.experiment.subframe[0].FacilityName,
-                    sizex: result.experiment.subframe[0].SizeX,
-                    sizey: result.experiment.subframe[0].SizeY,
-                    comment: result.experiment.subframe[0].Comment,
+                    subframe_validity: result.experiment.subframe[0].Validity,
+                    subframe_facilityname: result.experiment.subframe[0].FacilityName,
+                    subframe_typename: result.experiment.subframe[0].TypeName,
+                    subframe_groupname: result.experiment.subframe[0].GroupName,
+                    subframe_sizex: result.experiment.subframe[0].SizeX,
+                    subframe_sizey: result.experiment.subframe[0].SizeY,
+                    subframe_comments: result.experiment.subframe[0].Comments,
+                    subframe_experimentdate: result.experiment.subframe[0].ExperimentDate,
+                    subframe_experimenttime: result.experiment.subframe[0].ExperimentTime,
+                    subframe_eventtype: result.experiment.subframe[0].EventType,
                     fid1_validity: result.experiment.fiducials[0].fiducial1[0].Validity,
                     fid1_positionname: result.experiment.fiducials[0].fiducial1[0].PositionName,
                     fid1_xposition: result.experiment.fiducials[0].fiducial1[0].X_position,
@@ -398,75 +399,132 @@ app.post("/submitXMLFile", function(req, res){
                     fid4_positionname: result.experiment.fiducials[0].fiducial4[0].PositionName,
                     fid4_xposition: result.experiment.fiducials[0].fiducial4[0].X_position,
                     fid4_yposition: result.experiment.fiducials[0].fiducial4[0].Y_position,
-                    fid4_zposition: result.experiment.fiducials[0].fiducial4[0].Z_position
+                    fid4_zposition: result.experiment.fiducials[0].fiducial4[0].Z_position,
+                    overviewimage_validity: result.experiment.overviewimage[0].Validity,
+                    overviewimage_microscopetype: result.experiment.overviewimage[0].MicroscopeType,
+                    overviewimage_detectionmethod: result.experiment.overviewimage[0].DetectionMethod,
+                    overviewimage_imageload: result.experiment.overviewimage[0].ImageLoad,
+                    overviewimage_experimentdate: result.experiment.overviewimage[0].ExperimentDate,
+                    overviewimage_experimenttime: result.experiment.overviewimage[0].ExperimentTime, 
+                    roi1_validity: result.experiment.roiimages[0].roi1[0].Validity,
+                    roi1_microscopetype: result.experiment.roiimages[0].roi1[0].MicroscopeType,
+                    roi1_detectionmethod: result.experiment.roiimages[0].roi1[0].DetectionMethod,
+                    roi1_imageload: result.experiment.roiimages[0].roi1[0].ImageLoad,
+                    roi1_experimentdate: result.experiment.roiimages[0].roi1[0].ExperimentDate,
+                    roi1_experimenttime: result.experiment.roiimages[0].roi1[0].ExperimentTime,
+                    sample1_validity: result.experiment.sampleimages[0].sample1[0].Validity,
+                    sample1_pixelsizex: result.experiment.sampleimages[0].sample1[0].PixelSizeX,
+                    sample1_pixelsizey: result.experiment.sampleimages[0].sample1[0].PixelSizeY,
+                    sample1_bbxposition: result.experiment.sampleimages[0].sample1[0].BBXPosition,
+                    sample1_bbyposition: result.experiment.sampleimages[0].sample1[0].BBYPosition,
+                    sample1_bbwidth: result.experiment.sampleimages[0].sample1[0].BBWidth,
+                    sample1_bbheight: result.experiment.sampleimages[0].sample1[0].BBHeight,
+                    sample1_maskimageload: result.experiment.sampleimages[0].sample1[0].MaskImageLoad,
+                    sample1_sampleexperimentdate: result.experiment.sampleimages[0].sample1[0].SampleExperimentDate,
+                    sample1_sampleexperimenttime: result.experiment.sampleimages[0].sample1[0].SampleExperimentTime,
+                    sample1_samplecomments: result.experiment.sampleimages[0].sample1[0].SampleComments,
+                    sample1_sampleimagevalidity: result.experiment.sampleimages[0].sample1[0].SampleImageValidity,
+                    sample1_microscopetype: result.experiment.sampleimages[0].sample1[0].MicroscopeType,
+                    sample1_detectionmethod: result.experiment.sampleimages[0].sample1[0].DetectionMethod,
+                    sample1_roiimageload: result.experiment.sampleimages[0].sample1[0].ROIImageLoad,
+                    sample1_imagetype: result.experiment.sampleimages[0].sample1[0].ImageType,
+                    sample1_imagewidth: result.experiment.sampleimages[0].sample1[0].ImageWidth,
+                    sample1_imageheight: result.experiment.sampleimages[0].sample1[0].ImageHeight,
+                    sample1_imagesize: result.experiment.sampleimages[0].sample1[0].ImageSize,
+                    sample1_imagecomments: result.experiment.sampleimages[0].sample1[0].ImageComments,
+                    sample1_imageload: result.experiment.sampleimages[0].sample1[0].ImageLoad,
+                    sample1_experimentdate: result.experiment.sampleimages[0].sample1[0].ExperimentDate,
+                    sample1_experimenttime: result.experiment.sampleimages[0].sample1[0].ExperimentTime,
+                    target1_validity: result.experiment.targets[0].target1[0].Validity,
+                    target1_status: result.experiment.targets[0].target1[0].Status,
+                    target1_thetaangle: result.experiment.targets[0].target1[0].ThetaAngle,
+                    target1_phiangle: result.experiment.targets[0].target1[0].PhiAngle,
+                    target1_rhoangle: result.experiment.targets[0].target1[0].RhoAngle,
+                    target1_experimentdate: result.experiment.targets[0].target1[0].ExperimentDate,
+                    target1_experimenttime: result.experiment.targets[0].target1[0].ExperimentDate,
+                    target1_comments: result.experiment.targets[0].target1[0].Comments,
+                    target1_positionvalidity: result.experiment.targets[0].target1[0].PositionValidity,
+                    target1_xposition: result.experiment.targets[0].target1[0].XPosition,
+                    target1_yposition: result.experiment.targets[0].target1[0].YPosition,
+                    target1_zposition: result.experiment.targets[0].target1[0].ZPosition,
+                    target1_inplaneaccuracy: result.experiment.targets[0].target1[0].InplaneAccuracy,
+                    target1_outofplaneaccuracy: result.experiment.targets[0].target1[0].OutofplaneAccuracy,
+                    target1_positionexperimentdate: result.experiment.targets[0].target1[0].PositionExperimentDate,
+                    target1_positionexperimenttime: result.experiment.targets[0].target1[0].PositionExperimentTime,
+                    target1_instrument: result.experiment.targets[0].target1[0].Instrument,
+                    target1_xfelexperimentdate: result.experiment.targets[0].target1[0].XFELExperimentDate,
+                    target1_xfelexperimenttime: result.experiment.targets[0].target1[0].XFELExperimentTime,
+                    target1_xfelexperimentcomments: result.experiment.targets[0].target1[0].XFELExperimentComments
                 });       
             });
         });
     });
 });
 
-
-
 app.post("/submitExperimentXML", function(req, res){
     console.log(req.body);
     
-    var GroupName = req.body.GroupName;
-    var Subframe_Type = req.body.SubframeTypeName;
-    var FacilityName = req.body.FacilityName;
-    var SerialNumber = req.body.SerialNumber;
-    var sizeX = req.body.SizeX;
-    var sizeY = req.body.SizeY;
-    var comments = req.body.Comment;
-    var fid1_validity = req.body.fid1_Validity;
-    var fid1_positionName = req.body.fid1_PositionName;
-    var fid1_xposition = req.body.fid1_X_position;
-    var fid1_yposition = req.body.fid1_Y_position;
-    var fid1_zposition = req.body.fid1_Z_position;
-    var fid2_validity = req.body.fid2_Validity;
-    var fid2_positionName = req.body.fid2_PositionName;
-    var fid2_xposition = req.body.fid2_X_position;
-    var fid2_yposition = req.body.fid2_Y_position;
-    var fid2_zposition = req.body.fid2_Z_position;
-    var fid3_validity = req.body.fid3_Validity;
-    var fid3_positionName = req.body.fid3_PositionName;
-    var fid3_xposition = req.body.fid3_X_position;
-    var fid3_yposition = req.body.fid3_Y_position;
-    var fid3_zposition = req.body.fid3_Z_position;
-    var fid4_validity = req.body.fid4_Validity;
-    var fid4_positionName = req.body.fid4_PositionName;
-    var fid4_xposition = req.body.fid4_X_position;
-    var fid4_yposition = req.body.fid4_Y_position;
-    var fid4_zposition = req.body.fid4_Z_position;
+    console.log(xml_data);
+    //var GroupName = req.body.GroupName;
+    //var Subframe_Type = req.body.SubframeTypeName;
+    //var FacilityName = req.body.FacilityName;
+    //var SerialNumber = req.body.SerialNumber;
+    //var sizeX = req.body.SizeX;
+    //var sizeY = req.body.SizeY;
+    //var comments = req.body.Comment;
+    //var fid1_validity = req.body.fid1_Validity;
+    //var fid1_positionName = req.body.fid1_PositionName;
+    //var fid1_xposition = req.body.fid1_X_position;
+    //var fid1_yposition = req.body.fid1_Y_position;
+    //var fid1_zposition = req.body.fid1_Z_position;
+    //var fid2_validity = req.body.fid2_Validity;
+    //var fid2_positionName = req.body.fid2_PositionName;
+    //var fid2_xposition = req.body.fid2_X_position;
+    //var fid2_yposition = req.body.fid2_Y_position;
+    //var fid2_zposition = req.body.fid2_Z_position;
+    //var fid3_validity = req.body.fid3_Validity;
+    //var fid3_positionName = req.body.fid3_PositionName;
+    //var fid3_xposition = req.body.fid3_X_position;
+    //var fid3_yposition = req.body.fid3_Y_position;
+    //var fid3_zposition = req.body.fid3_Z_position;
+    //var fid4_validity = req.body.fid4_Validity;
+    //var fid4_positionName = req.body.fid4_PositionName;
+    //var fid4_xposition = req.body.fid4_X_position;
+    //var fid4_yposition = req.body.fid4_Y_position;
+    //var fid4_zposition = req.body.fid4_Z_position;
 
-    var q = "INSERT INTO Subframe (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments)" +
-    " VALUES ((SELECT ID FROM Group_Information WHERE GroupName='" + GroupName +
-    "'), (SELECT ID FROM Subframe_Type WHERE Type='" + Subframe_Type + "'), " +
-    "(SELECT ID FROM Facility WHERE CodeName='" + FacilityName + "'), " + 
-    SerialNumber + ", " + sizeX + ", " +  sizeY + ", '" + comments + "'); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid1_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid1_positionName +"'), " + 
-    fid1_xposition + ", " + fid1_yposition + ", " + fid1_zposition + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid2_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid2_positionName +"'), " + 
-    fid2_xposition + ", " + fid2_yposition + ", " + fid2_zposition + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid3_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid3_positionName +"'), " + 
-    fid3_xposition + ", " + fid3_yposition + ", " + fid3_zposition + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid4_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid4_positionName +"'), " + 
-    fid4_xposition + ", " + fid4_yposition + ", " + fid4_zposition + "); ";
+    //var q = "INSERT INTO Subframe (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments)" +
+    //" VALUES ((SELECT ID FROM Group_Information WHERE GroupName='" + GroupName +
+    //"'), (SELECT ID FROM Subframe_Type WHERE Type='" + Subframe_Type + "'), " +
+    //"(SELECT ID FROM Facility WHERE CodeName='" + FacilityName + "'), " + 
+    //SerialNumber + ", " + sizeX + ", " +  sizeY + ", '" + comments + "'); " +
+    //"INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+    //" VALUES ((SELECT MAX(ID) FROM Subframe), " + fid1_validity + 
+    //", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid1_positionName +"'), " + 
+    //fid1_xposition + ", " + fid1_yposition + ", " + fid1_zposition + "); " +
+    //"INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+    //" VALUES ((SELECT MAX(ID) FROM Subframe), " + fid2_validity + 
+    //", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid2_positionName +"'), " + 
+    //fid2_xposition + ", " + fid2_yposition + ", " + fid2_zposition + "); " +
+    //"INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+    //" VALUES ((SELECT MAX(ID) FROM Subframe), " + fid3_validity + 
+    //", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid3_positionName +"'), " + 
+    //fid3_xposition + ", " + fid3_yposition + ", " + fid3_zposition + "); " +
+    //"INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+    //" VALUES ((SELECT MAX(ID) FROM Subframe), " + fid4_validity + 
+    //", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid4_positionName +"'), " + 
+    //fid4_xposition + ", " + fid4_yposition + ", " + fid4_zposition + "); ";
 
-    console.log(q);
+    //console.log(q);
     
-    connection.query(q, function (error, result) {
-        if (error) throw error;
-        console.log(result);
-        res.redirect("/");
-    });
+    //connection.query(q, function (error, result) {
+    //    if (error) throw error;
+    //    console.log(result);
+    //    res.redirect("/");
+    //});
+    
+    
+    
     //console.log(req.body);
     //console.log(req.body);
     //console.log("POST REQUEST SENT TO /SUBMITEXPERIMENT email is " + req.body.email); 

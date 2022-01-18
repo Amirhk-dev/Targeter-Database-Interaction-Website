@@ -1,40 +1,113 @@
 <experiment>
     <subframe>
-        <GroupName>HED</GroupName>
-        <SubframeTypeName>FOI</SubframeTypeName>
+	<Validity>1</Validity>
         <FacilityName>ELIBL</FacilityName>
-        <SizeX>200</SizeX>
-        <SizeY>200</SizeY>
-        <Comment>Insertion Demo 1</Comment>
+        <TypeName>FOI</TypeName>
+        <GroupName>HED</GroupName>
+        <SizeX>120</SizeX>
+        <SizeY>120</SizeY>
+        <Comments>Test Demo</Comments>
+        <ExperimentDate>2022-01-18</ExperimentDate>
+        <ExperimentTime>11:41 AM</ExperimentTime>
+        <EventType>Created</EventType>
     </subframe>
     <fiducials>
         <fiducial1>    
             <Validity>1</Validity>
-            <PositionName>bottom-left</PositionName>
+            <PositionName>top-left</PositionName>
             <X_position>0</X_position>
             <Y_position>0</Y_position>
             <Z_position>0</Z_position>
         </fiducial1>
         <fiducial2>
             <Validity>1</Validity>
-            <PositionName>bottom-right</PositionName>
-            <X_position>190</X_position>
+            <PositionName>top-right</PositionName>
+            <X_position>100</X_position>
             <Y_position>0</Y_position>
             <Z_position>0</Z_position>
         </fiducial2>
         <fiducial3>    
             <Validity>1</Validity>
-            <PositionName>top-left</PositionName>
+            <PositionName>bottom-left</PositionName>
             <X_position>0</X_position>
-            <Y_position>190</Y_position>
+            <Y_position>100</Y_position>
             <Z_position>0</Z_position>
         </fiducial3>
         <fiducial4>    
             <Validity>1</Validity>
-            <PositionName>top-right</PositionName>
-            <X_position>190</X_position>
-            <Y_position>190</Y_position>
+            <PositionName>bottom-right</PositionName>
+            <X_position>100</X_position>
+            <Y_position>100</Y_position>
             <Z_position>0</Z_position>
         </fiducial4>
-    </fiducials>    
+    </fiducials>
+    <overviewimage>
+        <Validity>1</Validity>
+        <MicroscopeType>Keyence</MicroscopeType>
+        <DetectionMethod>Mask R-CNN</DetectionMethod>
+        <ImageLoad>Untitled.png</ImageLoad>
+        <ExperimentDate>2022-01-18</ExperimentDate>
+        <ExperimentTime>11:48 AM</ExperimentTime>
+    </overviewimage>  
+    <roiimages>
+        <roi1>
+            <Validity>1</Validity>
+            <MicroscopeType>Keyence</MicroscopeType>
+            <DetectionMethod>Mask R-CNN</DetectionMethod>
+            <ImageLoad>Untitled1.png</ImageLoad>
+            <ExperimentDate>2022-01-18</ExperimentDate>
+            <ExperimentTime>11:50 AM</ExperimentTime>
+        </roi1>
+    </roiimages>
+    <sampleimages>
+        <sample1>
+            <Validity>1</Validity>
+            <PixelSizeX>2</PixelSizeX>
+            <PixelSizeY>2</PixelSizeY>
+            <BBXPosition>0</BBXPosition>
+            <BBYPosition>20</BBYPosition>
+            <BBWidth>50</BBWidth>
+            <BBHeight>34</BBHeight>
+            <MaskImageLoad>Untitled2.png</MaskImageLoad>
+            <SampleExperimentDate>2022-01-18</SampleExperimentDate>
+            <SampleExperimentTime>11:58 AM</SampleExperimentTime>
+            <SampleComments>Sample Comment</SampleComments>
+            <SampleImageValidity>1</SampleImageValidity>
+            <MicroscopeType>Keyence</MicroscopeType>
+            <DetectionMethod>Mask R-CNN</DetectionMethod>
+            <ROIImageLoad>Untitled4.png</ROIImageLoad>
+            <ImageType>PNG</ImageType>
+            <ImageWidth>1000</ImageWidth>
+            <ImageHeight>1200</ImageHeight>
+            <ImageSize>100</ImageSize>
+	    <ImageComments></ImageComments>
+            <ImageLoad>Untitled.png</ImageLoad>
+            <ExperimentDate>2022-01-18</ExperimentDate>
+            <ExperimentTime>12:17 PM</ExperimentTime>
+        </sample1>
+    </sampleimages>
+    <targets>
+        <target1>
+            <Validity>1</Validity>
+            <Status>Shot</Status>
+            <ThetaAngle>0</ThetaAngle>
+            <PhiAngle>-120</PhiAngle>
+            <RhoAngle>10</RhoAngle>
+            <ExperimentDate>2022-01-18</ExperimentDate>
+            <ExperimentTime>12:29 PM</ExperimentTime>
+	    <Comments></Comments>
+            <PositionValidity>1</PositionValidity>
+            <XPosition>0</XPosition>
+            <YPosition>100</YPosition>
+            <ZPosition>0</ZPosition>
+            <InplaneAccuracy>0.8</InplaneAccuracy>
+            <OutofplaneAccuracy>0.9</OutofplaneAccuracy>
+            <PositionExperimentDate>2022-01-18</PositionExperimentDate>
+            <PositionExperimentTime>12:32 PM</PositionExperimentTime>
+            <Instrument>SCS</Instrument>
+            <XFELExperimentDate>2022-01-18</XFELExperimentDate>
+            <XFELExperimentTime>12:35</XFELExperimentTime>
+	    <XFELExperimentComments></XFELExperimentComments>
+        </target1>
+    </targets>
 </experiment>
