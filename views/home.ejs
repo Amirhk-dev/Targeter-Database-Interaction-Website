@@ -23,13 +23,19 @@
             <form method="POST" action='/submitDataManually'>
                 <div class="form-group">
                     <label class="label-text" id="manual_insert">Do you like to insert the data manually?</label>
-                    <% var test = 101; %> 
+                    <!--<% var test = 101; %> 
                     <script>
                       var getTest = <%= test  %>;  //var test is now assigned to getTest which will only work on browsers
                       console.log(getTest);  // successfully prints 101 on browser
-                   </script>
+                   </script>-->
                 </div>
                 <button class="btn btn-secondary">Insert the Data Manually</button>
+            </form>
+            <form method="POST" action='/createSubframe'>
+                <div class="form-group">
+                    <label class="label-text" id="create_subframe">Do you want to create a "SubframeID" for physical subframe creation?</label>
+                </div>
+                <button class="btn btn-secondary">Create Subframe</button>
             </form>
         </div>
     </div>

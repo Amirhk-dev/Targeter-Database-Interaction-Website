@@ -8,7 +8,7 @@
         <SizeY>120</SizeY>
         <Comments>Test Demo</Comments>
         <ExperimentDate>2022-01-18</ExperimentDate>
-        <ExperimentTime>11:41 AM</ExperimentTime>
+        <ExperimentTime>14:45</ExperimentTime>
         <EventType>Created</EventType>
     </subframe>
     <fiducials>
@@ -45,18 +45,24 @@
         <Validity>1</Validity>
         <MicroscopeType>Keyence</MicroscopeType>
         <DetectionMethod>Mask R-CNN</DetectionMethod>
-        <ImageLoad>Untitled.png</ImageLoad>
+        <ImageLoad>Overview_Image.png</ImageLoad>
         <ExperimentDate>2022-01-18</ExperimentDate>
         <ExperimentTime>11:48 AM</ExperimentTime>
+        <Comments></Comments>
     </overviewimage>  
     <roiimages>
         <roi1>
             <Validity>1</Validity>
             <MicroscopeType>Keyence</MicroscopeType>
             <DetectionMethod>Mask R-CNN</DetectionMethod>
-            <ImageLoad>Untitled1.png</ImageLoad>
+            <BBXPosition>50</BBXPosition>
+            <BBYPosition>10</BBYPosition>
+            <BBWidth>43</BBWidth>
+            <BBHeight>86</BBHeight>
+            <ImageLoad>ROI_Image_1.png</ImageLoad>
             <ExperimentDate>2022-01-18</ExperimentDate>
             <ExperimentTime>11:50 AM</ExperimentTime>
+            <Comments></Comments>
         </roi1>
     </roiimages>
     <sampleimages>
@@ -68,20 +74,19 @@
             <BBYPosition>20</BBYPosition>
             <BBWidth>50</BBWidth>
             <BBHeight>34</BBHeight>
-            <MaskImageLoad>Untitled2.png</MaskImageLoad>
+            <MaskImageLoad>Sample_Image_1.png</MaskImageLoad>
             <SampleExperimentDate>2022-01-18</SampleExperimentDate>
             <SampleExperimentTime>11:58 AM</SampleExperimentTime>
             <SampleComments>Sample Comment</SampleComments>
             <SampleImageValidity>1</SampleImageValidity>
             <MicroscopeType>Keyence</MicroscopeType>
             <DetectionMethod>Mask R-CNN</DetectionMethod>
-            <ROIImageLoad>Untitled4.png</ROIImageLoad>
             <ImageType>PNG</ImageType>
             <ImageWidth>1000</ImageWidth>
             <ImageHeight>1200</ImageHeight>
             <ImageSize>100</ImageSize>
-	    <ImageComments></ImageComments>
-            <ImageLoad>Untitled.png</ImageLoad>
+	        <ImageComments></ImageComments>
+            <ImageLoad>Image_1.png</ImageLoad>
             <ExperimentDate>2022-01-18</ExperimentDate>
             <ExperimentTime>12:17 PM</ExperimentTime>
         </sample1>
@@ -95,7 +100,7 @@
             <RhoAngle>10</RhoAngle>
             <ExperimentDate>2022-01-18</ExperimentDate>
             <ExperimentTime>12:29 PM</ExperimentTime>
-	    <Comments></Comments>
+	        <Comments></Comments>
             <PositionValidity>1</PositionValidity>
             <XPosition>0</XPosition>
             <YPosition>100</YPosition>
@@ -107,7 +112,7 @@
             <Instrument>SCS</Instrument>
             <XFELExperimentDate>2022-01-18</XFELExperimentDate>
             <XFELExperimentTime>12:35</XFELExperimentTime>
-	    <XFELExperimentComments></XFELExperimentComments>
+	        <XFELExperimentComments></XFELExperimentComments>
         </target1>
     </targets>
 </experiment>

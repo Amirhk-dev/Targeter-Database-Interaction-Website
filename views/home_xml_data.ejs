@@ -4,6 +4,7 @@
             <form method="POST" action='/submitExperimentXML'>
                 <br>
                 <br>
+                <br>
                 <p class="lead_text">Subframe Information</p>
                 <div class="form-check">
                     <label class="form-check-label" for="subframe_validity">Validity</label>
@@ -38,7 +39,7 @@
                 <div class="form-group">
                     <label class="label-text">Serial Number</label>
                     <input type="text" name="serial_number" class="form-control" id="serial_number"
-                        value=<%=serialnumber%> disabled>
+                        value=<%=serialnumber %> disabled>
                 </div>
                 <div class="form-group">
                     <label class="label-text">Width (SizeX) of the Subframe (in mm) <strong>(Double Values
@@ -55,7 +56,7 @@
                 <div class="form-group">
                     <label for="subframe_comments" class="label-text">Comments Related to the Subframe</label>
                     <textarea class="form-control" id="subframe_comments" name="subframe_comments" rows="2" minlength="0"
-                        maxlength="200" placeholder=<%=subframe_comments %>></textarea>
+                        maxlength="200" placeholder="Comments (at most 200 of characters are accepted)"><%=subframe_comments %></textarea>
                 </div>
                 <div class="form-group">
                     <label class="label-text">Date the Experiment of the Subframe is Done</strong></label>
@@ -78,8 +79,6 @@
                 </div>
                 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                 <hr />
-                <br>
-                <br>
                 <p class="lead_text">Fiducial Points Information</p>
                     <p class="label-text" style="text-align: center;"><em>Information for Fiducial 1 </em>
                     </p>
@@ -247,16 +246,14 @@
                 <br>
                 <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
                 <hr />
-                <br>
-                <br>
                 <p class="lead_text">Overview Image Information </p>
                 <div class="form-check">
                     <label class="form-check-label" for="overview_image_validity">Validity</label>
                     <input type="checkbox" class="form-check-input" id="overview_image_validity" name="overview_image_validity" checked=<%=overviewimage_validity %>>
                 </div>
                 <div class="form-group">
-                    <label class="label-text" for="microscopeDateSelect">Microscope Type</label>
-                    <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                    <label class="label-text" for="microscopeDataSelect">Microscope Type</label>
+                    <select class="form-control" id="microscopeDataSelect" name="overviewimg_microscope_data">
                         <option selected><%=overviewimage_microscopetype %></option>
                         <option>Keyence</option>
                         <option>Nanofocus</option>
@@ -264,7 +261,7 @@
                 </div>
                 <div class="form-group">
                     <label class="label-text" for="detectionMethodSelect">Detection (Imaging) Method</label>
-                    <select class="form-control" id="detectionMethodSelect" name="detection_method">
+                    <select class="form-control" id="detectionMethodSelect" name="overviewimg_detection_method">
                         <option selected><%=overviewimage_detectionmethod %></option>
                         <option>Hough Circle Transform</option>
                         <option>Mask R-CNN</option>
@@ -272,7 +269,7 @@
                 </div>
                 <div>
                     <label for="overviewImageLoad" class="form-label label-text">Overview Image File</label>
-                    <input class="form-control" type="file" id="overviewImageLoad" name="overview_image_load" value=<%=overviewimage_imageload %>>
+                    <input class="form-control" type="text" id="overviewImageLoad" name="overview_image_load" value=<%=overviewimage_imageload %>>
                 </div>
                 <div class="form-group">
                     <label class="label-text">Date the Experiment of the Overview Image is Done</strong></label>
@@ -283,22 +280,25 @@
                     <label class="label-text">Time the Experiment of the Overview Image is Done</strong></label>
                     <input class="form-control" type="time" id="overviewimage_experiment_time" name="overviewimage_experiment_time" value=<%=overviewimage_experimenttime %>>
                 </div>
+                <div class="form-group">
+                    <label for="sampleComments">Comments Related to the Overview Image</label>
+                    <textarea class="form-control" id="overviewimageComments" name="overviewimage_comments" placeholder="Comments (at most 200 of characters are accepted)"
+                      rows="2" minlength="0" maxlength="200"><%=overviewimage_comments %></textarea>
+                </div>
                 <!-- <form class="item" action="/submitFiducialsInfoManually" method="post">
                     <button class="btn btn-secondary" type="submit" name="list">Add Overveiw Image +</button>    
                 </form> -->
                 <br>
                 <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
                 <hr />
-                <br>
-            <br>
             <p class="lead_text">ROI Data</p>
             <div class="form-check">
                 <label class="form-check-label" for="roi_image_validity">Validity</label>
-                <input type="checkbox" class="form-check-input" id="roi_image_validity" name="roi_image_validity" checked=<%=roi1_validity %>>
+                <input type="checkbox" class="form-check-input" id="roi1_image_validity" name="roi1_image_validity" checked=<%=roi1_validity %>>
             </div>
             <div class="form-group">
                 <label class="label-text" for="ROImicroscopeDateSelect">Microscope Type</label>
-                <select class="form-control" id="ROImicroscopeDateSelect" name="microscope_data">
+                <select class="form-control" id="ROI1microscopeDateSelect" name="roi1_microscope_data">
                     <option selected><%=roi1_microscopetype %></option>
                     <option>Keyence</option>
                     <option>Nanofocus</option>
@@ -306,24 +306,51 @@
             </div>
             <div class="form-group">
                 <label class="label-text" for="ROIdetectionMethodSelect">Detection (Imaging) Method</label>
-                <select class="form-control" id="ROIdetectionMethodSelect" name="detection_method">
+                <select class="form-control" id="ROI1detectionMethodSelect" name="roi1_detection_method">
                     <option selected><%=roi1_detectionmethod %></option>
                     <option>Hough Circle Transform</option>
                     <option>Mask R-CNN</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box X Position <em>(Top-Left Corner
+                        Position)</em></label>
+                <input type="number" name="ROI1_BB_x_position" class="form-control" placeholder="Bounding Box X Position (values between 0 and 800 are accepted)"
+                    min="0" max="800" value=<%=roi1_bbxposition %>>
+            </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box Y Position <em>(Top-Left Corner
+                        Position)</em></label>
+                <input type="number" name="ROI1_BB_y_position" class="form-control" placeholder="Bounding Box Y Position (values between 0 and 800 are accepted)"
+                    min="0" max="800" value=<%=roi1_bbyposition %>>
+            </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box Width</label>
+                <input type="number" name="ROI1_BB_width" class="form-control" placeholder="Bounding Box Width (values between 0 and 800 are accepted)" min="0"
+                    max="800" value=<%=roi1_bbwidth %>>
+            </div>
+            <div class="form-group">
+                <label class="label-text">Bounding Box Height</label>
+                <input type="number" name="ROI1_BB_height" class="form-control" placeholder="Bounding Box Height (values between 0 and 800 are accepted)" min="0"
+                    max="800" value=<%=roi1_bbheight %>>
+            </div>
             <div>
                 <label for="ROIoverviewImageLoad" class="form-label label-text">ROI File</label>
-                <input class="form-control" type="file" id="ROIoverviewImageLoad" name="roi_overviewimage_load" value=<%=roi1_imageload %>>
+                <input class="form-control" type="text" id="ROIoverviewImageLoad" name="roi1_overviewimage_load" value=<%=roi1_imageload %>>
             </div>
             <div class="form-group">
                 <label class="label-text">Date the Experiment of the ROI Image is Done</strong></label>
-                <input class="form-control" type="date" id="roi_experiment_date" name="roi_experiment_date"
+                <input class="form-control" type="date" id="roi_experiment_date" name="roi1_experiment_date"
                     min="2012-01-01" max="2040-12-31" value=<%=roi1_experimentdate %>>
             </div>
             <div class="form-group">
                 <label class="label-text">Time the Experiment of the ROI Image is Done</strong></label>
-                <input class="form-control" type="time" id="roi_experiment_time" name="roi_experiment_time" value=<%=roi1_experimenttime %>>
+                <input class="form-control" type="time" id="roi_experiment_time" name="roi1_experiment_time" value=<%=roi1_experimenttime %>>
+            </div>
+            <div class="form-group">
+                <label for="sampleComments">Comments Related to the ROI</label>
+                <textarea class="form-control" id="ROIComments" name="roi1_comments" placeholder="Comments (at most 200 of characters are accepted)"
+                  rows="2" minlength="0" maxlength="200"><%=roi1_comments %></textarea>
             </div>
             <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <hr />
@@ -366,7 +393,7 @@
             </div>
             <div>
                 <label for="MaskImageLoad" class="form-label label-text">Mask Image File</label>
-                <input class="form-control" type="file" id="MaskImageLoad" name="mask_image_load" value=<%=sample1_maskimageload %>>
+                <input class="form-control" type="text" id="MaskImageLoad" name="mask_image_load" value=<%=sample1_maskimageload %>>
             </div>
             <div class="form-group">
                 <label class="label-text">Date the Sample Image is Created</strong></label>
@@ -380,10 +407,9 @@
             <div class="form-group">
                 <label for="sampleComments">Comments Related to the Sample</label>
                 <textarea class="form-control" id="SampleComments" name="sample_comments" placeholder="Comments (at most 200 of characters are accepted)"
-                  rows="2" minlength="0" maxlength="200" value=<%=sample1_samplecomments %>></textarea>
+                  rows="2" minlength="0" maxlength="200"><%=sample1_samplecomments %></textarea>
             </div>
             <hr />
-
             <!-- SampleImage Related Data -->
             <p class="lead_text">Sample Image Information</p>
             <div class="form-check">
@@ -406,10 +432,6 @@
                     <option>Hough Circle Transform</option>
                     <option>Mask R-CNN</option>
                 </select>
-            </div>
-            <div>
-                <label for="ROImageLoad" class="form-label label-text">ROI Image File</label>
-                <input class="form-control" type="file" id="ROIImageLoad" name="roi_image_load" value=<%=sample1_roiimageload %>>
             </div>
             <div class="form-group">
                 <label class="label-text" for="imagetype">Image Type</label>
@@ -436,13 +458,9 @@
                 <input type="number" name="image_size" class="form-control" placeholder="Image Size (values between 0 and 1000000 are accepted)"
                  min="0" max="1000000" value=<%=sample1_imagesize %>>
             </div>
-            <div class="form-group">
-                <label for="ImageComments">Comments Related to the Image</label>
-                <textarea class="form-control" id="ImageComments" name="image_comments" placeholder="Comments (at most 200 of characters are accepted)" rows="2" minlength="0" maxlength="200" value=<%=sample1_imagecomments %>></textarea>
-            </div>
             <div>
                 <label for="ImageLoad" class="form-label label-text">Image File</label>
-                <input class="form-control" type="file" id="ImageLoad" name="image_load" value=<%=sample1_imageload %>>
+                <input class="form-control" type="text" id="ImageLoad" name="image_load" value=<%=sample1_imageload %>>
             </div>
             <div class="form-group">
                 <label class="label-text">Date the Sample Information is Inserted</strong></label>
@@ -454,10 +472,12 @@
                 <input class="form-control" type="time" id="sampleinfo_experiment_time" name="sampleinfo_experiment_time"
                 value=<%=sample1_experimenttime %>>
             </div>
+            <div class="form-group">
+                <label for="ImageComments">Comments Related to the Image</label>
+                <textarea class="form-control" id="ImageComments" name="image_comments" placeholder="Comments (at most 200 of characters are accepted)" rows="2" minlength="0" maxlength="200"><%=sample1_imagecomments %></textarea>
+            </div>
             <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <hr />
-            <br>
-            <br>
             <!-- Target Related Data -->
             <p class="lead_text">Target Information</p>
             <div class="form-check">
@@ -504,10 +524,9 @@
             </div>
             <div class="form-group">
                 <label for="targetComments">Comments Related to the Target</label>
-                <textarea class="form-control" id="targetComments" name="target_comments" placeholder="Comments (maximum 200 characters are accepted)" rows="2" minlength="0" maxlength="200" value=<%=target1_comments %>></textarea>
+                <textarea class="form-control" id="targetComments" name="target_comments" placeholder="Comments (maximum 200 characters are accepted)" rows="2" minlength="0" maxlength="200"><%=target1_comments %></textarea>
             </div>
             <hr />
-
             <!-- Position Data Information -->
             <p class="lead_text">Target Position Information</p>
             <div class="form-check">
@@ -554,12 +573,12 @@
             <p class="lead_text">XFEL Instrument Information</p>
             <div class="form-group">
                 <label class="label-text" for="instrumentUsed">Instrument Used for Shooting</label>
-                <select class="form-control" id="instrumentUsed" name="instrument_used">
-                    <option selected><%=target1_instrument %></option>
-                    <option>HED</option>
-                    <option>SPB/SFX</option>
-                    <option>SCS</option>
-                    <option>MID</option>
+                <select  value="SCS" class="form-control" id="instrumentUsed" name="instrument_used" selected="selected">
+                    <option value="HED">HED</option>
+                    <option value="Choose...">Choose...</option>
+                    <option value="SPB/SFX">SPB/SFX</option>
+                    <option value="SCS">SCS</option>
+                    <option value="MID">MID</option>
                 </select>
             </div>
             <div class="form-group">
@@ -574,7 +593,7 @@
             <div class="form-group">
                 <label for="targetInstrumentComments">Comments Related to the Shooting</label>
                 <textarea class="form-control" id="targetInstrumentComments" placeholder="Comments (maximum 200 characters are accepted)"
-                rows="2" minlength="0" name="target_instrument_comments" maxlength="200" value=<%=target1_xfelexperimentcomments %>></textarea>
+                rows="2" minlength="0" name="target_instrument_comments" maxlength="200"><%=target1_xfelexperimentcomments %></textarea>
             </div>
             <button class="btn btn-secondary">Submit the Data</button>
             </form>
