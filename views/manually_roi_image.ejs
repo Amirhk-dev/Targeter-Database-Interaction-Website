@@ -29,6 +29,28 @@
                 <label for="ROIoverviewImageLoad" class="form-label label-text">Insert the ROI</label>
                 <input class="form-control" type="file" id="ROIoverviewImageLoad" name="roi_overviewimage_load">
             </div>
+            
+            <div class="form-group">
+                <label class="label-text">Enter the Bounding Box X Position</label>
+                <input type="number" name="roi_experiment_x_position" class="form-control" placeholder="Bounding Box X Position (values between 0 and 800 are accepted)" min="0"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Bounding Box Y Position</label>
+                <input type="number" name="roi_experiment_y_position" class="form-control" placeholder="Bounding Box Y Position (values between 0 and 800 are accepted)" min="0"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Bounding Box Width</label>
+                <input type="number" name="roi_experiment_width" class="form-control" placeholder="Bounding Box Width (values between 0 and 800 are accepted)" min="0"
+                    max="800">
+            </div>
+            <div class="form-group">
+                <label class="label-text">Enter the Bounding Box Height</label>
+                <input type="number" name="roi_experiment_height" class="form-control" placeholder="Bounding Box Height (values between 0 and 800 are accepted)" min="0"
+                    max="800">
+            </div>
+
             <div class="form-group">
                 <label class="label-text">Enter the Date the Experiment of the ROI Image is Done</strong></label>
                 <input class="form-control" type="date" id="roi_experiment_date" name="roi_experiment_date"
@@ -37,6 +59,11 @@
             <div class="form-group">
                 <label class="label-text">Enter the Time the Experiment of the ROI Image is Done</strong></label>
                 <input class="form-control" type="time" id="roi_experiment_time" name="roi_experiment_time">
+            </div>
+            <div class="form-group">
+                <label for="roi_experiment_comments">Comments Related to the ROI Image</label>
+                <textarea class="form-control" id="roi_experiment_comments" name="roi_experiment_comments" placeholder="Comments (at most 200 of characters are accepted)"
+                  rows="2" minlength="0" maxlength="200"></textarea>
             </div>
             <button class="btn btn-secondary" type="submit" form="enterSampleData">Enter the Sample
                 Information</button>

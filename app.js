@@ -32,10 +32,11 @@ var fiducials_itemNamesData = {"Fid1Validity":"", "Fid1PositionName":"", "Fid1XP
     "Fid4YPosition":"", "Fid4ZPosition":""};
 
 var overviewimage_itemNamesData = {"OverviewImageValidity":"", "MicroscopeData":"", "DetectionMethod":"", 
-    "OverviewImageLoad":"", "OverviewImageExperimentDate":"", "OverviewImageExperimentTime":""};
+    "OverviewImageLoad":"", "OverviewImageExperimentDate":"", "OverviewImageExperimentTime":"", "OverviewImageComments":""};
 
 var roi_itemNamesData = {"ROIImageValidity":"", "MicroscopeData":"", "DetectionMethod":"", 
-    "ROIOverviewImageLoad":"", "ROIExperimentDate":"", "ROIExperimentTime":""};
+    "ROIOverviewImageLoad":"", "ROIExperimentDate":"", "ROIExperimentTime":"", "ROIExperimentComments":"", 
+    "ROIExperimentXPosition":"", "ROIExperimentYPosition":"", "ROIExperimentWidth":"", "ROIExperimentHeight":""};
 
 var sample_itemNamesData = {"SampleImageValidity":"", "PixelSizeX":"", "PixelSizeY":"", "BBXPosition":"", 
     "BBYPosition":"", "BBWidth":"", "BBHeight":"", "MaskImageLoad":"", "SampleimageExperimentDate":"", 
@@ -174,6 +175,7 @@ app.get("/", function(req, res){
             throw err;
         else            
             var count = results[0].count;
+            serial_number = count+1;
         res.render("home", {data:count}); 
     });
 });
@@ -296,6 +298,7 @@ app.post("/submitOverviewImageManually", function(req, res){
     overviewimage_itemNamesData.OverviewImageLoad = req.body.overview_image_load;
     overviewimage_itemNamesData.OverviewImageExperimentDate = req.body.overviewimage_experiment_date;
     overviewimage_itemNamesData.OverviewImageExperimentTime = req.body.overviewimage_experiment_time;
+    overviewimage_itemNamesData.OverviewImageComments = req.body.OverviewImageComments;
     
     if (checkEmpty(overviewimage_itemNamesData, "overviewimage")) {
         res.render("manually_overview_image");
@@ -311,7 +314,12 @@ app.post("/submitROIImageManually", function(req, res){
     roi_itemNamesData.ROIOverviewImageLoad = req.body.roi_overviewimage_load;
     roi_itemNamesData.ROIExperimentDate = req.body.roi_experiment_date;
     roi_itemNamesData.ROIExperimentTime = req.body.roi_experiment_time;
-    
+    roi_itemNamesData.ROIExperimentXPosition = req.body.roi_experiment_x_position;
+    roi_itemNamesData.ROIExperimentYPosition = req.body.roi_experiment_y_position;
+    roi_itemNamesData.ROIExperimentWidth = req.body.roi_experiment_width;
+    roi_itemNamesData.ROIExperimentHeight = req.body.roi_experiment_height;
+    roi_itemNamesData.ROIExperimentComments = req.body.roi_experiment_comments;
+        
     if (checkEmpty(roi_itemNamesData, "roi")) {
         res.render("manually_roi_image");
     } else {
@@ -376,9 +384,6 @@ app.post("/submitAllData", function(req, res){
     if (checkEmpty(target_itemNamesData, "targetdata")) {
         res.render("manually_target_data");
     } else {
-        subframe_itemNamesData = {"":"",  
-        "":""};
-
         var subframe_query = "INSERT INTO Subframe (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments, CreateTimeStamp, Validity)" + 
         " VALUES ((SELECT ID FROM Group_Information WHERE GroupName='" + subframe_itemNamesData.GroupName + 
         "'), (SELECT ID FROM Subframe_Type WHERE Type='" + subframe_itemNamesData.SubframeTypeSelect +
@@ -386,71 +391,82 @@ app.post("/submitAllData", function(req, res){
         "'), " + serial_number + ", " +  subframe_itemNamesData.SizeX + ", " + subframe_itemNamesData.SizeY + ", '" + subframe_itemNamesData.SubframeComments + "', '" + 
         subframe_itemNamesData.SubframeExperimentDate + " " + subframe_itemNamesData.SubframeExperimentTime + ":00', " + subframe_itemNamesData.SubframeValidity  + "); ";
 
+        console.log(serial_number);
+
+
         var subframeeventtype_query = "INSERT INTO Subframe_Event (SubframeID, CreateTimeStamp, EventTypeID) VALUES ((SELECT MAX(ID) FROM Subframe), '" +
         subframe_itemNamesData.SubframeExperimentDate + " " + subframe_itemNamesData.SubframeExperimentTime + ":00', " + 
         "(SELECT ID FROM Subframe_Event_Type WHERE EventType='" + subframe_itemNamesData.SubframeEventTypeName + "')); ";   
 
-    var fiducial_query = "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid1_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid1_position_name +"'), " + 
-    fid1_x_position + ", " + fid1_y_position + ", " + fid1_z_position + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid2_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid2_position_name +"'), " + 
-    fid2_x_position + ", " + fid2_y_position + ", " + fid2_z_position + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid3_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid3_position_name +"'), " + 
-    fid3_x_position + ", " + fid3_y_position + ", " + fid3_z_position + "); " +
-    "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), " + fid4_validity + 
-    ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fid4_position_name +"'), " + 
-    fid4_x_position + ", " + fid4_y_position + ", " + fid4_z_position + "); ";
+        var fiducial_query = "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid1Validity + 
+        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid1PositionName +"'), " + 
+        fiducials_itemNamesData.Fid1XPosition + ", " + fiducials_itemNamesData.Fid1YPosition + ", " + fiducials_itemNamesData.Fid1ZPosition + "); " +
+        "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid2Validity + 
+        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid2PositionName +"'), " + 
+        fiducials_itemNamesData.Fid2XPosition + ", " + fiducials_itemNamesData.Fid2YPosition + ", " + fiducials_itemNamesData.Fid2ZPosition + "); " +
+        "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid3Validity + 
+        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid3PositionName +"'), " + 
+        fiducials_itemNamesData.Fid3XPosition + ", " + fiducials_itemNamesData.Fid3YPosition + ", " + fiducials_itemNamesData.Fid3ZPosition + "); " +
+        "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
+        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid4Validity + 
+        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid4PositionName +"'), " + 
+        fiducials_itemNamesData.Fid4XPosition + ", " + fiducials_itemNamesData.Fid4YPosition + ", " + fiducials_itemNamesData.Fid4ZPosition + "); ";
     
-    var overviewimage_query = "INSERT INTO OverviewImage_Event (SubframeID, CreateTimeStamp, MicroscopeID, MethodID, LinkToImage, Validity, Comments)" +
-    " VALUES ((SELECT MAX(ID) FROM Subframe), '" + overviewimage_experiment_date + " " +  overviewimage_experiment_time + ":00', " + 
-    "(SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + overviewimg_microscope_data + "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + 
-    overviewimg_detection_method + "'), '" + overview_image_load + "', " + overview_image_validity + ", '" + overviewimage_comments + "'); ";
+        var overviewimage_query = "INSERT INTO OverviewImage_Event (SubframeID, CreateTimeStamp, MicroscopeID, MethodID, LinkToImage, Validity, Comments)" +
+        " VALUES ((SELECT MAX(ID) FROM Subframe), '" + overviewimage_itemNamesData.OverviewImageExperimentDate + " " +  
+        overviewimage_itemNamesData.OverviewImageExperimentTime + ":00', " + 
+        "(SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + overviewimage_itemNamesData.MicroscopeData + "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + overviewimage_itemNamesData.DetectionMethod + "'), '" + overviewimage_itemNamesData.OverviewImageLoad + "', " + 
+        overviewimage_itemNamesData.OverviewImageValidity + ", '" + overviewimage_itemNamesData.OverviewImageComments + "'); ";
 
-    var roiimage_query = "INSERT INTO ROITable (OverviewImageEventID, MicroscopeID, MethodID, CreateTimeStamp, LinkToImage, " + 
-    "BoundingBoxXPosition, BoundingBoxYPosition, BoundingBoxWidth, BoundingBoxHeight, Validity, Comments) VALUES (" +
-    "(SELECT MAX(ID) FROM OverviewImage_Event), (SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + roi1_microscope_data + 
-    "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + roi1_detection_method + "'), '" + roi1_experiment_date + " " + 
-    roi1_experiment_time + ":00', '" + roi1_overviewimage_load + "', " + ROI1_BB_x_position + ", " + ROI1_BB_y_position + ", " + 
-    ROI1_BB_width + ", " + ROI1_BB_height + ", " + roi1_image_validity + ", '" + roi1_comments + "'); "; 
+        var roiimage_query = "INSERT INTO ROITable (OverviewImageEventID, MicroscopeID, MethodID, CreateTimeStamp, LinkToImage, " + 
+        "BoundingBoxXPosition, BoundingBoxYPosition, BoundingBoxWidth, BoundingBoxHeight, Validity, Comments) VALUES (" +
+        "(SELECT MAX(ID) FROM OverviewImage_Event), (SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + roi_itemNamesData.MicroscopeData + 
+        "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + roi_itemNamesData.DetectionMethod + "'), '" + roi_itemNamesData.ROIExperimentDate + " " + 
+        roi_itemNamesData.ROIExperimentTime + ":00', '" + roi_itemNamesData.ROIOverviewImageLoad + "', " + roi_itemNamesData.ROIExperimentXPosition + ", " + 
+        roi_itemNamesData.ROIExperimentYPosition + ", " + roi_itemNamesData.ROIExperimentWidth + ", " + roi_itemNamesData.ROIExperimentHeight + ", " + 
+        roi_itemNamesData.ROIImageValidity + ", '" + roi_itemNamesData.ROIExperimentComments + "'); "; 
 
-    var sampletable_query = "INSERT INTO SampleTable (ROIID, PixelSizeX, PixelSizeY, BoundingBoxXPosition, BoundingBoxYPosition, " + 
-    "BoundingBoxWidth, BoundingBoxHeight, MaskDirectory, Validity, Comments, CreateTimeStamp) VALUES ((SELECT MAX(ID) FROM ROITable), " +
-    pixel_size_x + ", " + pixel_size_y + ", " + BB_x_position + ", " + BB_y_position + ", " + BB_width + ", " + BB_height + ", '" + 
-    mask_image_load + "', " + sample_image_validity + ", '" +  sample_comments + "', '" + sampleimage_experiment_date + " " + sampleimage_experiment_time + ":00'); ";
+        var sampletable_query = "INSERT INTO SampleTable (ROIID, PixelSizeX, PixelSizeY, BoundingBoxXPosition, BoundingBoxYPosition, " + 
+        "BoundingBoxWidth, BoundingBoxHeight, MaskDirectory, Validity, Comments, CreateTimeStamp) VALUES ((SELECT MAX(ID) FROM ROITable), " +
+        sample_itemNamesData.PixelSizeX + ", " + sample_itemNamesData.PixelSizeY + ", " + sample_itemNamesData.BBXPosition + ", " + 
+        sample_itemNamesData.BBYPosition + ", " + sample_itemNamesData.BBWidth + ", " + sample_itemNamesData.BBHeight + ", '" + 
+        sample_itemNamesData.MaskImageLoad + "', " + sample_itemNamesData.SampleImageValidity + ", '" + sample_itemNamesData.SampleComments + "', '" + 
+        sample_itemNamesData.SampleimageExperimentDate + " " + sample_itemNamesData.SampleimageExperimentTime + ":00'); ";
 
-    var imagedata_query = "INSERT INTO Image_Data (SampleID, MicroscopeID, MethodID, ImageType, ImageWidth, ImageHeight, ImageMemorySize, " +
-    "LinkToImage, Validity, CreateTimeStamp, Comments) VALUES ((SELECT MAX(ID) FROM SampleTable), (SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + 
-    sample_microscope_data + "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + sample_detection_method + "'), '" + image_type + "', " + 
-    image_width + ", " + image_height + ", " + image_size + ", '" + image_load + "', " + sample_info_validity + ", '" + 
-    sampleinfo_experiment_date + " " + sampleinfo_experiment_time + ":00', '" + image_comments + "'); ";
+        var imagedata_query = "INSERT INTO Image_Data (SampleID, MicroscopeID, MethodID, ImageType, ImageWidth, ImageHeight, ImageMemorySize, " +
+        "LinkToImage, Validity, CreateTimeStamp, Comments) VALUES ((SELECT MAX(ID) FROM SampleTable), (SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + 
+        sample_itemNamesData.SampleMicroscopeData + "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + sample_itemNamesData.SampleDetectionMethod + "'), '" + 
+        sample_itemNamesData.ImageType + "', " + sample_itemNamesData.ImageWidth + ", " + sample_itemNamesData.ImageHeight + ", " + 
+        sample_itemNamesData.ImageSize + ", '" + sample_itemNamesData.ROIImageLoad + "', " + sample_itemNamesData.SampleInfoValidity + ", '" + 
+        sample_itemNamesData.SampleinfoExperimentDate + " " + sample_itemNamesData.SampleinfoExperimentTime + ":00', '" + sample_itemNamesData.ImageComments + "'); ";
 
-    var target_query = "INSERT INTO Target (SampleID, Theta, Phi, Rho, StatusID, Validity, CreateTimeStamp, Comments) VALUES (" +
-    "(SELECT MAX(ID) FROM SampleTable), " + theta_angle + ", " + phi_angle + ", " + rho_angle + ", (SELECT ID FROM Target_Status WHERE Status='" +
-    target_status + "'), " + target_image_validity + ", '" + targetinfo_experiment_date + " " + targetinfo_experiment_time + ":00', '" + target_comments + "'); ";
+        var target_query = "INSERT INTO Target (SampleID, Theta, Phi, Rho, StatusID, Validity, CreateTimeStamp, Comments) VALUES (" +
+        "(SELECT MAX(ID) FROM SampleTable), " + target_itemNamesData.ThetaAngle + ", " + target_itemNamesData.PhiAngle + ", " + target_itemNamesData.RhoAngle + 
+        ", (SELECT ID FROM Target_Status WHERE Status='" + target_itemNamesData.TargetStatus + "'), " + target_itemNamesData.TargetImageValidity + ", '" + 
+        target_itemNamesData.TargetinfoExperimentDate + " " + target_itemNamesData.TargetinfoExperimentTime + ":00', '" + 
+        target_itemNamesData.TargetComments + "'); ";
 
-    var positiondata_query = "INSERT INTO Position_Data (TargetID, X, Y, Z, InPlaneAccuracy, OutOfPlaneAccuracy, Validity, CreateTimeStamp) VALUES (" +
-    "(SELECT MAX(ID) FROM Target), " + target_x_position + ", " + target_y_position + ", " + target_z_position + ", " + inplane_accuracy + ", " + 
-    out_of_plane_accuracy + ", " + target_validity + ", '" + targetpositioninfo_experiment_date + " " +  targetpositioninfo_experiment_time + ":00'); ";
+        var positiondata_query = "INSERT INTO Position_Data (TargetID, X, Y, Z, InPlaneAccuracy, OutOfPlaneAccuracy, Validity, CreateTimeStamp) VALUES (" +
+        "(SELECT MAX(ID) FROM Target), " + target_itemNamesData.TargetXPosition + ", " + target_itemNamesData.TargetYPosition + ", " + 
+        target_itemNamesData.TargetZPosition + ", " + target_itemNamesData.InplaneAccuracy + ", " + target_itemNamesData.OutOfPlaneAccuracy + 
+        ", " + target_itemNamesData.TargetValidity + ", '" + target_itemNamesData.TargetpositioninfoExperimentDate + " " +  
+        target_itemNamesData.TargetpositioninfoExperimentTime + ":00'); ";
 
-    var xfeldata_query = "INSERT INTO XFEL_Data (TargetID, InstrumentID, CreateTimeStamp, Comments) VALUES ((SELECT MAX(ID) FROM Target), " + 
-    "(SELECT ID FROM Instrument WHERE Name='" + instrument_used + "'), '" +  xfeldata_experiment_date + " " + xfeldata_experiment_time + "', '" + 
-    target_instrument_comments + "'); ";
+        var xfeldata_query = "INSERT INTO XFEL_Data (TargetID, InstrumentID, CreateTimeStamp, Comments) VALUES ((SELECT MAX(ID) FROM Target), " + 
+        "(SELECT ID FROM Instrument WHERE Name='" + target_itemNamesData.InstrumentUsed + "'), '" +  target_itemNamesData.XFELDataExperimentDate + " " + 
+        target_itemNamesData.XFELDataExperimentTime + "', '" + target_itemNamesData.TargetInstrumentComments + "'); ";
     
-    var q = subframe_query + subframeeventtype_query + fiducial_query + overviewimage_query + roiimage_query + sampletable_query + 
-    imagedata_query + target_query + positiondata_query + xfeldata_query;
+        var q = subframe_query + subframeeventtype_query + fiducial_query + overviewimage_query + roiimage_query + sampletable_query + 
+        imagedata_query + target_query + positiondata_query + xfeldata_query;
 
-    connection.query(q, function (error, result) {
-        if (error) throw error;
-        console.log(result);
-        res.redirect("/");
-    }); 
-
+        connection.query(q, function (error, result) {
+            if (error) throw error;
+            console.log(result);
+            res.redirect("/");
+        }); 
     }
 });
 
