@@ -169,7 +169,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/imgs"));    
 
 app.get("/", function(req, res){
-    let query = "SELECT COUNT(*) as count FROM Subframe";
+    let query = "SELECT COUNT(*) as count FROM Subframe_Table";
     connection.query(query, function(err, results){
         if(err) 
             throw err;
@@ -181,19 +181,19 @@ app.get("/", function(req, res){
 });
 
 app.post("/submitDataManually", function(req, res){
-    let query = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
+    let query = "SELECT COUNT(*) as count FROM Subframe_Table; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe_Table;";
     connection.query(query, function(err, results){
         if(err) 
             throw err;
         else
             var count = results[0][0].count;
         var max_sr = results[1][0].max_sr;        
-        res.render("home_manually_subframe", {data: count, serialnumber: max_sr});
+        res.render("home_manually_subframe", {serialnumber: max_sr});
     });
 });
 
 app.post("/createSubframe", function(req, res){ 
-    let query = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
+    let query = "SELECT COUNT(*) as count FROM Subframe_Table; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe_Table;";
     connection.query(query, function(err, results){
         if(err) 
             throw err;
@@ -209,20 +209,29 @@ app.post("/createSubframeOnDatabase", function(req, res){
     FacilityName = req.body.facility_name_select;
     SubframeType = req.body.subframe_type_select;
 
-    var getFacilityID_query = "SELECT ID as facilityid FROM Facility WHERE CodeName='" + FacilityName + "'; ";
-    var getSubframeTypeID_query = "SELECT ID as subframetypeid FROM Subframe_Type WHERE Type='" + SubframeType + "'; ";
-    var createSubframeEntry = "INSERT INTO Subframe (FacilityID, SubframeTypeID, SerialNumber) VALUES ((" + 
-    "SELECT ID as facilityid FROM Facility WHERE CodeName='" + FacilityName + "'), (" + 
-    "SELECT ID as subframetypeid FROM Subframe_Type WHERE Type='" + SubframeType + "'), " + serial_number + "); ";
+    var getFacilityID_query = "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'; ";
+    var getSubframeTypeID_query = "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'; ";
+    var createSubframeEntry = "INSERT INTO Subframe_Table (FacilityID, SubframeTypeID, SerialNumber) VALUES ((" + 
+    "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'), (" + 
+    "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'), " + serial_number + "); ";
 
     var q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
+
+    var concat_zeros = 6 - serial_number.toString().length;
+    if(concat_zeros>0){
+        serial_number_text = serial_number.toString();
+        for(let i=0; i<concat_zeros; i++){
+            serial_number_text = '0' + serial_number_text;
+        }
+    }
 
     connection.query(q, function (error, result) {
         if (error) throw error;
         console.log(result);
         var facilityID = result[0][0].facilityid;
         var subframeTypeID = result[1][0].subframetypeid;
-        var finalID = facilityID.toString() + subframeTypeID.toString() + serial_number.toString();
+        //var finalID = facilityID.toString() + subframeTypeID.toString() + serial_number.toString();
+        var finalID = FacilityName + SubframeType + serial_number_text;
         console.log(finalID);
         res.render("show_subframe_id", {serial_number, FacilityName, SubframeType, finalID}); 
     });
@@ -245,7 +254,7 @@ app.post("/submitSubframeInfoManually", function(req, res){
     subframe_itemNamesData.SubframeEventTypeName = req.body.subframe_event_type_name;
     
     if (checkEmpty(subframe_itemNamesData, "subframe")) {
-        let query = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
+        let query = "SELECT COUNT(*) as count FROM Subframe_Table; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe_Table;";
         connection.query(query, function(err, results){
             if(err) 
                 throw err;
@@ -384,17 +393,16 @@ app.post("/submitAllData", function(req, res){
     if (checkEmpty(target_itemNamesData, "targetdata")) {
         res.render("manually_target_data");
     } else {
-        var subframe_query = "INSERT INTO Subframe (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments, CreateTimeStamp, Validity)" + 
-        " VALUES ((SELECT ID FROM Group_Information WHERE GroupName='" + subframe_itemNamesData.GroupName + 
-        "'), (SELECT ID FROM Subframe_Type WHERE Type='" + subframe_itemNamesData.SubframeTypeSelect +
-        "'), (SELECT ID FROM Facility WHERE CodeName='" + subframe_itemNamesData.FacilityNameSelect + 
+        var subframe_query = "INSERT INTO Subframe_Table (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments, CreateTimeStamp, Validity)" + 
+        " VALUES ((SELECT ID FROM GroupInformation_Table WHERE GroupName='" + subframe_itemNamesData.GroupName + 
+        "'), (SELECT ID FROM SubframeType_Table WHERE Type='" + subframe_itemNamesData.SubframeTypeSelect +
+        "'), (SELECT ID FROM Facility_Table WHERE CodeName='" + subframe_itemNamesData.FacilityNameSelect + 
         "'), " + serial_number + ", " +  subframe_itemNamesData.SizeX + ", " + subframe_itemNamesData.SizeY + ", '" + subframe_itemNamesData.SubframeComments + "', '" + 
         subframe_itemNamesData.SubframeExperimentDate + " " + subframe_itemNamesData.SubframeExperimentTime + ":00', " + subframe_itemNamesData.SubframeValidity  + "); ";
 
         console.log(serial_number);
 
-
-        var subframeeventtype_query = "INSERT INTO Subframe_Event (SubframeID, CreateTimeStamp, EventTypeID) VALUES ((SELECT MAX(ID) FROM Subframe), '" +
+        var subframeeventtype_query = "INSERT INTO SubframeEvent_Table (SubframeID, CreateTimeStamp, EventTypeID) VALUES ((SELECT MAX(ID) FROM Subframe), '" +
         subframe_itemNamesData.SubframeExperimentDate + " " + subframe_itemNamesData.SubframeExperimentTime + ":00', " + 
         "(SELECT ID FROM Subframe_Event_Type WHERE EventType='" + subframe_itemNamesData.SubframeEventTypeName + "')); ";   
 

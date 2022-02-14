@@ -107,6 +107,11 @@ button {
   padding: 0% 15%;
 }
 
+.row .twopanel {
+  padding: 0% 0%;
+}
+
+
 .row.title {
   text-align: center;
 }

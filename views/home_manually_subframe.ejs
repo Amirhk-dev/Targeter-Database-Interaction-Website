@@ -5,11 +5,7 @@
                 <br>
                 <br>
                 <p class="lead_text">Enter the Subframe Information</p>
-                <div class="form-check">
-                    <label class="form-check-label" for="subframe_validity">Validity</label>
-                    <input type="checkbox" class="form-check-input" id="subframe_validity" name="subframe_validity">
-                </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label class="label-text" for="facility_name_select">Select the Facility Name</label>
                     <select class="form-control" id="facility_name_select" name="facility_name_select">
                         <option selected>Choose...</option>
@@ -25,47 +21,72 @@
                         <option>9X9</option>
                         <option>FOI</option>
                     </select>
+                </div> -->
+                <div class="row twopanel">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the SubframeID</label>
+                            <input type="text" name="size_x" class="form-control" placeholder="14 Characters" minlength="14"
+                            maxlength="14">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text" for="group_select">Select the Group</label>
+                            <select class="form-control" id="group_select" name="group_name">
+                                <option selected>Choose...</option>
+                                <option>SEC</option>
+                                <option>HED</option>
+                                <option>MID</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="label-text" for="group_select">Select the Group</label>
-                    <select class="form-control" id="group_select" name="group_name">
-                        <option selected>Choose...</option>
-                        <option>SEC</option>
-                        <option>HED</option>
-                        <option>MID</option>
-                    </select>
-                </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label class="label-text">Serial Number</label>
                     <input type="text" name="serial_number" class="form-control" id="serial_number"
                         value=<%=serialnumber%> disabled>
+                </div> -->
+                <div class="row twopanel">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Width (SizeX) of the Subframe (in mm)</label>
+                            <input type="number" name="size_x" class="form-control" placeholder="values between 10 and 800 are accepted" min="10"
+                            max="800">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Height (SizeY) of the Subframe (in mm)</label>
+                            <input type="number" name="size_y" class="form-control" placeholder="values between 10 and 800 are accepted" min="10"
+                            max="800">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="label-text">Enter the Width (SizeX) of the Subframe (in mm) <strong>(Double Values
-                            Accepted)</strong></label>
-                    <input type="number" name="size_x" class="form-control" placeholder="Width of Subframe (values between 10 and 800 are accepted)" min="10"
-                        max="800">
-                </div>
-                <div class="form-group">
-                    <label class="label-text">Enter the Height (SizeY) of the Subframe (in mm) <strong>(Double Values
-                            Accepted)</strong></label>
-                    <input type="number" name="size_y" class="form-control" placeholder="Height of Subframe (values between 10 and 800 are accepted)" min="10"
-                        max="800">
+                <div class="row twopanel">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Date of the Experiment</strong></label>
+                            <input class="form-control" type="date" id="subframe_experiment_date" name="subframe_experiment_date" min="2012-01-01" max="2040-12-31">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Time of the Experiment</strong></label>
+                            <input class="form-control" type="time" id="subframe_experiment_time" name="subframe_experiment_time">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="subframe_comments" class="label-text">Enter Comments Related to the Subframe</label>
                     <textarea class="form-control" id="subframe_comments" name="subframe_comments" rows="2" minlength="0"
-                        maxlength="200" placeholder="Comments Length (between 0 and 200 characters are accepted)"></textarea>
+                    maxlength="100" placeholder="Comments Length (between 0 and 100 characters are accepted)"></textarea>
                 </div>
-                <div class="form-group">
-                    <label class="label-text">Enter the Date the Experiment of the Subframe is Done</strong></label>
-                    <input class="form-control" type="date" id="subframe_experiment_date" name="subframe_experiment_date" min="2012-01-01" max="2040-12-31">
+                <div class="form-check">
+                    <label class="form-check-label" for="subframe_validity">Validity</label>
+                    <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#checkboxCollapse" aria-expanded="false" id="subframe_validity" name="subframe_validity" checked>
                 </div>
-                <div class="form-group">
-                    <label class="label-text">Enter the Time the Experiment of the Subframe is Done</strong></label>
-                    <input class="form-control" type="time" id="subframe_experiment_time" name="subframe_experiment_time">
-                </div>
-                <p class="lead_text">Any Event Has Happened to the Subframe? </p>
+                <!-- <p class="lead_text">Any Event Has Happened to the Subframe? </p>
                 <div class="form-group">
                     <label class="label-text" for="subframe_event_type_name">Select the Event Type <em>(if there is
                             any)</em></label>
@@ -74,7 +95,24 @@
                         <option>Created</option>
                         <option>Fiducial Change</option>
                     </select>
-                </div>
+                </div> -->
+                
+                  <div class="collapse" id="checkboxCollapse">
+                    <div class="row twopanel">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="label-text">Enter the Date the Subframe got invalid</strong></label>
+                                <input class="form-control" type="date" id="subframe_invalid_date" name="subframe_invalid_date" min="2012-01-01" max="2040-12-31">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="label-text">Enter the Time the Subframe got invalid</strong></label>
+                                <input class="form-control" type="time" id="subframe_invalid_time" name="subframe_invalid_time">
+                            </div>
+                        </div>
+                    </div>
+                  </div>
                 <button class="btn btn-secondary">Enter the Fiducial Points Data</button>
             </form>
         </div>
