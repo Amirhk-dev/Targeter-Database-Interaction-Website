@@ -143,11 +143,20 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="subframe_events_comments" class="label-text">Enter Comments Related to the Subframe Event</label>
-                            <textarea class="form-control" id="subframe_events_comments" name="subframe_events_comments" rows="2" minlength="0"
-                            maxlength="100" placeholder="Comments Length (between 0 and 100 characters are accepted)"></textarea>
+                            <label class="label-text" for="microscopeDateSelect">Enter the Event Type</label>
+                            <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                                <option selected>Choose...</option>
+                                <option>Event 1</option>
+                                <option>Event 2</option>
+                            </select>
                         </div>
                     </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="subframe_events_comments" class="label-text">Enter Comments Related to the Subframe Event</label>
+                    <textarea class="form-control" id="subframe_events_comments" name="subframe_events_comments" rows="2" minlength="0"
+                    maxlength="100" placeholder="Comments Length (between 0 and 100 characters are accepted)"></textarea>
                   </div>
 
                   <div class="row twopanel">
@@ -169,22 +178,22 @@
                   <div class="row twopanel">
                     <div class="col-lg-4">
                         <p>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#fiducial1" aria-expanded="false" aria-controls="fiducial1">
-                            Fiducial 1 
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#fiducial1" aria-expanded="false" aria-controls="fiducial1">
+                            Fiducial 1 Information
                             </button>
                         </p>
                     </div>
                     <div class="col-lg-4">
                         <p>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#fiducial2" aria-expanded="false" aria-controls="fiducial2">
-                            Fiducial 2 
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#fiducial2" aria-expanded="false" aria-controls="fiducial2">
+                            Fiducial 2 Information
                             </button>
                         </p>
                     </div>
                     <div class="col-lg-4">
                         <p>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#fiducial3" aria-expanded="false" aria-controls="fiducial3">
-                            Fiducial 3 
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#fiducial3" aria-expanded="false" aria-controls="fiducial3">
+                            Fiducial 3 Information
                             </button>
                         </p>
                     </div>
@@ -344,7 +353,7 @@
                     </div>
                   </div>
 
-                <button class="btn btn-secondary">Enter the Fiducial Points Data</button>
+                <button class="btn btn-secondary">Enter the Region of Interest Data</button>
             </form>
         </div>
     </div>

@@ -242,6 +242,7 @@ app.post("/finishCreatingSubframeEntry", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
+    /*
     subframe_itemNamesData.SubframeValidity = (req.body.subframe_validity ? true:false);
     subframe_itemNamesData.FacilityNameSelect = req.body.facility_name_select;
     subframe_itemNamesData.SubframeTypeSelect = req.body.subframe_type_select;
@@ -264,8 +265,10 @@ app.post("/submitSubframeInfoManually", function(req, res){
             res.render("home_manually_subframe", {data: count, serialnumber: max_sr});
         });
     } else {
-        res.render("manually_fiducial");
-    }    
+    */    
+        //res.render("manually_fiducial");
+        res.render("manually_roi_image");
+    //}    
 });
 
 app.post("/submitFiducialsInfoManually", function(req, res){
