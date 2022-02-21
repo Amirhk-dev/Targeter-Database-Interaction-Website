@@ -320,6 +320,7 @@ app.post("/submitOverviewImageManually", function(req, res){
 });
 
 app.post("/submitROIImageManually", function(req, res){
+    /*
     roi_itemNamesData.ROIImageValidity = (req.body.roi_image_validity ? true:false);
     roi_itemNamesData.MicroscopeData = req.body.microscope_data;
     roi_itemNamesData.DetectionMethod = req.body.detection_method;
@@ -334,12 +335,13 @@ app.post("/submitROIImageManually", function(req, res){
         
     if (checkEmpty(roi_itemNamesData, "roi")) {
         res.render("manually_roi_image");
-    } else {
+    } else { */
         res.render("manually_sample_image");
-    }
+    //}
 });
 
 app.post("/submitSampleImageManually", function(req, res){
+    /* 
     sample_itemNamesData.SampleImageValidity = (req.body.sample_image_validity ? true:false);
     sample_itemNamesData.PixelSizeX = req.body.pixel_size_x;
     sample_itemNamesData.PixelSizeY = req.body.pixel_size_y;
@@ -367,8 +369,9 @@ app.post("/submitSampleImageManually", function(req, res){
     if (checkEmpty(sample_itemNamesData, "sampleimage")) {
         res.render("manually_sample_image");
     } else {
+        */
         res.render("manually_target_data");
-    }
+    //}
 });
 
 app.post("/submitAllData", function(req, res){
