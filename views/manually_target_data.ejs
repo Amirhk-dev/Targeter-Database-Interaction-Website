@@ -6,18 +6,12 @@
                 <br>
                 <!-- Target Related Data -->
                 <p class="lead_text">Enter Target Information</p>
-                <!-- Position Data Information -->
-                <!--<p class="lead_text">Enter the Target Position Information</p>-->
-                <!--<div class="form-check">
-                <label class="form-check-label" for="target_validity">Validity</label>
-                <input type="checkbox" class="form-check-input" id="target_validity" name="target_validity">
-            </div>-->
                 <div class="row twopanel">
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label class="label-text">X Position</label>
                             <input type="number" name="target_x_position" class="form-control"
-                                placeholder="Target X Position (values between 0 and 800 are accepted)" min="0"
+                                placeholder="values between 0 and 800 are accepted" min="0"
                                 max="800">
                         </div>
                     </div>
@@ -25,7 +19,7 @@
                         <div class="form-group">
                             <label class="label-text">Y Position</label>
                             <input type="number" name="target_y_position" class="form-control"
-                                placeholder="Target Y Position (values between 0 and 800 are accepted)" min="0"
+                                placeholder="values between 0 and 800 are accepted" min="0"
                                 max="800">
                         </div>
                     </div>
@@ -33,72 +27,39 @@
                         <div class="form-group">
                             <label class="label-text">Z Position</label>
                             <input type="number" name="target_z_position" class="form-control"
-                                placeholder="Target Z Position (values between 0 and 800 are accepted)" min="0"
+                                placeholder="values between 0 and 800 are accepted" min="0"
                                 max="800">
                         </div>
                     </div>
                 </div>
-                <!--
-            <div class="form-check">
-                <label class="form-check-label" for="target_image_validity">Validity</label>
-                <input type="checkbox" class="form-check-input" id="target_image_validity" name="target_image_validity">
-            </div>
-            <div class="form-group">
-                <label class="label-text" for="targetstatus">Target Status</label>
-                <select class="form-control" id="targetstatus" name="target_status">
-                    <option selected>Choose...</option>
-                    <option>Mounted</option>
-                    <option>Unmounted</option>
-                    <option>Mounted Somewhere Else</option>
-                    <option>Shot</option>
-                    <option>Broken</option>
-                    <option>Archived</option>
-                    <option>Destroyed</option>
-                </select>
-            </div>
-        -->
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Date the Target Information is Inserted</strong></label>
+                            <label class="label-text">Enter the Target Experiment Date</label>
                             <input class="form-control" type="date" id="targetinfo_experiment_date"
                                 name="targetinfo_experiment_date" min="2012-01-01" max="2040-12-31">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Time the Target Information is Inserted</strong></label>
+                            <label class="label-text">Enter the Target Experiment Time</label>
                             <input class="form-control" type="time" id="targetinfo_experiment_time"
                                 name="targetinfo_experiment_time">
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label for="targetComments">Enter Comments Related to the Target</label>
+                    <label for="targetComments">Enter Comments Related to the Target Experiment</label>
                     <textarea class="form-control" id="targetComments" name="target_comments"
-                        placeholder="Comments (maximum 200 characters are accepted)" rows="2" minlength="0"
-                        maxlength="200"></textarea>
+                        placeholder="maximum 100 characters are accepted" rows="2" minlength="0"
+                        maxlength="100"></textarea>
                 </div>
                 <hr />
-
-                <!--
-            <div class="form-group">
-                <label class="label-text">In-Plane Accuracy</label>
-                <input type="number" step="any" name="inplane_accuracy" class="form-control" placeholder="In-Plane Accuracy (values between 0 and 1 are accepted)" min="0"
-                    max="1">
-            </div>
-            <div class="form-group">
-                <label class="label-text">Out-of-Plane Accuracy</label>
-                <input type="number" step="any" name="out_of_plane_accuracy" class="form-control" placeholder="Out-of-Plane Accuracy (values between 0 and 1 are accepted)"
-                    min="0" max="1">
-            </div>
-        -->
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text" for="microscopeDateSelect">Select the Device</label>
-                            <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                            <label class="label-text" for="targetDeviceSelect">Select the Device</label>
+                            <select class="form-control" id="targetDeviceSelect" name="target_device">
                                 <option selected>Choose...</option>
                                 <option>Keyence</option>
                                 <option>Nanofocus</option>
@@ -110,8 +71,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text" for="microscopeDateSelect">Select the Event Type</label>
-                            <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                            <label class="label-text" for="targetEventType">Select the Event Type</label>
+                            <select class="form-control" id="targetEventType" name="target_event_type">
                                 <option selected>Choose...</option>
                                 <option>XRay Measurement</option>
                                 <option>XFEL Instrument Measurement</option>
@@ -133,48 +94,51 @@
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div>
-                            <label for="ROIverviewImageLoad" class="form-label label-text">Insert the Link to the
+                            <label for="TargetLinkToData" class="form-label label-text">Insert the Link to the
                                 Data</label>
-                            <input class="form-control" type="file" id="ROIoverviewImageLoad"
-                                name="roi_overviewimage_load">
+                            <input class="form-control" type="file" id="TargetLinkToData"
+                                name="target_link_to_data">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div>
-                            <label for="ROIverviewImageLoad" class="form-label label-text">Insert the Link to the Meta
+                            <label for="TargetLinkToMetaData" class="form-label label-text">Insert the Link to the Meta
                                 Data</label>
-                            <input class="form-control" type="file" id="ROIoverviewImageLoad"
-                                name="roi_overviewimage_load">
+                            <input class="form-control" type="file" id="TargetLinkToMetaData"
+                                name="target_link_to_meta_data">
                         </div>
                     </div>
                 </div>
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Date the Experiment of the ROI Image is
-                                Done</strong></label>
-                            <input class="form-control" type="date" id="roi_experiment_date" name="roi_experiment_date"
+                            <label class="label-text">Enter the Target Experiment Date</label>
+                            <input class="form-control" type="date" id="target_event_experiment_date" name="target_event_experiment_date"
                                 min="2012-01-01" max="2040-12-31">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Time the Experiment of the ROI Image is
-                                Done</strong></label>
-                            <input class="form-control" type="time" id="roi_experiment_time" name="roi_experiment_time">
+                            <label class="label-text">Enter the Target Experiment Time</label>
+                            <input class="form-control" type="time" id="target_event_experiment_time" name="target_event_experiment_time">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="sampleComments">Enter Comments Related to the Sample</label>
-                    <textarea class="form-control" id="SampleComments" name="sample_comments"
-                        placeholder="Comments (at most 200 of characters are accepted)" rows="2" minlength="0"
+                    <label for="targetEventComments">Enter Comments to the Target Experiment</label>
+                    <textarea class="form-control" id="targetEventComments" name="target_event__comments"
+                        placeholder="Maximum 100 of characters are accepted" rows="2" minlength="0"
                         maxlength="200"></textarea>
                 </div>
-
-
-
                 <hr>
+
+
+
+
+
+
+
+                
                 <p class="lead_text">Enter the Fiducial Points Information</p>
                 <div class="row twopanel">
                     <div class="col-lg-4">

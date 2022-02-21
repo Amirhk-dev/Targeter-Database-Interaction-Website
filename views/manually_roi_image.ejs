@@ -5,15 +5,11 @@
                 <br>
                 <br>
                 <p class="lead_text">Enter the Region of Interest (ROI) Data</p>
-                <!-- <div class="form-check">
-                <label class="form-check-label" for="roi_image_validity">Validity</label>
-                <input type="checkbox" class="form-check-input" id="roi_image_validity" name="roi_image_validity">
-            </div> -->
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text" for="ROImicroscopeDateSelect">Select the ROI Type</label>
-                            <select class="form-control" id="ROImicroscopeDateSelect" name="microscope_data">
+                            <label class="label-text" for="ROITypeSelect">Select the ROI Type</label>
+                            <select class="form-control" id="ROITypeSelect" name="roi_type">
                                 <option selected>Choose...</option>
                                 <option>Sample Piece</option>
                                 <option>Manual Selection</option>
@@ -24,8 +20,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text" for="ROIdetectionMethodSelect">Select the Detection Method</label>
-                            <select class="form-control" id="ROIdetectionMethodSelect" name="detection_method">
+                            <label class="label-text" for="ROIDetectionMethodSelect">Select the Detection Method</label>
+                            <select class="form-control" id="ROIDetectionMethodSelect" name="roi_detection_method">
                                 <option selected>Choose...</option>
                                 <option>Circle Detection</option>
                                 <option>Rectangle Detection</option>
@@ -38,8 +34,67 @@
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text" for="microscopeDateSelect">Select the Device</label>
-                            <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                            <label class="label-text">Enter the Bounding Box X Position</label>
+                            <input type="number" name="roi_experiment_x_position" class="form-control"
+                                placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Bounding Box Y Position</label>
+                            <input type="number" name="roi_experiment_y_position" class="form-control"
+                                placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                        </div>
+                    </div>
+                </div>
+                <div class="row twopanel">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Bounding Box Width</label>
+                            <input type="number" name="roi_experiment_width" class="form-control"
+                                placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Bounding Box Height</label>
+                            <input type="number" name="roi_experiment_height" class="form-control"
+                                placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ROIMaskLoad" class="form-label label-text">Insert the Mask Image</label>
+                    <input class="form-control" type="file" id="ROIMaskLoad" name="roi_mask_load">
+                </div>
+                <div class="row twopanel">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Date of the ROI Experiment</label>
+                            <input class="form-control" type="date" id="roi_experiment_date" name="roi_experiment_date"
+                                min="2012-01-01" max="2040-12-31">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Enter the Time of the ROI Experiment</label>
+                            <input class="form-control" type="time" id="roi_experiment_time" name="roi_experiment_time">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="roi_experiment_comments" class="label-text">Comments Related to the ROI
+                        Experiment</label>
+                    <textarea class="form-control" id="roi_experiment_comments" name="roi_experiment_comments"
+                        placeholder="Maximum 100 characters are accepted" rows="2" minlength="0"
+                        maxlength="200"></textarea>
+                </div>
+                <hr>
+                <div class="row twopanel">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text" for="ROIDeviceSelect">Select the Device</label>
+                            <select class="form-control" id="roi_device" name="roi_device">
                                 <option selected>Choose...</option>
                                 <option>Keyence</option>
                                 <option>Nanofocus</option>
@@ -51,8 +106,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text" for="microscopeDateSelect">Select the Event Type</label>
-                            <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                            <label class="label-text" for="ROIEventType">Select the Event Type</label>
+                            <select class="form-control" id="roi_event_type" name="roi_event_type">
                                 <option selected>Choose...</option>
                                 <option>XRay Measurement</option>
                                 <option>XFEL Instrument Measurement</option>
@@ -73,311 +128,242 @@
                 </div>
                 <div class="row twopanel">
                     <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Bounding Box X Position</label>
-                            <input type="number" name="roi_experiment_x_position" class="form-control"
-                                placeholder="Bounding Box X Position (values between 0 and 800 are accepted)" min="0"
-                                max="800">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Bounding Box Y Position</label>
-                            <input type="number" name="roi_experiment_y_position" class="form-control"
-                                placeholder="Bounding Box Y Position (values between 0 and 800 are accepted)" min="0"
-                                max="800">
-                        </div>
-                    </div>
-                </div>
-                <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Bounding Box Width</label>
-                            <input type="number" name="roi_experiment_width" class="form-control"
-                                placeholder="Bounding Box Width (values between 0 and 800 are accepted)" min="0"
-                                max="800">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Bounding Box Height</label>
-                            <input type="number" name="roi_experiment_height" class="form-control"
-                                placeholder="Bounding Box Height (values between 0 and 800 are accepted)" min="0"
-                                max="800">
-                        </div>
-                    </div>
-                </div>
-                <div class="row twopanel">
-                    <div class="col-lg-4">
                         <div>
-                            <label for="ROIverviewImageLoad" class="form-label label-text">Insert the Mask Image</label>
-                            <input class="form-control" type="file" id="ROIoverviewImageLoad"
-                                name="roi_overviewimage_load">
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div>
-                            <label for="ROIverviewImageLoad" class="form-label label-text">Insert the Link to the
+                            <label for="ROIEventLinkToData" class="form-label label-text">Insert the Link to the
                                 Data</label>
-                            <input class="form-control" type="file" id="ROIoverviewImageLoad"
-                                name="roi_overviewimage_load">
+                            <input class="form-control" type="file" id="ROIEventLinkToData"
+                                name="roi_event_link_to_data">
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div>
-                            <label for="ROIverviewImageLoad" class="form-label label-text">Insert the Link to the Meta
+                            <label for="ROIEventLinkToMetaData" class="form-label label-text">Insert the Link to the
+                                Meta
                                 Data</label>
-                            <input class="form-control" type="file" id="ROIoverviewImageLoad"
-                                name="roi_overviewimage_load">
+                            <input class="form-control" type="file" id="ROIEventLinkToMetaData"
+                                name="roi_event_link_to_meta_data">
                         </div>
                     </div>
                 </div>
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Date the Experiment of the ROI Image is
-                                Done</strong></label>
-                            <input class="form-control" type="date" id="roi_experiment_date" name="roi_experiment_date"
+                            <label class="label-text">Enter the Date of the ROI Event</label>
+                            <input class="form-control" type="date" id="roi_event_date" name="roi_event_date"
                                 min="2012-01-01" max="2040-12-31">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Time the Experiment of the ROI Image is
-                                Done</strong></label>
-                            <input class="form-control" type="time" id="roi_experiment_time" name="roi_experiment_time">
+                            <label class="label-text">Enter the Time of the ROI Event</label>
+                            <input class="form-control" type="time" id="roi_event_time" name="roi_event_time">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="roi_experiment_comments">Comments Related to the ROI Image</label>
-                    <textarea class="form-control" id="roi_experiment_comments" name="roi_experiment_comments"
-                        placeholder="Comments (at most 200 of characters are accepted)" rows="2" minlength="0"
+                    <label for="roi_experiment_comments" class="label-text">Comments Related to the ROI Event</label>
+                    <textarea class="form-control" id="roi_event_comments" name="roi_event_comments"
+                        placeholder="Maximum 100 of characters are accepted" rows="2" minlength="0"
                         maxlength="200"></textarea>
                 </div>
                 <hr>
                 <p class="lead_text">Enter the Fiducial Points Information</p>
                 <div class="row twopanel">
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial1" aria-expanded="false" aria-controls="fiducial1">
+                                data-bs-target="#roi_event_fiducial1" aria-expanded="false"
+                                aria-controls="roi_event_fiducial1">
                                 Fiducial 1 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial2" aria-expanded="false" aria-controls="fiducial2">
+                                data-bs-target="#roi_event_fiducial2" aria-expanded="false"
+                                aria-controls="roi_event_fiducial2">
                                 Fiducial 2 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial3" aria-expanded="false" aria-controls="fiducial3">
+                                data-bs-target="#roi_event_fiducial3" aria-expanded="false"
+                                aria-controls="roi_event_fiducial3">
                                 Fiducial 3 Information
                             </button>
-                        </p>
-                    </div>
-                </div>
-                <div class="row twopanel">
-                    <div class="col-lg-4">
-                        <div class="collapse" id="fiducial1">
-                            <div class="card card-body">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
-                                        Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
-                                        <option selected>Choose...</option>
-                                        <option>top-left</option>
-                                        <option>top-right</option>
-                                        <option>bottom-left</option>
-                                        <option>bottom-right</option>
-                                        <option>top-center</option>
-                                        <option>bottom-center</option>
-                                        <option>left-center</option>
-                                        <option>right-center</option>
-                                        <option>center</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="collapse" id="fiducial2">
-                            <div class="card card-body">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
-                                        Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
-                                        <option selected>Choose...</option>
-                                        <option>top-left</option>
-                                        <option>top-right</option>
-                                        <option>bottom-left</option>
-                                        <option>bottom-right</option>
-                                        <option>top-center</option>
-                                        <option>bottom-center</option>
-                                        <option>left-center</option>
-                                        <option>right-center</option>
-                                        <option>center</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="collapse" id="fiducial3">
-                            <div class="card card-body">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
-                                        Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
-                                        <option selected>Choose...</option>
-                                        <option>top-left</option>
-                                        <option>top-right</option>
-                                        <option>bottom-left</option>
-                                        <option>bottom-right</option>
-                                        <option>top-center</option>
-                                        <option>bottom-center</option>
-                                        <option>left-center</option>
-                                        <option>right-center</option>
-                                        <option>center</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
-                                </div>
-
-                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Date the Experiment of the ROI Image is
-                                Done</strong></label>
-                            <input class="form-control" type="date" id="roi_experiment_date" name="roi_experiment_date"
-                                min="2012-01-01" max="2040-12-31">
+                    <div class="col-lg-4">
+                        <div class="collapse" id="roi_event_fiducial1">
+                            <div class="card card-body">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="roi_event_fid1_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="roi_event_fid1_validity"
+                                        name="roi_event_fid1_validity">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text" for="roi_event_fid1_FiducialPositionSelect">Position of
+                                        the Fiducial
+                                        Point</label>
+                                    <select class="form-control" id="roi_event_fid1_FiducialPositionSelect"
+                                        name="roi_event_fid1_position_name">
+                                        <option selected>Choose...</option>
+                                        <option>top-left</option>
+                                        <option>top-right</option>
+                                        <option>bottom-left</option>
+                                        <option>bottom-right</option>
+                                        <option>top-center</option>
+                                        <option>bottom-center</option>
+                                        <option>left-center</option>
+                                        <option>right-center</option>
+                                        <option>center</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid1_x_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid1_y_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid1_z_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="roi_event_fid1_experiment_date"
+                                        name="roi_event_fid1_experiment_date" min="2012-01-01" max="2040-12-31">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="roi_event_fid1_experiment_time"
+                                        name="roi_event_fid1_experiment_time">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Time the Experiment of the ROI Image is
-                                Done</strong></label>
-                            <input class="form-control" type="time" id="roi_experiment_time" name="roi_experiment_time">
+                    <div class="col-lg-4">
+                        <div class="collapse" id="roi_event_fiducial2">
+                            <div class="card card-body">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="roi_event_fid2_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="roi_event_fid2_validity"
+                                        name="roi_event_fid2_validity">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text" for="roi_event_fid2_FiducialPositionSelect">Position of
+                                        the Fiducial
+                                        Point</label>
+                                    <select class="form-control" id="roi_event_fid2_FiducialPositionSelect"
+                                        name="roi_event_fid2_position_name">
+                                        <option selected>Choose...</option>
+                                        <option>top-left</option>
+                                        <option>top-right</option>
+                                        <option>bottom-left</option>
+                                        <option>bottom-right</option>
+                                        <option>top-center</option>
+                                        <option>bottom-center</option>
+                                        <option>left-center</option>
+                                        <option>right-center</option>
+                                        <option>center</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid2_x_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid2_y_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid2_z_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="roi_event_fid2_experiment_date"
+                                        name="roi_event_fid2_experiment_date" min="2012-01-01" max="2040-12-31">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="roi_event_fid2_experiment_time"
+                                        name="roi_event_fid1_experiment_time">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="roi_experiment_comments">Comments Related to the ROI Image</label>
-                    <textarea class="form-control" id="roi_experiment_comments" name="roi_experiment_comments"
-                        placeholder="Comments (at most 200 of characters are accepted)" rows="2" minlength="0"
-                        maxlength="200"></textarea>
+                    <div class="col-lg-4">
+                        <div class="collapse" id="roi_event_fiducial3">
+                            <div class="card card-body">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="roi_event_fid3_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="roi_event_fid3_validity"
+                                        name="roi_event_fid3_validity">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text" for="roi_event_fid3_FiducialPositionSelect">Position of
+                                        the Fiducial
+                                        Point</label>
+                                    <select class="form-control" id="roi_event_fid3_FiducialPositionSelect"
+                                        name="roi_event_fid3_position_name">
+                                        <option selected>Choose...</option>
+                                        <option>top-left</option>
+                                        <option>top-right</option>
+                                        <option>bottom-left</option>
+                                        <option>bottom-right</option>
+                                        <option>top-center</option>
+                                        <option>bottom-center</option>
+                                        <option>left-center</option>
+                                        <option>right-center</option>
+                                        <option>center</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid3_x_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid3_y_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
+                                    <input type="number" name="roi_event_fid3_z_position" class="form-control"
+                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="roi_event_fid3_experiment_date"
+                                        name="roi_event_fid3_experiment_date" min="2012-01-01" max="2040-12-31">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="roi_event_fid3_experiment_time"
+                                        name="roi_event_fid3_experiment_time">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button class="btn btn-secondary" type="submit" form="enterSampleData">Enter the Sample
                     Information</button>
             </form>
         </div>
     </div>
-    <%- include("footer") -%>
+<%- include("footer") -%>

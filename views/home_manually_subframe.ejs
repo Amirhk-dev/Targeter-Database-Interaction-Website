@@ -5,28 +5,11 @@
                 <br>
                 <br>
                 <p class="lead_text">Enter the Subframe Information</p>
-                <!-- <div class="form-group">
-                    <label class="label-text" for="facility_name_select">Select the Facility Name</label>
-                    <select class="form-control" id="facility_name_select" name="facility_name_select">
-                        <option selected>Choose...</option>
-                        <option>EXFEL</option>
-                        <option>ELIBL</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="label-text" for="subframe_type_select">Select the Subframe Type</label>
-                    <select class="form-control" id="subframe_type_select" name="subframe_type_select">
-                        <option selected>Choose...</option>
-                        <option>4IN</option>
-                        <option>9X9</option>
-                        <option>FOI</option>
-                    </select>
-                </div> -->
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="label-text">Enter the SubframeID</label>
-                            <input type="text" name="size_x" class="form-control" placeholder="14 Characters"
+                            <input type="text" name="subframe_id" class="form-control" placeholder="14 Characters"
                                 minlength="14" maxlength="14">
                         </div>
                     </div>
@@ -43,38 +26,17 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="form-group">
-                    <label class="label-text">Serial Number</label>
-                    <input type="text" name="serial_number" class="form-control" id="serial_number"
-                        value=<%=serialnumber%> disabled>
-                </div> -->
-                <!--<div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Width (SizeX) of the Subframe (in mm)</label>
-                            <input type="number" name="size_x" class="form-control" placeholder="values between 10 and 800 are accepted" min="10"
-                            max="800">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Height (SizeY) of the Subframe (in mm)</label>
-                            <input type="number" name="size_y" class="form-control" placeholder="values between 10 and 800 are accepted" min="10"
-                            max="800">
-                        </div>
-                    </div>
-                </div>-->
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Date of the Experiment</strong></label>
+                            <label class="label-text">Enter the Date of the Experiment</label>
                             <input class="form-control" type="date" id="subframe_experiment_date"
                                 name="subframe_experiment_date" min="2012-01-01" max="2040-12-31">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Enter the Time of the Experiment</strong></label>
+                            <label class="label-text">Enter the Time of the Experiment</label>
                             <input class="form-control" type="time" id="subframe_experiment_time"
                                 name="subframe_experiment_time">
                         </div>
@@ -83,37 +45,25 @@
                 <div class="form-group">
                     <label for="subframe_comments" class="label-text">Enter Comments Related to the Subframe</label>
                     <textarea class="form-control" id="subframe_comments" name="subframe_comments" rows="2"
-                        minlength="0" maxlength="100"
-                        placeholder="Comments Length (between 0 and 100 characters are accepted)"></textarea>
+                        minlength="0" maxlength="100" placeholder="Maximum 100 characters are accepted"></textarea>
                 </div>
                 <div class="form-check">
                     <label class="form-check-label" for="subframe_validity">Validity</label>
-                    <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#checkboxCollapse"
+                    <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#validityCollapse"
                         aria-expanded="false" id="subframe_validity" name="subframe_validity" checked>
                 </div>
-                <!-- <p class="lead_text">Any Event Has Happened to the Subframe? </p>
-                <div class="form-group">
-                    <label class="label-text" for="subframe_event_type_name">Select the Event Type <em>(if there is
-                            any)</em></label>
-                    <select class="form-control" id="subframe_event_type_name" name="subframe_event_type_name">
-                        <option selected>Choose...</option>
-                        <option>Created</option>
-                        <option>Fiducial Change</option>
-                    </select>
-                </div> -->
-
-                <div class="collapse" id="checkboxCollapse">
+                <div class="collapse" id="validityCollapse">
                     <div class="row twopanel">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="label-text">Enter the Date the Subframe got invalid</strong></label>
+                                <label class="label-text">Enter the Subframe Invalidy Date</label>
                                 <input class="form-control" type="date" id="subframe_invalid_date"
                                     name="subframe_invalid_date" min="2012-01-01" max="2040-12-31">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="label-text">Enter the Time the Subframe got invalid</strong></label>
+                                <label class="label-text">Enter the Subframe Invalidy Time</label>
                                 <input class="form-control" type="time" id="subframe_invalid_time"
                                     name="subframe_invalid_time">
                             </div>
@@ -121,27 +71,11 @@
                     </div>
                 </div>
                 <hr>
-
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text">Load the Data</label>
-                            <input class="form-control" type="file" id="link_to_data" name="link_to_data">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Load the Meta Data</label>
-                            <input class="form-control" type="file" id="link_to_meta_data" name="link_to_meta_data">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text" for="microscopeDateSelect">Select the Device</label>
-                            <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                            <label class="label-text" for="subframeDeviceSelect">Select the Device</label>
+                            <select class="form-control" id="subframeDeviceSelect" name="subframe_device_select">
                                 <option selected>Choose...</option>
                                 <option>Keyence</option>
                                 <option>Nanofocus</option>
@@ -153,8 +87,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="label-text" for="microscopeDateSelect">Select the Event Type</label>
-                            <select class="form-control" id="microscopeDateSelect" name="microscope_data">
+                            <label class="label-text" for="subframeEventSelect">Select the Subframe Event Type</label>
+                            <select class="form-control" id="subframeEventSelect" name="subframe_event_select">
                                 <option selected>Choose...</option>
                                 <option>XRay Measurement</option>
                                 <option>XFEL Instrument Measurement</option>
@@ -173,7 +107,22 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="row twopanel">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Load the Data (e.g. Images)</label>
+                            <input class="form-control" type="file" id="subframe_link_to_data"
+                                name="subframe_link_to_data">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="label-text">Load the Meta Data (e.g. Text File)</label>
+                            <input class="form-control" type="file" id="subframe_link_to_meta_data"
+                                name="subframe_link_to_meta_data">
+                        </div>
+                    </div>
+                </div>
                 <div class="row twopanel">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -195,50 +144,54 @@
                         Event</label>
                     <textarea class="form-control" id="subframe_events_comments" name="subframe_events_comments"
                         rows="2" minlength="0" maxlength="100"
-                        placeholder="Comments Length (between 0 and 100 characters are accepted)"></textarea>
+                        placeholder="Maximum 100 characters are accepted"></textarea>
                 </div>
                 <hr>
                 <p class="lead_text">Enter the Fiducial Points Information</p>
                 <div class="row twopanel">
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial1" aria-expanded="false" aria-controls="fiducial1">
+                                data-bs-target="#subframe_fiducial1" aria-expanded="false"
+                                aria-controls="subframe_fiducial1">
                                 Fiducial 1 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial2" aria-expanded="false" aria-controls="fiducial2">
+                                data-bs-target="#subframe_fiducial2" aria-expanded="false"
+                                aria-controls="subframe_fiducial2">
                                 Fiducial 2 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial3" aria-expanded="false" aria-controls="fiducial3">
+                                data-bs-target="#subframe_fiducial3" aria-expanded="false"
+                                aria-controls="subframe_fiducial3">
                                 Fiducial 3 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                 </div>
                 <div class="row twopanel">
                     <div class="col-lg-4">
-                        <div class="collapse" id="fiducial1">
+                        <div class="collapse" id="subframe_fiducial1">
                             <div class="card card-body">
                                 <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
+                                    <label class="form-check-label" for="subframe_fid1_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="subframe_fid1_validity"
+                                        name="subframe_fid1_validity">
                                 </div>
                                 <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
+                                    <label class="label-text" for="subframe_fid1_FiducialPoistionSelect">Position of the
+                                        Fiducial
                                         Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
+                                    <select class="form-control" id="subframe_fid1_FiducialPoistionSelect"
+                                        name="subframe_fid1_position_name">
                                         <option selected>Choose...</option>
                                         <option>top-left</option>
                                         <option>top-right</option>
@@ -253,47 +206,46 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
+                                    <input type="number" name="subframe_fid1_x_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
+                                    <input type="number" name="subframe_fid1_y_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
+                                    <input type="number" name="subframe_fid1_z_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="subframe_fid1_date"
+                                        name="subframe_fid1_date" min="2012-01-01" max="2040-12-31">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="subframe_fid1_time"
+                                        name="subframe_fid1_time">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="collapse" id="fiducial2">
+                        <div class="collapse" id="subframe_fiducial2">
                             <div class="card card-body">
                                 <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
+                                    <label class="form-check-label" for="subframe_fid2_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="subframe_fid2_validity"
+                                        name="subframe_fid2_validity">
                                 </div>
                                 <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
+                                    <label class="label-text" for="subframe_fid2_FiducialPoistionSelect">Position of the
+                                        Fiducial
                                         Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
+                                    <select class="form-control" id="subframe_fid2_FiducialPoistionSelect"
+                                        name="subframe_fid2_position_name">
                                         <option selected>Choose...</option>
                                         <option>top-left</option>
                                         <option>top-right</option>
@@ -308,48 +260,46 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
+                                    <input type="number" name="subframe_fid2_x_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
+                                    <input type="number" name="subframe_fid2_y_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
+                                    <input type="number" name="subframe_fid2_z_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="subframe_fid2_date"
+                                        name="subframe_fid2_date" min="2012-01-01" max="2040-12-31">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="subframe_fid2_time"
+                                        name="subframe_fid2_time">
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="collapse" id="fiducial3">
+                        <div class="collapse" id="subframe_fiducial3">
                             <div class="card card-body">
                                 <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
+                                    <label class="form-check-label" for="subframe_fid3_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="subframe_fid3_validity"
+                                        name="subframe_fid3_validity">
                                 </div>
                                 <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
+                                    <label class="label-text" for="subframe_fid3_FiducialPoistionSelect">Position of the
+                                        Fiducial
                                         Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
+                                    <select class="form-control" id="subframe_fid3_FiducialPoistionSelect"
+                                        name="subframe_fid3_position_name">
                                         <option selected>Choose...</option>
                                         <option>top-left</option>
                                         <option>top-right</option>
@@ -364,39 +314,35 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
+                                    <input type="number" name="subframe_fid3_x_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
+                                    <input type="number" name="subframe_fid3_y_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
+                                    <input type="number" name="subframe_fid3_z_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="subframe_fid3_date"
+                                        name="subframe_fid3_date" min="2012-01-01" max="2040-12-31">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="subframe_fid3_time"
+                                        name="subframe_fid3_time">
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <button class="btn btn-secondary">Enter the Region of Interest Data</button>
             </form>
         </div>
     </div>
-    <%- include("footer") -%>
+<%- include("footer") -%>
