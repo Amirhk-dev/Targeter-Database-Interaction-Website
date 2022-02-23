@@ -21,34 +21,45 @@ let fiducialCounter = 0;
 const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
 const fiducialPoints = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
 
-var subframe_itemNamesData = {"SubframeValidity":"", "FacilityNameSelect":"", "SubframeTypeSelect":"",
-    "GroupName":"", "SizeX":"", "SizeY":"", "SubframeComments":"", "SubframeExperimentDate":"", 
-    "SubframeExperimentTime":"", "SubframeEventTypeName":""};
+var subframe_itemNamesData = {"facility_name":"", "subframe_type":"", "serial_number":"", "group_name":"", "subframe_experiment_date":"",
+    "subframe_experiment_time":"", "subframe_comments":"", "subframe_validity":"", "subframe_invalid_date":"", "subframe_invalid_time":"", 
+    "subframe_device_select":"", "subframe_event_select":"", "subframe_link_to_data":"", "subframe_link_to_meta_data":"", 
+    "subframe_event_experiment_date":"", "subframe_event_experiment_time":"", "subframe_events_comments":"", "subframe_fid1_validity":"", 
+    "subframe_fid1_position_name":"", "subframe_fid1_x_position":"", "subframe_fid1_y_position":"", "subframe_fid1_z_position":"", 
+    "subframe_fid1_date":"", "subframe_fid1_time":"", "subframe_fid2_validity":"", "subframe_fid2_position_name":"", "subframe_fid2_x_position":"", 
+    "subframe_fid2_y_position":"", "subframe_fid2_z_position":"", "subframe_fid2_date":"", "subframe_fid2_time":"", "subframe_fid3_validity":"", 
+    "subframe_fid3_position_name":"", "subframe_fid3_x_position":"", "subframe_fid3_y_position":"", "subframe_fid3_z_position":"", 
+    "subframe_fid3_date":"", "subframe_fid3_time":""};
 
-var fiducials_itemNamesData = {"Fid1Validity":"", "Fid1PositionName":"", "Fid1XPosition":"", 
-    "Fid1YPosition":"", "Fid1ZPosition":"", "Fid2Validity":"", "Fid2PositionName":"", "Fid2XPosition":"", 
-    "Fid2YPosition":"", "Fid2ZPosition":"", "Fid3Validity":"", "Fid3PositionName":"", "Fid3XPosition":"", 
-    "Fid3YPosition":"", "Fid3ZPosition":"", "Fid4Validity":"", "Fid4PositionName":"", "Fid4XPosition":"", 
-    "Fid4YPosition":"", "Fid4ZPosition":""};
+var roi_itemNamesData = {"roi_type":"", "roi_detection_method":"", "roi_experiment_x_position":"", "roi_experiment_y_position":"", 
+    "roi_experiment_width":"", "roi_experiment_height":"", "roi_mask_load":"", "roi_experiment_date":"", "roi_experiment_time":"", 
+    "roi_experiment_comments":"", "roi_device":"", "roi_event_type":"", "roi_event_link_to_data":"", "roi_event_link_to_meta_data":"", 
+    "roi_event_date":"", "roi_event_time":"", "roi_event_comments":"", "":"roi_event_fid1_validity", "roi_event_fid1_position_name":"", 
+    "roi_event_fid1_x_position":"", "roi_event_fid1_y_position":"", "roi_event_fid1_z_position":"", "roi_event_fid1_experiment_date":"", 
+    "roi_event_fid1_experiment_time":"", "roi_event_fid2_validity":"", "roi_event_fid2_position_name":"", "roi_event_fid2_x_position":"", 
+    "roi_event_fid2_y_position":"", "roi_event_fid2_z_position":"", "roi_event_fid2_experiment_date":"", "roi_event_fid1_experiment_time":"", 
+    "roi_event_fid3_validity":"", "roi_event_fid3_position_name":"", "roi_event_fid3_x_position":"", "roi_event_fid3_y_position":"", 
+    "roi_event_fid3_z_position":"", "roi_event_fid3_experiment_date":"", "roi_event_fid3_experiment_time":""};
 
-var overviewimage_itemNamesData = {"OverviewImageValidity":"", "MicroscopeData":"", "DetectionMethod":"", 
-    "OverviewImageLoad":"", "OverviewImageExperimentDate":"", "OverviewImageExperimentTime":"", "OverviewImageComments":""};
-
-var roi_itemNamesData = {"ROIImageValidity":"", "MicroscopeData":"", "DetectionMethod":"", 
-    "ROIOverviewImageLoad":"", "ROIExperimentDate":"", "ROIExperimentTime":"", "ROIExperimentComments":"", 
-    "ROIExperimentXPosition":"", "ROIExperimentYPosition":"", "ROIExperimentWidth":"", "ROIExperimentHeight":""};
-
-var sample_itemNamesData = {"SampleImageValidity":"", "PixelSizeX":"", "PixelSizeY":"", "BBXPosition":"", 
-    "BBYPosition":"", "BBWidth":"", "BBHeight":"", "MaskImageLoad":"", "SampleimageExperimentDate":"", 
-    "SampleimageExperimentTime":"", "SampleComments":"", "SampleInfoValidity":"", "SampleMicroscopeData":"", 
-    "SampleDetectionMethod":"", "ROIImageLoad":"", "ImageType":"", "ImageWidth":"", "ImageHeight":"", 
-    "ImageSize":"", "ImageComments":"", "ImageLoad":"", "SampleinfoExperimentDate":"", "SampleinfoExperimentTime":""};
-
-var target_itemNamesData = {"TargetImageValidity":"", "TargetStatus":"", "ThetaAngle":"", "PhiAngle":"", 
-    "RhoAngle":"", "TargetinfoExperimentDate":"", "TargetinfoExperimentTime":"", "TargetComments":"", 
-    "TargetValidity":"", "TargetXPosition":"", "TargetYPosition":"", "TargetZPosition":"", "InplaneAccuracy":"", 
-    "OutOfPlaneAccuracy":"", "TargetpositioninfoExperimentDate":"", "TargetpositioninfoExperimentTime":"", 
-    "InstrumentUsed":"", "XFELDataExperimentDate":"", "XFELDataExperimentTime":"", "TargetInstrumentComments":""};
+var sample_itemNamesData = {"sample_experiment_x_position":"", "sample_experiment_y_position":"", "sample_experiment_width":"", "sample_experiment_height":"", 
+    "sample_detection_method":"", "sample_mask_load":"", "sample_experiment_date":"", "sample_experiment_time":"", "sample_experiment_comments":"", 
+    "sample_device":"", "sample_event_type":"", "sample_event_link_to_data":"", "sample_event_link_to_meta_data":"", 
+    "sample_event_date":"", "sample_event_time":"", "sample_event_comments":"", "sample_event_fid1_validity":"", "sample_event_fid1_position_name":"", 
+    "sample_event_fid1_x_position":"", "sample_event_fid1_y_position":"", "sample_event_fid1_z_position":"", "":"sample_event_fid1_experiment_date", 
+    "sample_event_fid1_experiment_time":"", "sample_event_fid2_validity":"", "sample_event_fid2_position_name":"", "sample_event_fid2_x_position":"", 
+    "sample_event_fid2_y_position":"", "sample_event_fid2_z_position":"", "sample_event_fid2_experiment_date":"", "sample_event_fid1_experiment_time":"",
+    "sample_event_fid3_validity":"", "sample_event_fid3_position_name":"", "sample_event_fid3_x_position":"", "sample_event_fid3_y_position":"", 
+    "sample_event_fid3_z_position":"", "sample_event_fid3_experiment_date":"", "sample_event_fid3_experiment_time":""};
+    
+var target_itemNamesData = {"target_x_position":"", "target_y_position":"", "target_z_position":"", "targetinfo_experiment_date":"", 
+    "targetinfo_experiment_time":"", "target_comments":"", "target_device":"", "target_event_type":"", 
+    "target_link_to_data":"", "target_link_to_meta_data":"", "target_event_experiment_date":"", "target_event_experiment_time":"", 
+    "target_event_comments":"", "target_event_fid1_validity":"", "target_event_fid1_position_name":"", "target_event_fid1_x_position":"", 
+    "target_event_fid1_y_position":"", "target_event_fid1_z_position":"", "target_event_fid1_experiment_date":"", "target_event_fid1_experiment_time":"",
+    "target_event_fid2_validity":"", "target_event_fid2_position_name":"", "target_event_fid2_x_position":"", "target_event_fid2_y_position":"",
+    "target_event_fid2_z_position":"", "target_event_fid2_experiment_date":"", "target_event_fid1_experiment_time":"", "target_event_fid3_validity":"",
+    "target_event_fid3_position_name":"", "target_event_fid3_x_position":"", "target_event_fid3_y_position":"", "target_event_fid3_z_position":"",
+    "target_event_fid3_experiment_date":"", "target_event_fid3_experiment_time":""};
 
 var xml_data = [];
 function assignTheValues(value) {
@@ -61,101 +72,186 @@ function checkEmpty(term, page_name) {
     var result = false;
 
     if (page_name === "subframe"){
-        value_0 = (term.SubframeValidity===false ? true:false);
-        value_1 = (term.FacilityNameSelect==="Choose..." ? true:false);
-        value_2 = (term.SubframeTypeSelect==="Choose..." ? true:false);
-        value_3 = (term.GroupName==="Choose..." ? true:false);
-        value_4 = (term.SizeX==='' ? true:false);
-        value_5 = (term.SizeY==='' ? true:false);
-        value_6 = (term.SubframeExperimentDate==='' ? true:false);
-        value_7 = (term.SubframeExperimentTime==='' ? true:false);
-        value_8 = (term.SubframeEventTypeName==="Choose..." ? true:false);
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8);
-    } else if (page_name === "fiducial"){
-        if ((term.Fid1Validity + term.Fid2Validity + term.Fid3Validity + term.Fid4Validity) < 3) {
-            result = true;
-        }else {
-            value_0 = (term.Fid1PositionName === 'Choose...' ? true:false);
-            value_1 = (term.Fid2PositionName === 'Choose...' ? true:false);
-            value_2 = (term.Fid3PositionName === 'Choose...' ? true:false);
-            value_3 = (term.Fid4PositionName === 'Choose...' ? true:false);
-            value_4 = (term.Fid1XPosition === '' ? true:false);
-            value_5 = (term.Fid1YPosition === '' ? true:false);
-            value_6 = (term.Fid1ZPosition === '' ? true:false);
-            value_7 = (term.Fid2XPosition === '' ? true:false);
-            value_8 = (term.Fid2YPosition === '' ? true:false);
-            value_9 = (term.Fid2ZPosition === '' ? true:false);
-            value_10 = (term.Fid3XPosition === '' ? true:false);
-            value_11 = (term.Fid3YPosition === '' ? true:false);
-            value_12 = (term.Fid3ZPosition === '' ? true:false);
-            value_13 = (term.Fid4XPosition === '' ? true:false);
-            value_14 = (term.Fid4YPosition === '' ? true:false);
-            value_15 = (term.Fid4ZPosition === '' ? true:false);
+        value_0 = (term.subframe_validity===false ? true:false);
+        if (value_0) {
+            value_1 = (term.facility_name==="Choose..." ? true:false);
+            value_2 = (term.subframe_type==="Choose..." ? true:false);
+            value_3 = (term.serial_number==='' ? true:false);
+            value_4 = (term.group_name==="Choose..." ? true:false);
+            value_5 = (term.subframe_experiment_date==='' ? true:false);
+            value_6 = (term.subframe_experiment_time==='' ? true:false);
+            value_7 = (term.subframe_comments==='' ? true:false);
+            value_8 = (term.subframe_device_select==="Choose..." ? true:false);
+            value_9 = (term.subframe_event_select==="Choose..." ? true:false);
+            value_10 = (term.subframe_link_to_data==='' ? true:false);
+            value_11 = (term.subframe_link_to_meta_data==='' ? true:false);
+            value_12 = (term.subframe_event_experiment_date==='' ? true:false);
+            value_13 = (term.subframe_event_experiment_time==='' ? true:false);
+            value_14 = (term.subframe_events_comments==='' ? true:false);
+            value_15 = (term.subframe_fid1_validity===false ? true:false);
+            value_16 = (term.subframe_fid1_position_name==="Choose..." ? true:false);
+            value_17 = (term.subframe_fid1_x_position==='' ? true:false);
+            value_18 = (term.subframe_fid1_y_position==='' ? true:false);
+            value_19 = (term.subframe_fid1_z_position==='' ? true:false);
+            value_20 = (term.subframe_fid1_date==='' ? true:false);
+            value_21 = (term.subframe_fid1_time==='' ? true:false);
+            value_22 = (term.subframe_fid2_validity===false ? true:false);
+            value_23 = (term.subframe_fid2_position_name==="Choose..." ? true:false);
+            value_24 = (term.subframe_fid2_x_position==='' ? true:false);
+            value_25 = (term.subframe_fid2_y_position==='' ? true:false);
+            value_26 = (term.subframe_fid2_z_position==='' ? true:false);
+            value_27 = (term.subframe_fid2_date==='' ? true:false);
+            value_28 = (term.subframe_fid2_time==='' ? true:false);
+            value_29 = (term.subframe_fid3_validity===false ? true:false);
+            value_30 = (term.subframe_fid3_position_name==="Choose..." ? true:false);
+            value_31 = (term.subframe_fid3_x_position==='' ? true:false);
+            value_32 = (term.subframe_fid3_y_position==='' ? true:false);
+            value_33 = (term.subframe_fid3_z_position==='' ? true:false);
+            value_34 = (term.subframe_fid3_date==='' ? true:false);
+            value_35 = (term.subframe_fid3_time==='' ? true:false);
+
             result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | 
-                value_9 | value_10 | value_11 | value_12 | value_13 | value_14 | value_15);
+                value_9 | value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 |
+                value_18 | value_19 | value_20 | value_21 | value_22 | value_23 | value_24 | value_25 | value_26 |
+                value_27 | value_27 | value_28 | value_29 | value_30 | value_31 | value_32 | value_33 | value_34 | value_35);
+
+        } else {
+            value_1 = (term.subframe_invalid_date==='' ? true:false);
+            value_2 = (term.subframe_invalid_time==='' ? true:false);
+            
+            result = (value_1 | value_2);
+
         }
-    }  else if (page_name === "overviewimage") {
-        value_0 = (term.OverviewImageValidity===false ? true:false);
-        value_1 = (term.MicroscopeData==="Choose..." ? true:false);
-        value_2 = (term.DetectionMethod==="Choose..." ? true:false);
-        value_3 = (term.OverviewImageLoad==='' ? true:false);
-        value_4 = (term.OverviewImageExperimentDate==='' ? true:false);
-        value_5 = (term.OverviewImageExperimentTime==='' ? true:false);
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5);
     } else if (page_name === "roi") {
-        value_0 = (term.ROIImageValidity===false ? true:false);
-        value_1 = (term.MicroscopeData==="Choose..." ? true:false);
-        value_2 = (term.DetectionMethod==="Choose..." ? true:false);
-        value_3 = (term.ROIOverviewImageLoad==='' ? true:false);
-        value_4 = (term.ROIExperimentDate==='' ? true:false);
-        value_5 = (term.ROIExperimentTime==='' ? true:false);
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5);
+        value_0 = (roi_itemNamesData.roi_type==="Choose..." ? true:false);
+        value_1 = (roi_itemNamesData.roi_detection_method==="Choose..." ? true:false);
+        value_2 = (roi_itemNamesData.roi_experiment_x_position==='' ? true:false);
+        value_3 = (roi_itemNamesData.roi_experiment_y_position==='' ? true:false);
+        value_4 = (roi_itemNamesData.roi_experiment_width==='' ? true:false);
+        value_5 = (roi_itemNamesData.roi_experiment_height==='' ? true:false);
+        value_6 = (roi_itemNamesData.roi_mask_load==='' ? true:false);
+        value_7 = (roi_itemNamesData.roi_experiment_date==='' ? true:false);
+        value_8 = (roi_itemNamesData.roi_experiment_time==='' ? true:false);
+        value_9 = (roi_itemNamesData.roi_experiment_comments==='' ? true:false);
+        value_10 = (roi_itemNamesData.roi_device==="Choose..." ? true:false);
+        value_11 = (roi_itemNamesData.roi_event_type==="Choose..." ? true:false);
+        value_12 = (roi_itemNamesData.roi_event_link_to_data==='' ? true:false);
+        value_13 = (roi_itemNamesData.roi_event_link_to_meta_data==='' ? true:false);
+        value_14 = (roi_itemNamesData.roi_event_date==='' ? true:false);
+        value_15 = (roi_itemNamesData.roi_event_time==='' ? true:false);
+        value_16 = (roi_itemNamesData.roi_event_comments==='' ? true:false);
+        value_17 = (roi_itemNamesData.roi_event_fid1_validity===false ? true:false);
+        value_18 = (roi_itemNamesData.roi_event_fid1_position_name==="Choose..." ? true:false);
+        value_19 = (roi_itemNamesData.roi_event_fid1_x_position==='' ? true:false);
+        value_20 = (roi_itemNamesData.roi_event_fid1_y_position==='' ? true:false);
+        value_21 = (roi_itemNamesData.roi_event_fid1_z_position==='' ? true:false);
+        value_22 = (roi_itemNamesData.roi_event_fid1_experiment_date==='' ? true:false);
+        value_23 = (roi_itemNamesData.roi_event_fid1_experiment_time==='' ? true:false);
+        value_24 = (roi_itemNamesData.roi_event_fid2_validity===false ? true:false);
+        value_25 = (roi_itemNamesData.roi_event_fid2_position_name==="Choose..." ? true:false);
+        value_26 = (roi_itemNamesData.roi_event_fid2_x_position==='' ? true:false);
+        value_27 = (roi_itemNamesData.roi_event_fid2_y_position==='' ? true:false);
+        value_28 = (roi_itemNamesData.roi_event_fid2_z_position==='' ? true:false);
+        value_29 = (roi_itemNamesData.roi_event_fid2_experiment_date==='' ? true:false);
+        value_30 = (roi_itemNamesData.roi_event_fid1_experiment_time==='' ? true:false);
+        value_31 = (roi_itemNamesData.roi_event_fid3_validity===false ? true:false);
+        value_32 = (roi_itemNamesData.roi_event_fid3_position_name==="Choose..." ? true:false);
+        value_33 = (roi_itemNamesData.roi_event_fid3_x_position==='' ? true:false);
+        value_34 = (roi_itemNamesData.roi_event_fid3_y_position==='' ? true:false);
+        value_35 = (roi_itemNamesData.roi_event_fid3_z_position==='' ? true:false);
+        value_36 = (roi_itemNamesData.roi_event_fid3_experiment_date==='' ? true:false);
+        value_37 = (roi_itemNamesData.roi_event_fid3_experiment_time==='' ? true:false);
+
+        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | value_9 |
+            value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 | value_18 | value_19 | value_20 |
+            value_21 | value_22 | value_23 | value_24 | value_25 | value_26 | value_27 | value_28 | value_29 | value_30 | value_31 |
+            value_32 | value_33 | value_34 | value_35 | value_36 | value_37);
+
     } else if (page_name==="sampleimage"){
-        value_0 = (term.SampleImageValidity===false ? true:false);
-        value_1 = (term.PixelSizeX==='' ? true:false);
-        value_2 = (term.PixelSizeY==='' ? true:false);
-        value_3 = (term.BBXPosition==='' ? true:false);
-        value_4 = (term.BBYPosition==='' ? true:false);
-        value_5 = (term.BBWidth==='' ? true:false);
-        value_6 = (term.BBHeight==='' ? true:false);
-        value_7 = (term.MaskImageLoad==='' ? true:false);
-        value_8 = (term.SampleimageExperimentDate==='' ? true:false);
-        value_9 = (term.SampleimageExperimentTime==='' ? true:false);
-        value_10 = (term.SampleInfoValidity===false ? true:false);
-        value_11 = (term.SampleMicroscopeData==="Choose..." ? true:false);
-        value_12 = (term.SampleDetectionMethod==="Choose..." ? true:false);
-        value_13 = (term.ROIImageLoad==='' ? true:false);
-        value_14 = (term.ImageType==="Choose..." ? true:false);
-        value_15 = (term.ImageWidth==='' ? true:false);
-        value_16 = (term.ImageHeight==='' ? true:false);
-        value_17 = (term.ImageSize==='' ? true:false);
-        value_18 = (term.ImageLoad==='' ? true:false);
-        value_19 = (term.SampleinfoExperimentDate==='' ? true:false);
-        value_20 = (term.SampleinfoExperimentTime==='' ? true:false);
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | 
-            value_9 | value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 |
-            value_18 | value_19 | value_20);
+        value_0 = (sample_itemNamesData.sample_experiment_x_position==='' ? true:false);
+        value_1 = (sample_itemNamesData.sample_experiment_y_position==='' ? true:false);
+        value_2 = (sample_itemNamesData.sample_experiment_width==='' ? true:false);
+        value_3 = (sample_itemNamesData.sample_experiment_height==='' ? true:false);
+        value_4 = (sample_itemNamesData.sample_detection_method==="Choose..." ? true:false);
+        value_5 = (sample_itemNamesData.sample_mask_load==='' ? true:false);
+        value_6 = (sample_itemNamesData.sample_experiment_date==='' ? true:false);
+        value_7 = (sample_itemNamesData.sample_experiment_time==='' ? true:false);
+        value_8 = (sample_itemNamesData.sample_experiment_comments==='' ? true:false);
+        value_9 = (sample_itemNamesData.sample_device==="Choose..." ? true:false);
+        value_10 = (sample_itemNamesData.sample_event_type==="Choose..." ? true:false);
+        value_11 = (sample_itemNamesData.sample_event_link_to_data==='' ? true:false);
+        value_12 = (sample_itemNamesData.sample_event_link_to_meta_data==='' ? true:false);
+        value_13 = (sample_itemNamesData.sample_event_date==='' ? true:false);
+        value_14 = (sample_itemNamesData.sample_event_time==='' ? true:false);
+        value_15 = (sample_itemNamesData.sample_event_comments==='' ? true:false);
+        value_16 = (sample_itemNamesData.sample_event_fid1_validity===false ? true:false);
+        value_17 = (sample_itemNamesData.sample_event_fid1_position_name==="Choose..." ? true:false);
+        value_18 = (sample_itemNamesData.sample_event_fid1_x_position==='' ? true:false);
+        value_19 = (sample_itemNamesData.sample_event_fid1_y_position==='' ? true:false);
+        value_20 = (sample_itemNamesData.sample_event_fid1_z_position==='' ? true:false);
+        value_21 = (sample_itemNamesData.sample_event_fid1_experiment_date==='' ? true:false);
+        value_22 = (sample_itemNamesData.sample_event_fid1_experiment_time==='' ? true:false);
+        value_23 = (sample_itemNamesData.sample_event_fid2_validity===false ? true:false);
+        value_24 = (sample_itemNamesData.sample_event_fid2_position_name==="Choose..." ? true:false);
+        value_25 = (sample_itemNamesData.sample_event_fid2_x_position==='' ? true:false);
+        value_26 = (sample_itemNamesData.sample_event_fid2_y_position==='' ? true:false);
+        value_27 = (sample_itemNamesData.sample_event_fid2_z_position==='' ? true:false);
+        value_28 = (sample_itemNamesData.sample_event_fid2_experiment_date==='' ? true:false);
+        value_29 = (sample_itemNamesData.sample_event_fid1_experiment_time==='' ? true:false);
+        value_30 = (sample_itemNamesData.sample_event_fid3_validity===false ? true:false);
+        value_31 = (sample_itemNamesData.sample_event_fid3_position_name==="Choose..." ? true:false);
+        value_32 = (sample_itemNamesData.sample_event_fid3_x_position==='' ? true:false);
+        value_33 = (sample_itemNamesData.sample_event_fid3_y_position==='' ? true:false);
+        value_34 = (sample_itemNamesData.sample_event_fid3_z_position==='' ? true:false);
+        value_35 = (sample_itemNamesData.sample_event_fid3_experiment_date==='' ? true:false);
+        value_36 = (sample_itemNamesData.sample_event_fid3_experiment_time==='' ? true:false);
+
+        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | value_9 |
+            value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 | value_18 | value_19 | value_20 |
+            value_21 | value_22 | value_23 | value_24 | value_25 | value_26 | value_27 | value_28 | value_29 | value_30 | value_31 |
+            value_32 | value_33 | value_34 | value_35 | value_36);
+
     } else if (page_name==="targetdata") {
-        value_0 = (term.TargetImageValidity===false ? true:false);
-        value_1 = (term.TargetStatus==="Choose..." ? true:false);
-        value_2 = (term.ThetaAngle==='' ? true:false);
-        value_3 = (term.PhiAngle==='' ? true:false);
-        value_4 = (term.RhoAngle==='' ? true:false);
-        value_5 = (term.TargetinfoExperimentDate==='' ? true:false);
-        value_6 = (term.TargetinfoExperimentTime==='' ? true:false);
-        value_7 = (term.TargetValidity===false ? true:false);
-        value_8 = (term.TargetXPosition==='' ? true:false);
-        value_9 = (term.TargetYPosition==='' ? true:false);
-        value_10 = (term.TargetZPosition==='' ? true:false);
-        value_11 = (term.InplaneAccuracy==='' ? true:false);
-        value_12 = (term.OutOfPlaneAccuracy==='' ? true:false);
-        value_13 = (term.TargetpositioninfoExperimentDate==='' ? true:false);
-        value_14 = (term.TargetpositioninfoExperimentTime==='' ? true:false);
-        value_15 = (term.InstrumentUsed==="Choose..." ? true:false);
-        value_16 = (term.XFELDataExperimentDate==='' ? true:false);
-        value_17 = (term.XFELDataExperimentTime==='' ? true:false);
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | 
-            value_9 | value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17);
+        value_0 = (target_itemNamesData.target_x_position==='' ? true:false);
+        value_1 = (target_itemNamesData.target_y_position==='' ? true:false);
+        value_2 = (target_itemNamesData.target_z_position==='' ? true:false);
+        value_3 = (target_itemNamesData.targetinfo_experiment_date==='' ? true:false);
+        value_4 = (target_itemNamesData.targetinfo_experiment_time==='' ? true:false);
+        value_5 = (target_itemNamesData.target_comments==='' ? true:false);
+        value_6 = (target_itemNamesData.target_device==="Choose..." ? true:false);
+        value_7 = (target_itemNamesData.target_event_type==="Choose..." ? true:false);
+        value_8 = (target_itemNamesData.target_link_to_data==='' ? true:false);
+        value_9 = (target_itemNamesData.target_link_to_meta_data==='' ? true:false);
+        value_10 = (target_itemNamesData.target_event_experiment_date==='' ? true:false);
+        value_11 = (target_itemNamesData.target_event_experiment_time==='' ? true:false);
+        value_12 = (target_itemNamesData.target_event_comments==='' ? true:false);
+        value_13 = (target_itemNamesData.target_event_fid1_validity===false ? true:false);
+        value_14 = (target_itemNamesData.target_event_fid1_position_name==="Choose..." ? true:false);
+        value_15 = (target_itemNamesData.target_event_fid1_x_position==='' ? true:false);
+        value_16 = (target_itemNamesData.target_event_fid1_y_position==='' ? true:false);
+        value_17 = (target_itemNamesData.target_event_fid1_z_position==='' ? true:false);
+        value_18 = (target_itemNamesData.target_event_fid1_experiment_date==='' ? true:false);
+        value_19 = (target_itemNamesData.target_event_fid1_experiment_time==='' ? true:false);
+        value_20 = (target_itemNamesData.target_event_fid2_validity===false ? true:false);
+        value_21 = (target_itemNamesData.target_event_fid2_position_name==="Choose..." ? true:false);
+        value_22 = (target_itemNamesData.target_event_fid2_x_position==='' ? true:false);
+        value_23 = (target_itemNamesData.target_event_fid2_y_position==='' ? true:false);
+        value_24 = (target_itemNamesData.target_event_fid2_z_position==='' ? true:false);
+        value_25 = (target_itemNamesData.target_event_fid2_experiment_date==='' ? true:false);
+        value_26 = (target_itemNamesData.target_event_fid1_experiment_time==='' ? true:false);
+        value_27 = (target_itemNamesData.target_event_fid3_validity===false ? true:false);
+        value_28 = (target_itemNamesData.target_event_fid3_position_name==="Choose..." ? true:false);
+        value_29 = (target_itemNamesData.target_event_fid3_x_position==='' ? true:false);
+        value_30 = (target_itemNamesData.target_event_fid3_y_position==='' ? true:false);
+        value_31 = (target_itemNamesData.target_event_fid3_z_position==='' ? true:false);
+        value_32 = (target_itemNamesData.target_event_fid3_experiment_date==='' ? true:false);
+        value_33 = (target_itemNamesData.target_event_fid3_experiment_time==='' ? true:false);
+
+        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | value_9 |
+            value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 | value_18 | value_19 | value_20 |
+            value_21 | value_22 | value_23 | value_24 | value_25 | value_26 | value_27 | value_28 | value_29 | value_30 | value_31 |
+            value_32 | value_33);
+
     } else if (page_name==="xmldata") {
         result = true;
     }
@@ -188,7 +284,7 @@ app.post("/submitDataManually", function(req, res){
         else
             var count = results[0][0].count;
         var max_sr = results[1][0].max_sr;        
-        res.render("home_manually_subframe", {serialnumber: max_sr});
+        res.render("home_manually_subframe", {serialnumber: max_sr, utils: app.js});
     });
 });
 
@@ -230,7 +326,6 @@ app.post("/createSubframeOnDatabase", function(req, res){
         console.log(result);
         var facilityID = result[0][0].facilityid;
         var subframeTypeID = result[1][0].subframetypeid;
-        //var finalID = facilityID.toString() + subframeTypeID.toString() + serial_number.toString();
         var finalID = FacilityName + SubframeType + serial_number_text;
         console.log(finalID);
         res.render("show_subframe_id", {serial_number, FacilityName, SubframeType, finalID}); 
@@ -242,18 +337,50 @@ app.post("/finishCreatingSubframeEntry", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
-    /*
-    subframe_itemNamesData.SubframeValidity = (req.body.subframe_validity ? true:false);
-    subframe_itemNamesData.FacilityNameSelect = req.body.facility_name_select;
-    subframe_itemNamesData.SubframeTypeSelect = req.body.subframe_type_select;
-    subframe_itemNamesData.GroupName = req.body.group_name;
-    subframe_itemNamesData.SizeX = req.body.size_x;
-    subframe_itemNamesData.SizeY = req.body.size_y;
-    subframe_itemNamesData.SubframeComments = req.body.subframe_comments;
-    subframe_itemNamesData.SubframeExperimentDate = req.body.subframe_experiment_date;
-    subframe_itemNamesData.SubframeExperimentTime = req.body.subframe_experiment_time;
-    subframe_itemNamesData.SubframeEventTypeName = req.body.subframe_event_type_name;
-    
+    subframe_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
+    var subframe_id = req.body.subframe_id;
+
+    if(subframe_itemNamesData.subframe_validity){
+        subframe_itemNamesData.facility_name = subframe_id.substr(0, 5);
+        subframe_itemNamesData.subframe_type = subframe_id.substr(5, 3);
+        subframe_itemNamesData.serial_number = Number(subframe_id.substr(8,));
+        subframe_itemNamesData.group_name = req.body.group_name;
+        subframe_itemNamesData.subframe_experiment_date = req.body.subframe_experiment_date;
+        subframe_itemNamesData.subframe_experiment_time = req.body.subframe_experiment_time;
+        subframe_itemNamesData.subframe_comments = req.body.subframe_comments;
+        subframe_itemNamesData.subframe_device_select = req.body.subframe_device_select;
+        subframe_itemNamesData.subframe_event_select = req.body.subframe_event_select;
+        subframe_itemNamesData.subframe_link_to_data = req.body.subframe_link_to_data;
+        subframe_itemNamesData.subframe_link_to_meta_data = req.body.subframe_link_to_meta_data;
+        subframe_itemNamesData.subframe_event_experiment_date = req.body.subframe_event_experiment_date;
+        subframe_itemNamesData.subframe_event_experiment_time = req.body.subframe_event_experiment_time;
+        subframe_itemNamesData.subframe_events_comments = req.body.subframe_events_comments;
+        subframe_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
+        subframe_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
+        subframe_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
+        subframe_itemNamesData.subframe_fid1_y_position = req.body.subframe_fid1_y_position;
+        subframe_itemNamesData.subframe_fid1_z_position = req.body.subframe_fid1_z_position;
+        subframe_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date
+        subframe_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time
+        subframe_itemNamesData.subframe_fid2_validity = (req.body.subframe_fid2_validity ? true:false);
+        subframe_itemNamesData.subframe_fid2_position_name = req.body.subframe_fid2_position_name;
+        subframe_itemNamesData.subframe_fid2_x_position = req.body.subframe_fid2_x_position;
+        subframe_itemNamesData.subframe_fid2_y_position = req.body.subframe_fid2_y_position;
+        subframe_itemNamesData.subframe_fid2_z_position = req.body.subframe_fid2_z_position;
+        subframe_itemNamesData.subframe_fid2_date = req.body.subframe_fid2_date;
+        subframe_itemNamesData.subframe_fid2_time = req.body.subframe_fid2_time;
+        subframe_itemNamesData.subframe_fid3_validity = (req.body.subframe_fid3_validity ? true:false);
+        subframe_itemNamesData.subframe_fid3_position_name = req.body.subframe_fid3_position_name;
+        subframe_itemNamesData.subframe_fid3_x_position = req.body.subframe_fid3_x_position;
+        subframe_itemNamesData.subframe_fid3_y_position = req.body.subframe_fid3_y_position;
+        subframe_itemNamesData.subframe_fid3_z_position = req.body.subframe_fid3_z_position;
+        subframe_itemNamesData.subframe_fid3_date = req.body.subframe_fid3_date;
+        subframe_itemNamesData.subframe_fid3_time = req.body.subframe_fid3_time;
+    } else {
+        subframe_itemNamesData.subframe_invalid_date = req.body.subframe_invalid_date;
+        subframe_itemNamesData.subframe_invalid_time = req.body.subframe_invalid_time;
+    }
+        
     if (checkEmpty(subframe_itemNamesData, "subframe")) {
         let query = "SELECT COUNT(*) as count FROM Subframe_Table; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe_Table;";
         connection.query(query, function(err, results){
@@ -262,139 +389,141 @@ app.post("/submitSubframeInfoManually", function(req, res){
             else
                 var count = results[0][0].count;
             var max_sr = results[1][0].max_sr;        
-            res.render("home_manually_subframe", {data: count, serialnumber: max_sr});
+            res.render("home_manually_subframe", {serialnumber: max_sr});
         });
     } else {
-    */    
-        //res.render("manually_fiducial");
-        res.render("manually_roi_image");
-    //}    
-});
-
-app.post("/submitFiducialsInfoManually", function(req, res){
-    fiducials_itemNamesData.Fid1Validity = (req.body.fid1_validity ? true:false);
-    fiducials_itemNamesData.Fid1PositionName = req.body.fid1_position_name;
-    fiducials_itemNamesData.Fid1XPosition = req.body.fid1_x_position;
-    fiducials_itemNamesData.Fid1YPosition = req.body.fid1_y_position;
-    fiducials_itemNamesData.Fid1ZPosition = req.body.fid1_z_position;
-
-    fiducials_itemNamesData.Fid2Validity = (req.body.fid2_validity ? true:false);
-    fiducials_itemNamesData.Fid2PositionName = req.body.fid2_position_name;
-    fiducials_itemNamesData.Fid2XPosition = req.body.fid2_x_position;
-    fiducials_itemNamesData.Fid2YPosition = req.body.fid2_y_position;
-    fiducials_itemNamesData.Fid2ZPosition = req.body.fid2_z_position;
-
-    fiducials_itemNamesData.Fid3Validity = (req.body.fid3_validity ? true:false);
-    fiducials_itemNamesData.Fid3PositionName = req.body.fid3_position_name;
-    fiducials_itemNamesData.Fid3XPosition = req.body.fid3_x_position;
-    fiducials_itemNamesData.Fid3YPosition = req.body.fid3_y_position;
-    fiducials_itemNamesData.Fid3ZPosition = req.body.fid3_z_position;
-
-    fiducials_itemNamesData.Fid4Validity = (req.body.fid4_validity ? true:false);
-    fiducials_itemNamesData.Fid4PositionName = req.body.fid4_position_name;
-    fiducials_itemNamesData.Fid4XPosition = req.body.fid4_x_position;
-    fiducials_itemNamesData.Fid4YPosition = req.body.fid4_y_position;
-    fiducials_itemNamesData.Fid4ZPosition = req.body.fid4_z_position;
-
-    if (checkEmpty(fiducials_itemNamesData, "fiducial")) {
-        res.render("manually_fiducial");
-    } else {
-        res.render("manually_overview_image");
-    }
-});
-
-app.post("/submitOverviewImageManually", function(req, res){
-    overviewimage_itemNamesData.OverviewImageValidity = (req.body.overview_image_validity ? true:false);
-    overviewimage_itemNamesData.MicroscopeData = req.body.microscope_data;
-    overviewimage_itemNamesData.DetectionMethod = req.body.detection_method;
-    overviewimage_itemNamesData.OverviewImageLoad = req.body.overview_image_load;
-    overviewimage_itemNamesData.OverviewImageExperimentDate = req.body.overviewimage_experiment_date;
-    overviewimage_itemNamesData.OverviewImageExperimentTime = req.body.overviewimage_experiment_time;
-    overviewimage_itemNamesData.OverviewImageComments = req.body.OverviewImageComments;
-    
-    if (checkEmpty(overviewimage_itemNamesData, "overviewimage")) {
-        res.render("manually_overview_image");
-    } else {
-        res.render("manually_roi_image");
-    }
+            res.render("manually_roi_image");
+    }    
 });
 
 app.post("/submitROIImageManually", function(req, res){
-    /*
-    roi_itemNamesData.ROIImageValidity = (req.body.roi_image_validity ? true:false);
-    roi_itemNamesData.MicroscopeData = req.body.microscope_data;
-    roi_itemNamesData.DetectionMethod = req.body.detection_method;
-    roi_itemNamesData.ROIOverviewImageLoad = req.body.roi_overviewimage_load;
-    roi_itemNamesData.ROIExperimentDate = req.body.roi_experiment_date;
-    roi_itemNamesData.ROIExperimentTime = req.body.roi_experiment_time;
-    roi_itemNamesData.ROIExperimentXPosition = req.body.roi_experiment_x_position;
-    roi_itemNamesData.ROIExperimentYPosition = req.body.roi_experiment_y_position;
-    roi_itemNamesData.ROIExperimentWidth = req.body.roi_experiment_width;
-    roi_itemNamesData.ROIExperimentHeight = req.body.roi_experiment_height;
-    roi_itemNamesData.ROIExperimentComments = req.body.roi_experiment_comments;
+    roi_itemNamesData.roi_type = req.body.roi_type;
+    roi_itemNamesData.roi_detection_method = req.body.roi_detection_method;
+    roi_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
+    roi_itemNamesData.roi_experiment_y_position = req.body.roi_experiment_y_position;
+    roi_itemNamesData.roi_experiment_width = req.body.roi_experiment_width;
+    roi_itemNamesData.roi_experiment_height = req.body.roi_experiment_height;
+    roi_itemNamesData.roi_mask_load = req.body.roi_mask_load;
+    roi_itemNamesData.roi_experiment_date = req.body.roi_experiment_date;
+    roi_itemNamesData.roi_experiment_time = req.body.roi_experiment_time;
+    roi_itemNamesData.roi_experiment_comments = req.body.roi_experiment_comments;
+    roi_itemNamesData.roi_device = req.body.roi_device;
+    roi_itemNamesData.roi_event_type = req.body.roi_event_type;
+    roi_itemNamesData.roi_event_link_to_data = req.body.roi_event_link_to_data;
+    roi_itemNamesData.roi_event_link_to_meta_data = req.body.roi_event_link_to_meta_data;
+    roi_itemNamesData.roi_event_date = req.body.roi_event_date;
+    roi_itemNamesData.roi_event_time = req.body.roi_event_time;
+    roi_itemNamesData.roi_event_comments = req.body.roi_event_comments;
+    roi_itemNamesData.roi_event_fid1_validity = (req.body.roi_event_fid1_validity ? true:false);
+    roi_itemNamesData.roi_event_fid1_position_name = req.body.roi_event_fid1_position_name;
+    roi_itemNamesData.roi_event_fid1_x_position = req.body.roi_event_fid1_x_position;
+    roi_itemNamesData.roi_event_fid1_y_position = req.body.roi_event_fid1_y_position;
+    roi_itemNamesData.roi_event_fid1_z_position = req.body.roi_event_fid1_z_position;
+    roi_itemNamesData.roi_event_fid1_experiment_date = req.body.roi_event_fid1_experiment_date;
+    roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
+    roi_itemNamesData.roi_event_fid2_validity = (req.body.roi_event_fid2_validity ? true:false);
+    roi_itemNamesData.roi_event_fid2_position_name = req.body.roi_event_fid2_position_name;
+    roi_itemNamesData.roi_event_fid2_x_position = req.body.roi_event_fid2_x_position;
+    roi_itemNamesData.roi_event_fid2_y_position = req.body.roi_event_fid2_y_position;
+    roi_itemNamesData.roi_event_fid2_z_position = req.body.roi_event_fid2_z_position;
+    roi_itemNamesData.roi_event_fid2_experiment_date = req.body.roi_event_fid2_experiment_date;
+    roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
+    roi_itemNamesData.roi_event_fid3_validity = (req.body.roi_event_fid3_validity ? true:false);
+    roi_itemNamesData.roi_event_fid3_position_name = req.body.roi_event_fid3_position_name;
+    roi_itemNamesData.roi_event_fid3_x_position = req.body.roi_event_fid3_x_position;
+    roi_itemNamesData.roi_event_fid3_y_position = req.body.roi_event_fid3_y_position;
+    roi_itemNamesData.roi_event_fid3_z_position = req.body.roi_event_fid3_z_position;
+    roi_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
+    roi_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
         
     if (checkEmpty(roi_itemNamesData, "roi")) {
         res.render("manually_roi_image");
-    } else { */
+    } else { 
         res.render("manually_sample_image");
-    //}
+    }
 });
 
 app.post("/submitSampleImageManually", function(req, res){
-    /* 
-    sample_itemNamesData.SampleImageValidity = (req.body.sample_image_validity ? true:false);
-    sample_itemNamesData.PixelSizeX = req.body.pixel_size_x;
-    sample_itemNamesData.PixelSizeY = req.body.pixel_size_y;
-    sample_itemNamesData.BBXPosition = req.body.BB_x_position;
-    sample_itemNamesData.BBYPosition = req.body.BB_y_position;
-    sample_itemNamesData.BBWidth = req.body.BB_width;
-    sample_itemNamesData.BBHeight = req.body.BB_height;
-    sample_itemNamesData.MaskImageLoad = req.body.mask_image_load;
-    sample_itemNamesData.SampleimageExperimentDate = req.body.sampleimage_experiment_date;
-    sample_itemNamesData.SampleimageExperimentTime = req.body.sampleimage_experiment_time;
-    sample_itemNamesData.SampleComments = req.body.sample_comments;
-    sample_itemNamesData.SampleInfoValidity = (req.body.sample_info_validity ? true:false);
-    sample_itemNamesData.SampleMicroscopeData = req.body.sample_microscope_data;
-    sample_itemNamesData.SampleDetectionMethod = req.body.sample_detection_method;
-    sample_itemNamesData.ROIImageLoad = req.body.roi_image_load;
-    sample_itemNamesData.ImageType = req.body.image_type;
-    sample_itemNamesData.ImageWidth = req.body.image_width;
-    sample_itemNamesData.ImageHeight = req.body.image_height;
-    sample_itemNamesData.ImageSize = req.body.image_size;
-    sample_itemNamesData.ImageComments = req.body.image_comments;
-    sample_itemNamesData.ImageLoad = req.body.image_load;
-    sample_itemNamesData.SampleinfoExperimentDate = req.body.sampleinfo_experiment_date;
-    sample_itemNamesData.SampleinfoExperimentTime = req.body.sampleinfo_experiment_time;
+    sample_itemNamesData.sample_experiment_x_position = req.body.sample_experiment_x_position;
+    sample_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
+    sample_itemNamesData.sample_experiment_width = req.body.sample_experiment_width;
+    sample_itemNamesData.sample_experiment_height = req.body.sample_experiment_height;
+    sample_itemNamesData.sample_detection_method = req.body.sample_detection_method;
+    sample_itemNamesData.sample_mask_load = req.body.sample_mask_load;
+    sample_itemNamesData.sample_experiment_date = req.body.sample_experiment_date;
+    sample_itemNamesData.sample_experiment_time = req.body.sample_experiment_time;
+    sample_itemNamesData.sample_experiment_comments = req.body.sample_experiment_comments;
+    sample_itemNamesData.sample_device = req.body.sample_device;
+    sample_itemNamesData.sample_event_type = req.body.sample_event_type;
+    sample_itemNamesData.sample_event_link_to_data = req.body.sample_event_link_to_data;
+    sample_itemNamesData.sample_event_link_to_meta_data = req.body.sample_event_link_to_meta_data;
+    sample_itemNamesData.sample_event_date = req.body.sample_event_date;
+    sample_itemNamesData.sample_event_time = req.body.sample_event_time;
+    sample_itemNamesData.sample_event_comments = req.body.sample_event_comments;
+    sample_itemNamesData.sample_event_fid1_validity = (req.body.sample_event_fid1_validity ? true:false);
+    sample_itemNamesData.sample_event_fid1_position_name = req.body.sample_event_fid1_position_name;
+    sample_itemNamesData.sample_event_fid1_x_position = req.body.sample_event_fid1_x_position;
+    sample_itemNamesData.sample_event_fid1_y_position = req.body.sample_event_fid1_y_position;
+    sample_itemNamesData.sample_event_fid1_z_position = req.body.sample_event_fid1_z_position;
+    sample_itemNamesData.sample_event_fid1_experiment_date = req.body.sample_event_fid1_experiment_date;
+    sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    sample_itemNamesData.sample_event_fid2_validity = (req.body.sample_event_fid2_validity ? true:false);
+    sample_itemNamesData.sample_event_fid2_position_name = req.body.sample_event_fid2_position_name;
+    sample_itemNamesData.sample_event_fid2_x_position = req.body.sample_event_fid2_x_position;
+    sample_itemNamesData.sample_event_fid2_y_position = req.body.sample_event_fid2_y_position;
+    sample_itemNamesData.sample_event_fid2_z_position = req.body.sample_event_fid2_z_position;
+    sample_itemNamesData.sample_event_fid2_experiment_date = req.body.sample_event_fid2_experiment_date;
+    sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    sample_itemNamesData.sample_event_fid3_validity = (req.body.sample_event_fid3_validity ? true:false);
+    sample_itemNamesData.sample_event_fid3_position_name = req.body.sample_event_fid3_position_name
+    sample_itemNamesData.sample_event_fid3_x_position = req.body.sample_event_fid3_x_position;
+    sample_itemNamesData.sample_event_fid3_y_position = req.body.sample_event_fid3_y_position;
+    sample_itemNamesData.sample_event_fid3_z_position = req.body.sample_event_fid3_z_position;
+    sample_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
+    sample_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
 
     if (checkEmpty(sample_itemNamesData, "sampleimage")) {
         res.render("manually_sample_image");
     } else {
-        */
         res.render("manually_target_data");
-    //}
+    }
 });
 
 app.post("/submitAllData", function(req, res){
-    target_itemNamesData.TargetImageValidity = (req.body.target_image_validity ? true:false);
-    target_itemNamesData.TargetStatus = req.body.target_status;
-    target_itemNamesData.ThetaAngle = req.body.theta_angle;
-    target_itemNamesData.PhiAngle = req.body.phi_angle;
-    target_itemNamesData.RhoAngle = req.body.rho_angle;
-    target_itemNamesData.TargetinfoExperimentDate = req.body.targetinfo_experiment_date;
-    target_itemNamesData.TargetinfoExperimentTime = req.body.targetinfo_experiment_time;
-    target_itemNamesData.TargetComments = req.body.target_comments;
-    target_itemNamesData.TargetValidity = (req.body.target_validity ? true:false);
-    target_itemNamesData.TargetXPosition = req.body.target_x_position;
-    target_itemNamesData.TargetYPosition = req.body.target_y_position;
-    target_itemNamesData.TargetZPosition = req.body.target_z_position;
-    target_itemNamesData.InplaneAccuracy = req.body.inplane_accuracy;
-    target_itemNamesData.OutOfPlaneAccuracy = req.body.out_of_plane_accuracy;
-    target_itemNamesData.TargetpositioninfoExperimentDate = req.body.targetpositioninfo_experiment_date;
-    target_itemNamesData.TargetpositioninfoExperimentTime = req.body.targetpositioninfo_experiment_time;
-    target_itemNamesData.InstrumentUsed = req.body.instrument_used;
-    target_itemNamesData.XFELDataExperimentDate = req.body.xfeldata_experiment_date;
-    target_itemNamesData.XFELDataExperimentTime = req.body.xfeldata_experiment_time;
-    target_itemNamesData.TargetInstrumentComments = req.body.target_instrument_comments;
+    target_itemNamesData.target_x_position = req.body.target_x_position;
+    target_itemNamesData.target_y_position = req.body.target_y_position;
+    target_itemNamesData.target_z_position = req.body.target_z_position;
+    target_itemNamesData.targetinfo_experiment_date = req.body.targetinfo_experiment_date;
+    target_itemNamesData.targetinfo_experiment_time = req.body.targetinfo_experiment_time;
+    target_itemNamesData.target_comments = req.body.target_comments;
+    target_itemNamesData.target_device = req.body.target_device;
+    target_itemNamesData.target_event_type = req.body.target_event_type;
+    target_itemNamesData.target_link_to_data = req.body.target_link_to_data;
+    target_itemNamesData.target_link_to_meta_data = req.body.target_link_to_meta_data;
+    target_itemNamesData.target_event_experiment_date = req.body.target_event_experiment_date;
+    target_itemNamesData.target_event_experiment_time = req.body.target_event_experiment_time;
+    target_itemNamesData.target_event_comments = req.body.target_event_comments;
+    target_itemNamesData.target_event_fid1_validity = (req.body.target_event_fid1_validity ? true:false);
+    target_itemNamesData.target_event_fid1_position_name = req.body.target_event_fid1_position_name;
+    target_itemNamesData.target_event_fid1_x_position = req.body.target_event_fid1_x_position;
+    target_itemNamesData.target_event_fid1_y_position = req.body.target_event_fid1_y_position;
+    target_itemNamesData.target_event_fid1_z_position = req.body.target_event_fid1_z_position;
+    target_itemNamesData.target_event_fid1_experiment_date = req.body.target_event_fid1_experiment_date;
+    target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    target_itemNamesData.target_event_fid2_validity = (req.body.target_event_fid2_validity ? true:false);
+    target_itemNamesData.target_event_fid2_position_name = req.body.target_event_fid2_position_name;
+    target_itemNamesData.target_event_fid2_x_position = req.body.target_event_fid2_x_position;
+    target_itemNamesData.target_event_fid2_y_position = req.body.target_event_fid2_y_position;
+    target_itemNamesData.target_event_fid2_z_position = req.body.target_event_fid2_z_position;
+    target_itemNamesData.target_event_fid2_experiment_date = req.body.target_event_fid2_experiment_date;
+    target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    target_itemNamesData.target_event_fid3_validity = (req.body.target_event_fid3_validity ? true:false);
+    target_itemNamesData.target_event_fid3_position_name = req.body.target_event_fid3_position_name;
+    target_itemNamesData.target_event_fid3_x_position = req.body.target_event_fid3_x_position;
+    target_itemNamesData.target_event_fid3_y_position = req.body.target_event_fid3_y_position;
+    target_itemNamesData.target_event_fid3_z_position = req.body.target_event_fid3_z_position;
+    target_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
+    target_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
 
     if (checkEmpty(target_itemNamesData, "targetdata")) {
         res.render("manually_target_data");
@@ -476,11 +605,12 @@ app.post("/submitAllData", function(req, res){
         var q = subframe_query + subframeeventtype_query + fiducial_query + overviewimage_query + roiimage_query + sampletable_query + 
         imagedata_query + target_query + positiondata_query + xfeldata_query;
 
+        /*
         connection.query(q, function (error, result) {
             if (error) throw error;
             console.log(result);
             res.redirect("/");
-        }); 
+        });*/ 
     }
 });
 

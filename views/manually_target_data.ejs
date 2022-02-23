@@ -11,24 +11,21 @@
                         <div class="form-group">
                             <label class="label-text">X Position</label>
                             <input type="number" name="target_x_position" class="form-control"
-                                placeholder="values between 0 and 800 are accepted" min="0"
-                                max="800">
+                                placeholder="values between 0 and 800 are accepted" min="0" max="800">
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label class="label-text">Y Position</label>
                             <input type="number" name="target_y_position" class="form-control"
-                                placeholder="values between 0 and 800 are accepted" min="0"
-                                max="800">
+                                placeholder="values between 0 and 800 are accepted" min="0" max="800">
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label class="label-text">Z Position</label>
                             <input type="number" name="target_z_position" class="form-control"
-                                placeholder="values between 0 and 800 are accepted" min="0"
-                                max="800">
+                                placeholder="values between 0 and 800 are accepted" min="0" max="800">
                         </div>
                     </div>
                 </div>
@@ -65,7 +62,6 @@
                                 <option>Nanofocus</option>
                                 <option>Quanta</option>
                                 <option>Zeiss</option>
-                                <option>New...</option>
                             </select>
                         </div>
                     </div>
@@ -86,7 +82,6 @@
                                 <option>Broken</option>
                                 <option>Archived</option>
                                 <option>Destroyed</option>
-                                <option>New...</option>
                             </select>
                         </div>
                     </div>
@@ -96,8 +91,7 @@
                         <div>
                             <label for="TargetLinkToData" class="form-label label-text">Insert the Link to the
                                 Data</label>
-                            <input class="form-control" type="file" id="TargetLinkToData"
-                                name="target_link_to_data">
+                            <input class="form-control" type="file" id="TargetLinkToData" name="target_link_to_data">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -113,76 +107,70 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="label-text">Enter the Target Experiment Date</label>
-                            <input class="form-control" type="date" id="target_event_experiment_date" name="target_event_experiment_date"
-                                min="2012-01-01" max="2040-12-31">
+                            <input class="form-control" type="date" id="target_event_experiment_date"
+                                name="target_event_experiment_date" min="2012-01-01" max="2040-12-31">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="label-text">Enter the Target Experiment Time</label>
-                            <input class="form-control" type="time" id="target_event_experiment_time" name="target_event_experiment_time">
+                            <input class="form-control" type="time" id="target_event_experiment_time"
+                                name="target_event_experiment_time">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="targetEventComments">Enter Comments to the Target Experiment</label>
-                    <textarea class="form-control" id="targetEventComments" name="target_event__comments"
+                    <textarea class="form-control" id="targetEventComments" name="target_event_comments"
                         placeholder="Maximum 100 of characters are accepted" rows="2" minlength="0"
                         maxlength="200"></textarea>
                 </div>
                 <hr>
-
-
-
-
-
-
-
-                
                 <p class="lead_text">Enter the Fiducial Points Information</p>
                 <div class="row twopanel">
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial1" aria-expanded="false" aria-controls="fiducial1">
+                                data-bs-target="#target_event_fiducial1" aria-expanded="false"
+                                aria-controls="target_event_fiducial1">
                                 Fiducial 1 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial2" aria-expanded="false" aria-controls="fiducial2">
+                                data-bs-target="#target_event_fiducial2" aria-expanded="false"
+                                aria-controls="target_event_fiducial2">
                                 Fiducial 2 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <p>
+                        <div>
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#fiducial3" aria-expanded="false" aria-controls="fiducial3">
+                                data-bs-target="#target_event_fiducial3" aria-expanded="false"
+                                aria-controls="target_event_fiducial3">
                                 Fiducial 3 Information
                             </button>
-                        </p>
+                        </div>
                     </div>
                 </div>
-
-
-
                 <div class="row twopanel">
                     <div class="col-lg-4">
-                        <div class="collapse" id="fiducial1">
+                        <div class="collapse" id="target_event_fiducial1">
                             <div class="card card-body">
                                 <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
+                                    <label class="form-check-label" for="target_event_fid1_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="target_event_fid1_validity"
+                                        name="target_event_fid1_validity">
                                 </div>
                                 <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
+                                    <label class="label-text" for="target_event_fid1_FiducialPositionSelect">Position of
+                                        the Fiducial
                                         Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
+                                    <select class="form-control" id="target_event_fid1_FiducialPositionSelect"
+                                        name="target_event_fid1_position_name">
                                         <option selected>Choose...</option>
                                         <option>top-left</option>
                                         <option>top-right</option>
@@ -197,47 +185,46 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
+                                    <input type="number" name="target_event_fid1_x_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
+                                    <input type="number" name="target_event_fid1_y_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
+                                    <input type="number" name="target_event_fid1_z_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="target_event_fid1_experiment_date"
+                                        name="target_event_fid1_experiment_date" min="2012-01-01" max="2040-12-31">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="target_event_fid1_experiment_time"
+                                        name="target_event_fid1_experiment_time">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="collapse" id="fiducial2">
+                        <div class="collapse" id="target_event_fiducial2">
                             <div class="card card-body">
                                 <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
+                                    <label class="form-check-label" for="target_event_fid2_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="target_event_fid2_validity"
+                                        name="target_event_fid2_validity">
                                 </div>
                                 <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
+                                    <label class="label-text" for="target_event_fid2_FiducialPositionSelect">Position of
+                                        the Fiducial
                                         Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
+                                    <select class="form-control" id="target_event_fid2_FiducialPositionSelect"
+                                        name="target_event_fid2_position_name">
                                         <option selected>Choose...</option>
                                         <option>top-left</option>
                                         <option>top-right</option>
@@ -252,48 +239,46 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
+                                    <input type="number" name="target_event_fid2_x_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
+                                    <input type="number" name="target_event_fid2_y_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
+                                    <input type="number" name="target_event_fid2_z_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="target_event_fid2_experiment_date"
+                                        name="target_event_fid2_experiment_date" min="2012-01-01" max="2040-12-31">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="target_event_fid2_experiment_time"
+                                        name="target_event_fid1_experiment_time">
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="collapse" id="fiducial3">
+                        <div class="collapse" id="target_event_fiducial3">
                             <div class="card card-body">
                                 <div class="form-check">
-                                    <label class="form-check-label" for="fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="fid1_validity"
-                                        name="fid1_validity">
+                                    <label class="form-check-label" for="target_event_fid3_validity">Validity</label>
+                                    <input type="checkbox" class="form-check-input" id="target_event_fid3_validity"
+                                        name="target_event_fid3_validity">
                                 </div>
                                 <div class="form-group">
-                                    <label class="label-text" for="fid1_FiducialPoistionSelect">Position of the Fiducial
+                                    <label class="label-text" for="target_event_fid3_FiducialPositionSelect">Position of
+                                        the Fiducial
                                         Point</label>
-                                    <select class="form-control" id="fid1_FiducialPoistionSelect"
-                                        name="fid1_position_name">
+                                    <select class="form-control" id="target_event_fid3_FiducialPositionSelect"
+                                        name="target_event_fid3_position_name">
                                         <option selected>Choose...</option>
                                         <option>top-left</option>
                                         <option>top-right</option>
@@ -308,85 +293,35 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_x_position" class="form-control"
+                                    <input type="number" name="target_event_fid3_x_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_y_position" class="form-control"
+                                    <input type="number" name="target_event_fid3_y_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
                                 <div class="form-group">
                                     <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="fid1_z_position" class="form-control"
+                                    <input type="number" name="target_event_fid3_z_position" class="form-control"
                                         placeholder="values between 0 and 800 are accepted" min="0" max="800">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                                    <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                        name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
+                                    <label class="label-text">Enter the Date</label>
+                                    <input class="form-control" type="date" id="target_event_fid3_experiment_date"
+                                        name="target_event_fid3_experiment_date" min="2012-01-01" max="2040-12-31">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                                    <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                        name="subframe_event_experiment_time">
+                                    <label class="label-text">Enter the Time</label>
+                                    <input class="form-control" type="time" id="target_event_fid3_experiment_time"
+                                        name="target_event_fid3_experiment_time">
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-                <!--
-            <div class="form-group">
-                <label class="label-text">Enter the Date the Target Position Information is Inserted</strong></label>
-                <input class="form-control" type="date" id="targetpositioninfo_experiment_date" name="targetpositioninfo_experiment_date"
-                    min="2012-01-01" max="2040-12-31">
-            </div>
-            <div class="form-group">
-                <label class="label-text">Enter the Time the Target Position Information is Inserted</strong></label>
-                <input class="form-control" type="time" id="targetpositioninfo_experiment_time" name="targetpositioninfo_experiment_time">
-            </div>
-            <hr /> -->
-                <!-- XFEL_Data Related Information -->
-                <!--   <p class="lead_text">XFEL Instrument Information</p>
-            <div class="form-group">
-                <label class="label-text" for="instrumentUsed">Instrument Used for Shooting</label>
-                <select class="form-control" id="instrumentUsed" name="instrument_used">
-                    <option selected>Choose...</option>
-                    <option>HED</option>
-                    <option>SPB/SFX</option>
-                    <option>SCS</option>
-                    <option>MID</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="label-text">Enter the Date the XFEL Data Information is Inserted</strong></label>
-                <input class="form-control" type="date" id="xfeldata_experiment_date" name="xfeldata_experiment_date"
-                    min="2012-01-01" max="2040-12-31">
-            </div>
-            <div class="form-group">
-                <label class="label-text">Enter the Time the XFEL Data Information is Inserted</strong></label>
-                <input class="form-control" type="time" id="xfeldata_experiment_time" name="xfeldata_experiment_time">
-            </div>
-            <div class="form-group">
-                <label for="targetInstrumentComments">Enter Comments Related to the Shooting</label>
-                <textarea class="form-control" id="targetInstrumentComments" placeholder="Comments (maximum 200 characters are accepted)" rows="2" minlength="0" name="target_instrument_comments"
-                    maxlength="200"></textarea>
-            </div>
-        -->
                 <button class="btn btn-secondary" type="submit" form="submitTheData">Submit the Data</button>
             </form>
         </div>
     </div>
-    <%- include("footer") -%>
+<%- include("footer") -%>
