@@ -1,65 +1,33 @@
 //jshint esversion:6
-var fs = require('fs'),
+require('dotenv').config();
+const fs = require('fs'),
 xml2js = require('xml2js');
 var xmlParser = new xml2js.Parser();
 const express = require('express');
 const bodyParser = require("body-parser");
+const ejs = require("ejs");
+const session = require('express-session');
+const passport = require('passport');
 const database_connect = require(__dirname + "/database_connection.js");
 const date = require(__dirname + "/date.js");
-var app = express();
-
+const app = express();
+app.use(session({
+    secret: "Our little secret.",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 let mysql = require('mysql'); 
 let connection = mysql.createConnection({
-    host	 : 'mydevadmin.xfel.eu',
-    user	 : 'euxfeltargets_dev',
-    database : 'euxfeltargets_dev',
-    password : 'L*-bQyK,JU&[',
-    multipleStatements: true
+    host	            : process.env.HOST_NAME, 
+    user	            : process.env.DB_USER,
+    database            : process.env.DB_NAME,
+    password            : process.env.DB_PWD,
+    multipleStatements  : true
 });
 
-let fiducialCounter = 0;
-const fiducialList = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
-const fiducialPoints = ["Fiducial 1", "Fiducial 2", "Fiducial 3", "Fiducial 4"];
-
-var subframe_itemNamesData = {"facility_name":"", "subframe_type":"", "serial_number":"", "group_name":"", "subframe_experiment_date":"",
-    "subframe_experiment_time":"", "subframe_comments":"", "subframe_validity":"", "subframe_invalid_date":"", "subframe_invalid_time":"", 
-    "subframe_device_select":"", "subframe_event_select":"", "subframe_link_to_data":"", "subframe_link_to_meta_data":"", 
-    "subframe_event_experiment_date":"", "subframe_event_experiment_time":"", "subframe_events_comments":"", "subframe_fid1_validity":"", 
-    "subframe_fid1_position_name":"", "subframe_fid1_x_position":"", "subframe_fid1_y_position":"", "subframe_fid1_z_position":"", 
-    "subframe_fid1_date":"", "subframe_fid1_time":"", "subframe_fid2_validity":"", "subframe_fid2_position_name":"", "subframe_fid2_x_position":"", 
-    "subframe_fid2_y_position":"", "subframe_fid2_z_position":"", "subframe_fid2_date":"", "subframe_fid2_time":"", "subframe_fid3_validity":"", 
-    "subframe_fid3_position_name":"", "subframe_fid3_x_position":"", "subframe_fid3_y_position":"", "subframe_fid3_z_position":"", 
-    "subframe_fid3_date":"", "subframe_fid3_time":""};
-
-var roi_itemNamesData = {"roi_type":"", "roi_detection_method":"", "roi_experiment_x_position":"", "roi_experiment_y_position":"", 
-    "roi_experiment_width":"", "roi_experiment_height":"", "roi_mask_load":"", "roi_experiment_date":"", "roi_experiment_time":"", 
-    "roi_experiment_comments":"", "roi_device":"", "roi_event_type":"", "roi_event_link_to_data":"", "roi_event_link_to_meta_data":"", 
-    "roi_event_date":"", "roi_event_time":"", "roi_event_comments":"", "":"roi_event_fid1_validity", "roi_event_fid1_position_name":"", 
-    "roi_event_fid1_x_position":"", "roi_event_fid1_y_position":"", "roi_event_fid1_z_position":"", "roi_event_fid1_experiment_date":"", 
-    "roi_event_fid1_experiment_time":"", "roi_event_fid2_validity":"", "roi_event_fid2_position_name":"", "roi_event_fid2_x_position":"", 
-    "roi_event_fid2_y_position":"", "roi_event_fid2_z_position":"", "roi_event_fid2_experiment_date":"", "roi_event_fid1_experiment_time":"", 
-    "roi_event_fid3_validity":"", "roi_event_fid3_position_name":"", "roi_event_fid3_x_position":"", "roi_event_fid3_y_position":"", 
-    "roi_event_fid3_z_position":"", "roi_event_fid3_experiment_date":"", "roi_event_fid3_experiment_time":""};
-
-var sample_itemNamesData = {"sample_experiment_x_position":"", "sample_experiment_y_position":"", "sample_experiment_width":"", "sample_experiment_height":"", 
-    "sample_detection_method":"", "sample_mask_load":"", "sample_experiment_date":"", "sample_experiment_time":"", "sample_experiment_comments":"", 
-    "sample_device":"", "sample_event_type":"", "sample_event_link_to_data":"", "sample_event_link_to_meta_data":"", 
-    "sample_event_date":"", "sample_event_time":"", "sample_event_comments":"", "sample_event_fid1_validity":"", "sample_event_fid1_position_name":"", 
-    "sample_event_fid1_x_position":"", "sample_event_fid1_y_position":"", "sample_event_fid1_z_position":"", "":"sample_event_fid1_experiment_date", 
-    "sample_event_fid1_experiment_time":"", "sample_event_fid2_validity":"", "sample_event_fid2_position_name":"", "sample_event_fid2_x_position":"", 
-    "sample_event_fid2_y_position":"", "sample_event_fid2_z_position":"", "sample_event_fid2_experiment_date":"", "sample_event_fid1_experiment_time":"",
-    "sample_event_fid3_validity":"", "sample_event_fid3_position_name":"", "sample_event_fid3_x_position":"", "sample_event_fid3_y_position":"", 
-    "sample_event_fid3_z_position":"", "sample_event_fid3_experiment_date":"", "sample_event_fid3_experiment_time":""};
-    
-var target_itemNamesData = {"target_x_position":"", "target_y_position":"", "target_z_position":"", "targetinfo_experiment_date":"", 
-    "targetinfo_experiment_time":"", "target_comments":"", "target_device":"", "target_event_type":"", 
-    "target_link_to_data":"", "target_link_to_meta_data":"", "target_event_experiment_date":"", "target_event_experiment_time":"", 
-    "target_event_comments":"", "target_event_fid1_validity":"", "target_event_fid1_position_name":"", "target_event_fid1_x_position":"", 
-    "target_event_fid1_y_position":"", "target_event_fid1_z_position":"", "target_event_fid1_experiment_date":"", "target_event_fid1_experiment_time":"",
-    "target_event_fid2_validity":"", "target_event_fid2_position_name":"", "target_event_fid2_x_position":"", "target_event_fid2_y_position":"",
-    "target_event_fid2_z_position":"", "target_event_fid2_experiment_date":"", "target_event_fid1_experiment_time":"", "target_event_fid3_validity":"",
-    "target_event_fid3_position_name":"", "target_event_fid3_x_position":"", "target_event_fid3_y_position":"", "target_event_fid3_z_position":"",
-    "target_event_fid3_experiment_date":"", "target_event_fid3_experiment_time":""};
+const variables = require('./public/app_variables');
 
 var xml_data = [];
 function assignTheValues(value) {
@@ -337,48 +305,48 @@ app.post("/finishCreatingSubframeEntry", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
-    subframe_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
+    variables.subframe_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
     var subframe_id = req.body.subframe_id;
 
-    if(subframe_itemNamesData.subframe_validity){
-        subframe_itemNamesData.facility_name = subframe_id.substr(0, 5);
-        subframe_itemNamesData.subframe_type = subframe_id.substr(5, 3);
-        subframe_itemNamesData.serial_number = Number(subframe_id.substr(8,));
-        subframe_itemNamesData.group_name = req.body.group_name;
-        subframe_itemNamesData.subframe_experiment_date = req.body.subframe_experiment_date;
-        subframe_itemNamesData.subframe_experiment_time = req.body.subframe_experiment_time;
-        subframe_itemNamesData.subframe_comments = req.body.subframe_comments;
-        subframe_itemNamesData.subframe_device_select = req.body.subframe_device_select;
-        subframe_itemNamesData.subframe_event_select = req.body.subframe_event_select;
-        subframe_itemNamesData.subframe_link_to_data = req.body.subframe_link_to_data;
-        subframe_itemNamesData.subframe_link_to_meta_data = req.body.subframe_link_to_meta_data;
-        subframe_itemNamesData.subframe_event_experiment_date = req.body.subframe_event_experiment_date;
-        subframe_itemNamesData.subframe_event_experiment_time = req.body.subframe_event_experiment_time;
-        subframe_itemNamesData.subframe_events_comments = req.body.subframe_events_comments;
-        subframe_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
-        subframe_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
-        subframe_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
-        subframe_itemNamesData.subframe_fid1_y_position = req.body.subframe_fid1_y_position;
-        subframe_itemNamesData.subframe_fid1_z_position = req.body.subframe_fid1_z_position;
-        subframe_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date
-        subframe_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time
-        subframe_itemNamesData.subframe_fid2_validity = (req.body.subframe_fid2_validity ? true:false);
-        subframe_itemNamesData.subframe_fid2_position_name = req.body.subframe_fid2_position_name;
-        subframe_itemNamesData.subframe_fid2_x_position = req.body.subframe_fid2_x_position;
-        subframe_itemNamesData.subframe_fid2_y_position = req.body.subframe_fid2_y_position;
-        subframe_itemNamesData.subframe_fid2_z_position = req.body.subframe_fid2_z_position;
-        subframe_itemNamesData.subframe_fid2_date = req.body.subframe_fid2_date;
-        subframe_itemNamesData.subframe_fid2_time = req.body.subframe_fid2_time;
-        subframe_itemNamesData.subframe_fid3_validity = (req.body.subframe_fid3_validity ? true:false);
-        subframe_itemNamesData.subframe_fid3_position_name = req.body.subframe_fid3_position_name;
-        subframe_itemNamesData.subframe_fid3_x_position = req.body.subframe_fid3_x_position;
-        subframe_itemNamesData.subframe_fid3_y_position = req.body.subframe_fid3_y_position;
-        subframe_itemNamesData.subframe_fid3_z_position = req.body.subframe_fid3_z_position;
-        subframe_itemNamesData.subframe_fid3_date = req.body.subframe_fid3_date;
-        subframe_itemNamesData.subframe_fid3_time = req.body.subframe_fid3_time;
+    if(variables.subframe_itemNamesData.subframe_validity){
+        variables.subframe_itemNamesData.facility_name = subframe_id.substr(0, 5);
+        variables.subframe_itemNamesData.subframe_type = subframe_id.substr(5, 3);
+        variables.subframe_itemNamesData.serial_number = Number(subframe_id.substr(8,));
+        variables.subframe_itemNamesData.group_name = req.body.group_name;
+        variables.subframe_itemNamesData.subframe_experiment_date = req.body.subframe_experiment_date;
+        variables.subframe_itemNamesData.subframe_experiment_time = req.body.subframe_experiment_time;
+        variables.subframe_itemNamesData.subframe_comments = req.body.subframe_comments;
+        variables.subframe_itemNamesData.subframe_device_select = req.body.subframe_device_select;
+        variables.subframe_itemNamesData.subframe_event_select = req.body.subframe_event_select;
+        variables.subframe_itemNamesData.subframe_link_to_data = req.body.subframe_link_to_data;
+        variables.subframe_itemNamesData.subframe_link_to_meta_data = req.body.subframe_link_to_meta_data;
+        variables.subframe_itemNamesData.subframe_event_experiment_date = req.body.subframe_event_experiment_date;
+        variables.subframe_itemNamesData.subframe_event_experiment_time = req.body.subframe_event_experiment_time;
+        variables.subframe_itemNamesData.subframe_events_comments = req.body.subframe_events_comments;
+        variables.subframe_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
+        variables.subframe_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
+        variables.subframe_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
+        variables.subframe_itemNamesData.subframe_fid1_y_position = req.body.subframe_fid1_y_position;
+        variables.subframe_itemNamesData.subframe_fid1_z_position = req.body.subframe_fid1_z_position;
+        variables.subframe_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date
+        variables.variables.subframe_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time
+        variables.subframe_itemNamesData.subframe_fid2_validity = (req.body.subframe_fid2_validity ? true:false);
+        variables.subframe_itemNamesData.subframe_fid2_position_name = req.body.subframe_fid2_position_name;
+        variables.subframe_itemNamesData.subframe_fid2_x_position = req.body.subframe_fid2_x_position;
+        variables.subframe_itemNamesData.subframe_fid2_y_position = req.body.subframe_fid2_y_position;
+        variables.subframe_itemNamesData.subframe_fid2_z_position = req.body.subframe_fid2_z_position;
+        variables.subframe_itemNamesData.subframe_fid2_date = req.body.subframe_fid2_date;
+        variables.subframe_itemNamesData.subframe_fid2_time = req.body.subframe_fid2_time;
+        variables.subframe_itemNamesData.subframe_fid3_validity = (req.body.subframe_fid3_validity ? true:false);
+        variables.subframe_itemNamesData.subframe_fid3_position_name = req.body.subframe_fid3_position_name;
+        variables.subframe_itemNamesData.subframe_fid3_x_position = req.body.subframe_fid3_x_position;
+        variables.subframe_itemNamesData.subframe_fid3_y_position = req.body.subframe_fid3_y_position;
+        variables.subframe_itemNamesData.subframe_fid3_z_position = req.body.subframe_fid3_z_position;
+        variables.subframe_itemNamesData.subframe_fid3_date = req.body.subframe_fid3_date;
+        variables.subframe_itemNamesData.subframe_fid3_time = req.body.subframe_fid3_time;
     } else {
-        subframe_itemNamesData.subframe_invalid_date = req.body.subframe_invalid_date;
-        subframe_itemNamesData.subframe_invalid_time = req.body.subframe_invalid_time;
+        variables.subframe_itemNamesData.subframe_invalid_date = req.body.subframe_invalid_date;
+        variables.subframe_itemNamesData.subframe_invalid_time = req.body.subframe_invalid_time;
     }
         
     if (checkEmpty(subframe_itemNamesData, "subframe")) {
@@ -397,44 +365,44 @@ app.post("/submitSubframeInfoManually", function(req, res){
 });
 
 app.post("/submitROIImageManually", function(req, res){
-    roi_itemNamesData.roi_type = req.body.roi_type;
-    roi_itemNamesData.roi_detection_method = req.body.roi_detection_method;
-    roi_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
-    roi_itemNamesData.roi_experiment_y_position = req.body.roi_experiment_y_position;
-    roi_itemNamesData.roi_experiment_width = req.body.roi_experiment_width;
-    roi_itemNamesData.roi_experiment_height = req.body.roi_experiment_height;
-    roi_itemNamesData.roi_mask_load = req.body.roi_mask_load;
-    roi_itemNamesData.roi_experiment_date = req.body.roi_experiment_date;
-    roi_itemNamesData.roi_experiment_time = req.body.roi_experiment_time;
-    roi_itemNamesData.roi_experiment_comments = req.body.roi_experiment_comments;
-    roi_itemNamesData.roi_device = req.body.roi_device;
-    roi_itemNamesData.roi_event_type = req.body.roi_event_type;
-    roi_itemNamesData.roi_event_link_to_data = req.body.roi_event_link_to_data;
-    roi_itemNamesData.roi_event_link_to_meta_data = req.body.roi_event_link_to_meta_data;
-    roi_itemNamesData.roi_event_date = req.body.roi_event_date;
-    roi_itemNamesData.roi_event_time = req.body.roi_event_time;
-    roi_itemNamesData.roi_event_comments = req.body.roi_event_comments;
-    roi_itemNamesData.roi_event_fid1_validity = (req.body.roi_event_fid1_validity ? true:false);
-    roi_itemNamesData.roi_event_fid1_position_name = req.body.roi_event_fid1_position_name;
-    roi_itemNamesData.roi_event_fid1_x_position = req.body.roi_event_fid1_x_position;
-    roi_itemNamesData.roi_event_fid1_y_position = req.body.roi_event_fid1_y_position;
-    roi_itemNamesData.roi_event_fid1_z_position = req.body.roi_event_fid1_z_position;
-    roi_itemNamesData.roi_event_fid1_experiment_date = req.body.roi_event_fid1_experiment_date;
-    roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
-    roi_itemNamesData.roi_event_fid2_validity = (req.body.roi_event_fid2_validity ? true:false);
-    roi_itemNamesData.roi_event_fid2_position_name = req.body.roi_event_fid2_position_name;
-    roi_itemNamesData.roi_event_fid2_x_position = req.body.roi_event_fid2_x_position;
-    roi_itemNamesData.roi_event_fid2_y_position = req.body.roi_event_fid2_y_position;
-    roi_itemNamesData.roi_event_fid2_z_position = req.body.roi_event_fid2_z_position;
-    roi_itemNamesData.roi_event_fid2_experiment_date = req.body.roi_event_fid2_experiment_date;
-    roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
-    roi_itemNamesData.roi_event_fid3_validity = (req.body.roi_event_fid3_validity ? true:false);
-    roi_itemNamesData.roi_event_fid3_position_name = req.body.roi_event_fid3_position_name;
-    roi_itemNamesData.roi_event_fid3_x_position = req.body.roi_event_fid3_x_position;
-    roi_itemNamesData.roi_event_fid3_y_position = req.body.roi_event_fid3_y_position;
-    roi_itemNamesData.roi_event_fid3_z_position = req.body.roi_event_fid3_z_position;
-    roi_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
-    roi_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
+    variables.roi_itemNamesData.roi_type = req.body.roi_type;
+    variables.roi_itemNamesData.roi_detection_method = req.body.roi_detection_method;
+    variables.roi_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
+    variables.roi_itemNamesData.roi_experiment_y_position = req.body.roi_experiment_y_position;
+    variables.roi_itemNamesData.roi_experiment_width = req.body.roi_experiment_width;
+    variables.roi_itemNamesData.roi_experiment_height = req.body.roi_experiment_height;
+    variables.roi_itemNamesData.roi_mask_load = req.body.roi_mask_load;
+    variables.roi_itemNamesData.roi_experiment_date = req.body.roi_experiment_date;
+    variables.roi_itemNamesData.roi_experiment_time = req.body.roi_experiment_time;
+    variables.roi_itemNamesData.roi_experiment_comments = req.body.roi_experiment_comments;
+    variables.roi_itemNamesData.roi_device = req.body.roi_device;
+    variables.roi_itemNamesData.roi_event_type = req.body.roi_event_type;
+    variables.roi_itemNamesData.roi_event_link_to_data = req.body.roi_event_link_to_data;
+    variables.roi_itemNamesData.roi_event_link_to_meta_data = req.body.roi_event_link_to_meta_data;
+    variables.roi_itemNamesData.roi_event_date = req.body.roi_event_date;
+    variables.roi_itemNamesData.roi_event_time = req.body.roi_event_time;
+    variables.roi_itemNamesData.roi_event_comments = req.body.roi_event_comments;
+    variables.roi_itemNamesData.roi_event_fid1_validity = (req.body.roi_event_fid1_validity ? true:false);
+    variables.roi_itemNamesData.roi_event_fid1_position_name = req.body.roi_event_fid1_position_name;
+    variables.roi_itemNamesData.roi_event_fid1_x_position = req.body.roi_event_fid1_x_position;
+    variables.roi_itemNamesData.roi_event_fid1_y_position = req.body.roi_event_fid1_y_position;
+    variables.roi_itemNamesData.roi_event_fid1_z_position = req.body.roi_event_fid1_z_position;
+    variables.roi_itemNamesData.roi_event_fid1_experiment_date = req.body.roi_event_fid1_experiment_date;
+    variables.roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
+    variables.roi_itemNamesData.roi_event_fid2_validity = (req.body.roi_event_fid2_validity ? true:false);
+    variables.roi_itemNamesData.roi_event_fid2_position_name = req.body.roi_event_fid2_position_name;
+    variables.roi_itemNamesData.roi_event_fid2_x_position = req.body.roi_event_fid2_x_position;
+    variables.roi_itemNamesData.roi_event_fid2_y_position = req.body.roi_event_fid2_y_position;
+    variables.roi_itemNamesData.roi_event_fid2_z_position = req.body.roi_event_fid2_z_position;
+    variables.roi_itemNamesData.roi_event_fid2_experiment_date = req.body.roi_event_fid2_experiment_date;
+    variables.roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
+    variables.roi_itemNamesData.roi_event_fid3_validity = (req.body.roi_event_fid3_validity ? true:false);
+    variables.roi_itemNamesData.roi_event_fid3_position_name = req.body.roi_event_fid3_position_name;
+    variables.roi_itemNamesData.roi_event_fid3_x_position = req.body.roi_event_fid3_x_position;
+    variables.roi_itemNamesData.roi_event_fid3_y_position = req.body.roi_event_fid3_y_position;
+    variables.roi_itemNamesData.roi_event_fid3_z_position = req.body.roi_event_fid3_z_position;
+    variables.roi_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
+    variables.roi_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
         
     if (checkEmpty(roi_itemNamesData, "roi")) {
         res.render("manually_roi_image");
@@ -444,43 +412,43 @@ app.post("/submitROIImageManually", function(req, res){
 });
 
 app.post("/submitSampleImageManually", function(req, res){
-    sample_itemNamesData.sample_experiment_x_position = req.body.sample_experiment_x_position;
-    sample_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
-    sample_itemNamesData.sample_experiment_width = req.body.sample_experiment_width;
-    sample_itemNamesData.sample_experiment_height = req.body.sample_experiment_height;
-    sample_itemNamesData.sample_detection_method = req.body.sample_detection_method;
-    sample_itemNamesData.sample_mask_load = req.body.sample_mask_load;
-    sample_itemNamesData.sample_experiment_date = req.body.sample_experiment_date;
-    sample_itemNamesData.sample_experiment_time = req.body.sample_experiment_time;
-    sample_itemNamesData.sample_experiment_comments = req.body.sample_experiment_comments;
-    sample_itemNamesData.sample_device = req.body.sample_device;
-    sample_itemNamesData.sample_event_type = req.body.sample_event_type;
-    sample_itemNamesData.sample_event_link_to_data = req.body.sample_event_link_to_data;
-    sample_itemNamesData.sample_event_link_to_meta_data = req.body.sample_event_link_to_meta_data;
-    sample_itemNamesData.sample_event_date = req.body.sample_event_date;
-    sample_itemNamesData.sample_event_time = req.body.sample_event_time;
-    sample_itemNamesData.sample_event_comments = req.body.sample_event_comments;
-    sample_itemNamesData.sample_event_fid1_validity = (req.body.sample_event_fid1_validity ? true:false);
-    sample_itemNamesData.sample_event_fid1_position_name = req.body.sample_event_fid1_position_name;
-    sample_itemNamesData.sample_event_fid1_x_position = req.body.sample_event_fid1_x_position;
-    sample_itemNamesData.sample_event_fid1_y_position = req.body.sample_event_fid1_y_position;
-    sample_itemNamesData.sample_event_fid1_z_position = req.body.sample_event_fid1_z_position;
-    sample_itemNamesData.sample_event_fid1_experiment_date = req.body.sample_event_fid1_experiment_date;
-    sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
-    sample_itemNamesData.sample_event_fid2_validity = (req.body.sample_event_fid2_validity ? true:false);
-    sample_itemNamesData.sample_event_fid2_position_name = req.body.sample_event_fid2_position_name;
-    sample_itemNamesData.sample_event_fid2_x_position = req.body.sample_event_fid2_x_position;
-    sample_itemNamesData.sample_event_fid2_y_position = req.body.sample_event_fid2_y_position;
-    sample_itemNamesData.sample_event_fid2_z_position = req.body.sample_event_fid2_z_position;
-    sample_itemNamesData.sample_event_fid2_experiment_date = req.body.sample_event_fid2_experiment_date;
-    sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
-    sample_itemNamesData.sample_event_fid3_validity = (req.body.sample_event_fid3_validity ? true:false);
-    sample_itemNamesData.sample_event_fid3_position_name = req.body.sample_event_fid3_position_name
-    sample_itemNamesData.sample_event_fid3_x_position = req.body.sample_event_fid3_x_position;
-    sample_itemNamesData.sample_event_fid3_y_position = req.body.sample_event_fid3_y_position;
-    sample_itemNamesData.sample_event_fid3_z_position = req.body.sample_event_fid3_z_position;
-    sample_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
-    sample_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
+    variables.sample_itemNamesData.sample_experiment_x_position = req.body.sample_experiment_x_position;
+    variables.sample_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
+    variables.sample_itemNamesData.sample_experiment_width = req.body.sample_experiment_width;
+    variables.sample_itemNamesData.sample_experiment_height = req.body.sample_experiment_height;
+    variables.sample_itemNamesData.sample_detection_method = req.body.sample_detection_method;
+    variables.sample_itemNamesData.sample_mask_load = req.body.sample_mask_load;
+    variables.sample_itemNamesData.sample_experiment_date = req.body.sample_experiment_date;
+    variables.sample_itemNamesData.sample_experiment_time = req.body.sample_experiment_time;
+    variables.sample_itemNamesData.sample_experiment_comments = req.body.sample_experiment_comments;
+    variables.sample_itemNamesData.sample_device = req.body.sample_device;
+    variables.sample_itemNamesData.sample_event_type = req.body.sample_event_type;
+    variables.sample_itemNamesData.sample_event_link_to_data = req.body.sample_event_link_to_data;
+    variables.sample_itemNamesData.sample_event_link_to_meta_data = req.body.sample_event_link_to_meta_data;
+    variables.sample_itemNamesData.sample_event_date = req.body.sample_event_date;
+    variables.sample_itemNamesData.sample_event_time = req.body.sample_event_time;
+    variables.sample_itemNamesData.sample_event_comments = req.body.sample_event_comments;
+    variables.sample_itemNamesData.sample_event_fid1_validity = (req.body.sample_event_fid1_validity ? true:false);
+    variables.sample_itemNamesData.sample_event_fid1_position_name = req.body.sample_event_fid1_position_name;
+    variables.sample_itemNamesData.sample_event_fid1_x_position = req.body.sample_event_fid1_x_position;
+    variables.sample_itemNamesData.sample_event_fid1_y_position = req.body.sample_event_fid1_y_position;
+    variables.sample_itemNamesData.sample_event_fid1_z_position = req.body.sample_event_fid1_z_position;
+    variables.sample_itemNamesData.sample_event_fid1_experiment_date = req.body.sample_event_fid1_experiment_date;
+    variables.sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    variables.sample_itemNamesData.sample_event_fid2_validity = (req.body.sample_event_fid2_validity ? true:false);
+    variables.sample_itemNamesData.sample_event_fid2_position_name = req.body.sample_event_fid2_position_name;
+    variables.sample_itemNamesData.sample_event_fid2_x_position = req.body.sample_event_fid2_x_position;
+    variables.sample_itemNamesData.sample_event_fid2_y_position = req.body.sample_event_fid2_y_position;
+    variables.sample_itemNamesData.sample_event_fid2_z_position = req.body.sample_event_fid2_z_position;
+    variables.sample_itemNamesData.sample_event_fid2_experiment_date = req.body.sample_event_fid2_experiment_date;
+    variables.sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    variables.sample_itemNamesData.sample_event_fid3_validity = (req.body.sample_event_fid3_validity ? true:false);
+    variables.sample_itemNamesData.sample_event_fid3_position_name = req.body.sample_event_fid3_position_name
+    variables.sample_itemNamesData.sample_event_fid3_x_position = req.body.sample_event_fid3_x_position;
+    variables.sample_itemNamesData.sample_event_fid3_y_position = req.body.sample_event_fid3_y_position;
+    variables.sample_itemNamesData.sample_event_fid3_z_position = req.body.sample_event_fid3_z_position;
+    variables.sample_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
+    variables.sample_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
 
     if (checkEmpty(sample_itemNamesData, "sampleimage")) {
         res.render("manually_sample_image");
@@ -490,40 +458,40 @@ app.post("/submitSampleImageManually", function(req, res){
 });
 
 app.post("/submitAllData", function(req, res){
-    target_itemNamesData.target_x_position = req.body.target_x_position;
-    target_itemNamesData.target_y_position = req.body.target_y_position;
-    target_itemNamesData.target_z_position = req.body.target_z_position;
-    target_itemNamesData.targetinfo_experiment_date = req.body.targetinfo_experiment_date;
-    target_itemNamesData.targetinfo_experiment_time = req.body.targetinfo_experiment_time;
-    target_itemNamesData.target_comments = req.body.target_comments;
-    target_itemNamesData.target_device = req.body.target_device;
-    target_itemNamesData.target_event_type = req.body.target_event_type;
-    target_itemNamesData.target_link_to_data = req.body.target_link_to_data;
-    target_itemNamesData.target_link_to_meta_data = req.body.target_link_to_meta_data;
-    target_itemNamesData.target_event_experiment_date = req.body.target_event_experiment_date;
-    target_itemNamesData.target_event_experiment_time = req.body.target_event_experiment_time;
-    target_itemNamesData.target_event_comments = req.body.target_event_comments;
-    target_itemNamesData.target_event_fid1_validity = (req.body.target_event_fid1_validity ? true:false);
-    target_itemNamesData.target_event_fid1_position_name = req.body.target_event_fid1_position_name;
-    target_itemNamesData.target_event_fid1_x_position = req.body.target_event_fid1_x_position;
-    target_itemNamesData.target_event_fid1_y_position = req.body.target_event_fid1_y_position;
-    target_itemNamesData.target_event_fid1_z_position = req.body.target_event_fid1_z_position;
-    target_itemNamesData.target_event_fid1_experiment_date = req.body.target_event_fid1_experiment_date;
-    target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
-    target_itemNamesData.target_event_fid2_validity = (req.body.target_event_fid2_validity ? true:false);
-    target_itemNamesData.target_event_fid2_position_name = req.body.target_event_fid2_position_name;
-    target_itemNamesData.target_event_fid2_x_position = req.body.target_event_fid2_x_position;
-    target_itemNamesData.target_event_fid2_y_position = req.body.target_event_fid2_y_position;
-    target_itemNamesData.target_event_fid2_z_position = req.body.target_event_fid2_z_position;
-    target_itemNamesData.target_event_fid2_experiment_date = req.body.target_event_fid2_experiment_date;
-    target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
-    target_itemNamesData.target_event_fid3_validity = (req.body.target_event_fid3_validity ? true:false);
-    target_itemNamesData.target_event_fid3_position_name = req.body.target_event_fid3_position_name;
-    target_itemNamesData.target_event_fid3_x_position = req.body.target_event_fid3_x_position;
-    target_itemNamesData.target_event_fid3_y_position = req.body.target_event_fid3_y_position;
-    target_itemNamesData.target_event_fid3_z_position = req.body.target_event_fid3_z_position;
-    target_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
-    target_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
+    variables.target_itemNamesData.target_x_position = req.body.target_x_position;
+    variables.target_itemNamesData.target_y_position = req.body.target_y_position;
+    variables.target_itemNamesData.target_z_position = req.body.target_z_position;
+    variables.target_itemNamesData.targetinfo_experiment_date = req.body.targetinfo_experiment_date;
+    variables.target_itemNamesData.targetinfo_experiment_time = req.body.targetinfo_experiment_time;
+    variables.target_itemNamesData.target_comments = req.body.target_comments;
+    variables.target_itemNamesData.target_device = req.body.target_device;
+    variables.target_itemNamesData.target_event_type = req.body.target_event_type;
+    variables.target_itemNamesData.target_link_to_data = req.body.target_link_to_data;
+    variables.target_itemNamesData.target_link_to_meta_data = req.body.target_link_to_meta_data;
+    variables.target_itemNamesData.target_event_experiment_date = req.body.target_event_experiment_date;
+    variables.target_itemNamesData.target_event_experiment_time = req.body.target_event_experiment_time;
+    variables.target_itemNamesData.target_event_comments = req.body.target_event_comments;
+    variables.target_itemNamesData.target_event_fid1_validity = (req.body.target_event_fid1_validity ? true:false);
+    variables.target_itemNamesData.target_event_fid1_position_name = req.body.target_event_fid1_position_name;
+    variables.target_itemNamesData.target_event_fid1_x_position = req.body.target_event_fid1_x_position;
+    variables.target_itemNamesData.target_event_fid1_y_position = req.body.target_event_fid1_y_position;
+    variables.target_itemNamesData.target_event_fid1_z_position = req.body.target_event_fid1_z_position;
+    variables.target_itemNamesData.target_event_fid1_experiment_date = req.body.target_event_fid1_experiment_date;
+    variables.target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    variables.target_itemNamesData.target_event_fid2_validity = (req.body.target_event_fid2_validity ? true:false);
+    variables.target_itemNamesData.target_event_fid2_position_name = req.body.target_event_fid2_position_name;
+    variables.target_itemNamesData.target_event_fid2_x_position = req.body.target_event_fid2_x_position;
+    variables.target_itemNamesData.target_event_fid2_y_position = req.body.target_event_fid2_y_position;
+    variables.target_itemNamesData.target_event_fid2_z_position = req.body.target_event_fid2_z_position;
+    variables.target_itemNamesData.target_event_fid2_experiment_date = req.body.target_event_fid2_experiment_date;
+    variables.target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    variables.target_itemNamesData.target_event_fid3_validity = (req.body.target_event_fid3_validity ? true:false);
+    variables.target_itemNamesData.target_event_fid3_position_name = req.body.target_event_fid3_position_name;
+    variables.target_itemNamesData.target_event_fid3_x_position = req.body.target_event_fid3_x_position;
+    variables.target_itemNamesData.target_event_fid3_y_position = req.body.target_event_fid3_y_position;
+    variables.target_itemNamesData.target_event_fid3_z_position = req.body.target_event_fid3_z_position;
+    variables.target_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
+    variables.target_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
 
     if (checkEmpty(target_itemNamesData, "targetdata")) {
         res.render("manually_target_data");
