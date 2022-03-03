@@ -7,10 +7,14 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const session = require('express-session');
+var flash = require('connect-flash');
 const passport = require('passport');
+var LocalStrategy   = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
 const database_connect = require(__dirname + "/database_connection.js");
 const date = require(__dirname + "/date.js");
 const app = express();
+app.use(flash());
 app.use(session({
     secret: "Our little secret.",
     resave: false,
@@ -26,212 +30,18 @@ let connection = mysql.createConnection({
     password            : process.env.DB_PWD,
     multipleStatements  : true
 });
-
 const variables = require('./public/app_variables');
-
+const functions = require('./public/app_functions');
 var xml_data = [];
 function assignTheValues(value) {
     xml_data = value;
 }
-
 var serial_number = [];
-
-function checkEmpty(term, page_name) {
-    var result = false;
-
-    if (page_name === "subframe"){
-        value_0 = (term.subframe_validity===false ? true:false);
-        if (value_0) {
-            value_1 = (term.facility_name==="Choose..." ? true:false);
-            value_2 = (term.subframe_type==="Choose..." ? true:false);
-            value_3 = (term.serial_number==='' ? true:false);
-            value_4 = (term.group_name==="Choose..." ? true:false);
-            value_5 = (term.subframe_experiment_date==='' ? true:false);
-            value_6 = (term.subframe_experiment_time==='' ? true:false);
-            value_7 = (term.subframe_comments==='' ? true:false);
-            value_8 = (term.subframe_device_select==="Choose..." ? true:false);
-            value_9 = (term.subframe_event_select==="Choose..." ? true:false);
-            value_10 = (term.subframe_link_to_data==='' ? true:false);
-            value_11 = (term.subframe_link_to_meta_data==='' ? true:false);
-            value_12 = (term.subframe_event_experiment_date==='' ? true:false);
-            value_13 = (term.subframe_event_experiment_time==='' ? true:false);
-            value_14 = (term.subframe_events_comments==='' ? true:false);
-            value_15 = (term.subframe_fid1_validity===false ? true:false);
-            value_16 = (term.subframe_fid1_position_name==="Choose..." ? true:false);
-            value_17 = (term.subframe_fid1_x_position==='' ? true:false);
-            value_18 = (term.subframe_fid1_y_position==='' ? true:false);
-            value_19 = (term.subframe_fid1_z_position==='' ? true:false);
-            value_20 = (term.subframe_fid1_date==='' ? true:false);
-            value_21 = (term.subframe_fid1_time==='' ? true:false);
-            value_22 = (term.subframe_fid2_validity===false ? true:false);
-            value_23 = (term.subframe_fid2_position_name==="Choose..." ? true:false);
-            value_24 = (term.subframe_fid2_x_position==='' ? true:false);
-            value_25 = (term.subframe_fid2_y_position==='' ? true:false);
-            value_26 = (term.subframe_fid2_z_position==='' ? true:false);
-            value_27 = (term.subframe_fid2_date==='' ? true:false);
-            value_28 = (term.subframe_fid2_time==='' ? true:false);
-            value_29 = (term.subframe_fid3_validity===false ? true:false);
-            value_30 = (term.subframe_fid3_position_name==="Choose..." ? true:false);
-            value_31 = (term.subframe_fid3_x_position==='' ? true:false);
-            value_32 = (term.subframe_fid3_y_position==='' ? true:false);
-            value_33 = (term.subframe_fid3_z_position==='' ? true:false);
-            value_34 = (term.subframe_fid3_date==='' ? true:false);
-            value_35 = (term.subframe_fid3_time==='' ? true:false);
-
-            result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | 
-                value_9 | value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 |
-                value_18 | value_19 | value_20 | value_21 | value_22 | value_23 | value_24 | value_25 | value_26 |
-                value_27 | value_27 | value_28 | value_29 | value_30 | value_31 | value_32 | value_33 | value_34 | value_35);
-
-        } else {
-            value_1 = (term.subframe_invalid_date==='' ? true:false);
-            value_2 = (term.subframe_invalid_time==='' ? true:false);
-            
-            result = (value_1 | value_2);
-
-        }
-    } else if (page_name === "roi") {
-        value_0 = (roi_itemNamesData.roi_type==="Choose..." ? true:false);
-        value_1 = (roi_itemNamesData.roi_detection_method==="Choose..." ? true:false);
-        value_2 = (roi_itemNamesData.roi_experiment_x_position==='' ? true:false);
-        value_3 = (roi_itemNamesData.roi_experiment_y_position==='' ? true:false);
-        value_4 = (roi_itemNamesData.roi_experiment_width==='' ? true:false);
-        value_5 = (roi_itemNamesData.roi_experiment_height==='' ? true:false);
-        value_6 = (roi_itemNamesData.roi_mask_load==='' ? true:false);
-        value_7 = (roi_itemNamesData.roi_experiment_date==='' ? true:false);
-        value_8 = (roi_itemNamesData.roi_experiment_time==='' ? true:false);
-        value_9 = (roi_itemNamesData.roi_experiment_comments==='' ? true:false);
-        value_10 = (roi_itemNamesData.roi_device==="Choose..." ? true:false);
-        value_11 = (roi_itemNamesData.roi_event_type==="Choose..." ? true:false);
-        value_12 = (roi_itemNamesData.roi_event_link_to_data==='' ? true:false);
-        value_13 = (roi_itemNamesData.roi_event_link_to_meta_data==='' ? true:false);
-        value_14 = (roi_itemNamesData.roi_event_date==='' ? true:false);
-        value_15 = (roi_itemNamesData.roi_event_time==='' ? true:false);
-        value_16 = (roi_itemNamesData.roi_event_comments==='' ? true:false);
-        value_17 = (roi_itemNamesData.roi_event_fid1_validity===false ? true:false);
-        value_18 = (roi_itemNamesData.roi_event_fid1_position_name==="Choose..." ? true:false);
-        value_19 = (roi_itemNamesData.roi_event_fid1_x_position==='' ? true:false);
-        value_20 = (roi_itemNamesData.roi_event_fid1_y_position==='' ? true:false);
-        value_21 = (roi_itemNamesData.roi_event_fid1_z_position==='' ? true:false);
-        value_22 = (roi_itemNamesData.roi_event_fid1_experiment_date==='' ? true:false);
-        value_23 = (roi_itemNamesData.roi_event_fid1_experiment_time==='' ? true:false);
-        value_24 = (roi_itemNamesData.roi_event_fid2_validity===false ? true:false);
-        value_25 = (roi_itemNamesData.roi_event_fid2_position_name==="Choose..." ? true:false);
-        value_26 = (roi_itemNamesData.roi_event_fid2_x_position==='' ? true:false);
-        value_27 = (roi_itemNamesData.roi_event_fid2_y_position==='' ? true:false);
-        value_28 = (roi_itemNamesData.roi_event_fid2_z_position==='' ? true:false);
-        value_29 = (roi_itemNamesData.roi_event_fid2_experiment_date==='' ? true:false);
-        value_30 = (roi_itemNamesData.roi_event_fid1_experiment_time==='' ? true:false);
-        value_31 = (roi_itemNamesData.roi_event_fid3_validity===false ? true:false);
-        value_32 = (roi_itemNamesData.roi_event_fid3_position_name==="Choose..." ? true:false);
-        value_33 = (roi_itemNamesData.roi_event_fid3_x_position==='' ? true:false);
-        value_34 = (roi_itemNamesData.roi_event_fid3_y_position==='' ? true:false);
-        value_35 = (roi_itemNamesData.roi_event_fid3_z_position==='' ? true:false);
-        value_36 = (roi_itemNamesData.roi_event_fid3_experiment_date==='' ? true:false);
-        value_37 = (roi_itemNamesData.roi_event_fid3_experiment_time==='' ? true:false);
-
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | value_9 |
-            value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 | value_18 | value_19 | value_20 |
-            value_21 | value_22 | value_23 | value_24 | value_25 | value_26 | value_27 | value_28 | value_29 | value_30 | value_31 |
-            value_32 | value_33 | value_34 | value_35 | value_36 | value_37);
-
-    } else if (page_name==="sampleimage"){
-        value_0 = (sample_itemNamesData.sample_experiment_x_position==='' ? true:false);
-        value_1 = (sample_itemNamesData.sample_experiment_y_position==='' ? true:false);
-        value_2 = (sample_itemNamesData.sample_experiment_width==='' ? true:false);
-        value_3 = (sample_itemNamesData.sample_experiment_height==='' ? true:false);
-        value_4 = (sample_itemNamesData.sample_detection_method==="Choose..." ? true:false);
-        value_5 = (sample_itemNamesData.sample_mask_load==='' ? true:false);
-        value_6 = (sample_itemNamesData.sample_experiment_date==='' ? true:false);
-        value_7 = (sample_itemNamesData.sample_experiment_time==='' ? true:false);
-        value_8 = (sample_itemNamesData.sample_experiment_comments==='' ? true:false);
-        value_9 = (sample_itemNamesData.sample_device==="Choose..." ? true:false);
-        value_10 = (sample_itemNamesData.sample_event_type==="Choose..." ? true:false);
-        value_11 = (sample_itemNamesData.sample_event_link_to_data==='' ? true:false);
-        value_12 = (sample_itemNamesData.sample_event_link_to_meta_data==='' ? true:false);
-        value_13 = (sample_itemNamesData.sample_event_date==='' ? true:false);
-        value_14 = (sample_itemNamesData.sample_event_time==='' ? true:false);
-        value_15 = (sample_itemNamesData.sample_event_comments==='' ? true:false);
-        value_16 = (sample_itemNamesData.sample_event_fid1_validity===false ? true:false);
-        value_17 = (sample_itemNamesData.sample_event_fid1_position_name==="Choose..." ? true:false);
-        value_18 = (sample_itemNamesData.sample_event_fid1_x_position==='' ? true:false);
-        value_19 = (sample_itemNamesData.sample_event_fid1_y_position==='' ? true:false);
-        value_20 = (sample_itemNamesData.sample_event_fid1_z_position==='' ? true:false);
-        value_21 = (sample_itemNamesData.sample_event_fid1_experiment_date==='' ? true:false);
-        value_22 = (sample_itemNamesData.sample_event_fid1_experiment_time==='' ? true:false);
-        value_23 = (sample_itemNamesData.sample_event_fid2_validity===false ? true:false);
-        value_24 = (sample_itemNamesData.sample_event_fid2_position_name==="Choose..." ? true:false);
-        value_25 = (sample_itemNamesData.sample_event_fid2_x_position==='' ? true:false);
-        value_26 = (sample_itemNamesData.sample_event_fid2_y_position==='' ? true:false);
-        value_27 = (sample_itemNamesData.sample_event_fid2_z_position==='' ? true:false);
-        value_28 = (sample_itemNamesData.sample_event_fid2_experiment_date==='' ? true:false);
-        value_29 = (sample_itemNamesData.sample_event_fid1_experiment_time==='' ? true:false);
-        value_30 = (sample_itemNamesData.sample_event_fid3_validity===false ? true:false);
-        value_31 = (sample_itemNamesData.sample_event_fid3_position_name==="Choose..." ? true:false);
-        value_32 = (sample_itemNamesData.sample_event_fid3_x_position==='' ? true:false);
-        value_33 = (sample_itemNamesData.sample_event_fid3_y_position==='' ? true:false);
-        value_34 = (sample_itemNamesData.sample_event_fid3_z_position==='' ? true:false);
-        value_35 = (sample_itemNamesData.sample_event_fid3_experiment_date==='' ? true:false);
-        value_36 = (sample_itemNamesData.sample_event_fid3_experiment_time==='' ? true:false);
-
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | value_9 |
-            value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 | value_18 | value_19 | value_20 |
-            value_21 | value_22 | value_23 | value_24 | value_25 | value_26 | value_27 | value_28 | value_29 | value_30 | value_31 |
-            value_32 | value_33 | value_34 | value_35 | value_36);
-
-    } else if (page_name==="targetdata") {
-        value_0 = (target_itemNamesData.target_x_position==='' ? true:false);
-        value_1 = (target_itemNamesData.target_y_position==='' ? true:false);
-        value_2 = (target_itemNamesData.target_z_position==='' ? true:false);
-        value_3 = (target_itemNamesData.targetinfo_experiment_date==='' ? true:false);
-        value_4 = (target_itemNamesData.targetinfo_experiment_time==='' ? true:false);
-        value_5 = (target_itemNamesData.target_comments==='' ? true:false);
-        value_6 = (target_itemNamesData.target_device==="Choose..." ? true:false);
-        value_7 = (target_itemNamesData.target_event_type==="Choose..." ? true:false);
-        value_8 = (target_itemNamesData.target_link_to_data==='' ? true:false);
-        value_9 = (target_itemNamesData.target_link_to_meta_data==='' ? true:false);
-        value_10 = (target_itemNamesData.target_event_experiment_date==='' ? true:false);
-        value_11 = (target_itemNamesData.target_event_experiment_time==='' ? true:false);
-        value_12 = (target_itemNamesData.target_event_comments==='' ? true:false);
-        value_13 = (target_itemNamesData.target_event_fid1_validity===false ? true:false);
-        value_14 = (target_itemNamesData.target_event_fid1_position_name==="Choose..." ? true:false);
-        value_15 = (target_itemNamesData.target_event_fid1_x_position==='' ? true:false);
-        value_16 = (target_itemNamesData.target_event_fid1_y_position==='' ? true:false);
-        value_17 = (target_itemNamesData.target_event_fid1_z_position==='' ? true:false);
-        value_18 = (target_itemNamesData.target_event_fid1_experiment_date==='' ? true:false);
-        value_19 = (target_itemNamesData.target_event_fid1_experiment_time==='' ? true:false);
-        value_20 = (target_itemNamesData.target_event_fid2_validity===false ? true:false);
-        value_21 = (target_itemNamesData.target_event_fid2_position_name==="Choose..." ? true:false);
-        value_22 = (target_itemNamesData.target_event_fid2_x_position==='' ? true:false);
-        value_23 = (target_itemNamesData.target_event_fid2_y_position==='' ? true:false);
-        value_24 = (target_itemNamesData.target_event_fid2_z_position==='' ? true:false);
-        value_25 = (target_itemNamesData.target_event_fid2_experiment_date==='' ? true:false);
-        value_26 = (target_itemNamesData.target_event_fid1_experiment_time==='' ? true:false);
-        value_27 = (target_itemNamesData.target_event_fid3_validity===false ? true:false);
-        value_28 = (target_itemNamesData.target_event_fid3_position_name==="Choose..." ? true:false);
-        value_29 = (target_itemNamesData.target_event_fid3_x_position==='' ? true:false);
-        value_30 = (target_itemNamesData.target_event_fid3_y_position==='' ? true:false);
-        value_31 = (target_itemNamesData.target_event_fid3_z_position==='' ? true:false);
-        value_32 = (target_itemNamesData.target_event_fid3_experiment_date==='' ? true:false);
-        value_33 = (target_itemNamesData.target_event_fid3_experiment_time==='' ? true:false);
-
-        result = (value_0 | value_1 | value_2 | value_3 | value_4 | value_5 | value_6 | value_7 | value_8 | value_9 |
-            value_10 | value_11 | value_12 | value_13 | value_14 | value_15 | value_16 | value_17 | value_18 | value_19 | value_20 |
-            value_21 | value_22 | value_23 | value_24 | value_25 | value_26 | value_27 | value_28 | value_29 | value_30 | value_31 |
-            value_32 | value_33);
-
-    } else if (page_name==="xmldata") {
-        result = true;
-    }
-
-    return result;
-}
-
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/imgs"));    
-
+//==========================================================================================================
 app.get("/", function(req, res){
     let query = "SELECT COUNT(*) as count FROM Subframe_Table";
     connection.query(query, function(err, results){
@@ -245,60 +55,74 @@ app.get("/", function(req, res){
 });
 
 app.post("/submitDataManually", function(req, res){
-    let query = "SELECT COUNT(*) as count FROM Subframe_Table; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe_Table;";
-    connection.query(query, function(err, results){
-        if(err) 
-            throw err;
-        else
-            var count = results[0][0].count;
-        var max_sr = results[1][0].max_sr;        
-        res.render("home_manually_subframe", {serialnumber: max_sr, utils: app.js});
-    });
+    res.render("home_manually_subframe");
 });
 
-app.post("/createSubframe", function(req, res){ 
-    let query = "SELECT COUNT(*) as count FROM Subframe_Table; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe_Table;";
+
+
+
+
+
+
+
+
+app.get("/editTables", function(req, res){
+    let query = "SELECT * FROM DetectionMethod_Table";
     connection.query(query, function(err, results){
         if(err) 
             throw err;
-        else
-            var count = results[0][0].count;
-            serial_number = count + 1;
-        var max_sr = results[1][0].max_sr;        
-        res.render("get_subframe_id", {data: count, serialnumber: max_sr});
-    });      
+        else            
+            console.log(results);
+            
+        res.render("edit_tables", {listTitle: "DetectionMethod_Table", newListItems: results}); 
+    });
+
+});
+
+
+
+app.post("/createSubframe", function(req, res){ 
+    res.render("get_subframe_id");      
 });
 
 app.post("/createSubframeOnDatabase", function(req, res){
     FacilityName = req.body.facility_name_select;
     SubframeType = req.body.subframe_type_select;
 
-    var getFacilityID_query = "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'; ";
-    var getSubframeTypeID_query = "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'; ";
-    var createSubframeEntry = "INSERT INTO Subframe_Table (FacilityID, SubframeTypeID, SerialNumber) VALUES ((" + 
-    "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'), (" + 
-    "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'), " + serial_number + "); ";
-
-    var q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
-
-    var concat_zeros = 6 - serial_number.toString().length;
-    if(concat_zeros>0){
-        serial_number_text = serial_number.toString();
-        for(let i=0; i<concat_zeros; i++){
-            serial_number_text = '0' + serial_number_text;
-        }
-    }
+    var found_serialnumber = "SELECT MAX(SerialNumber)+1 as serialnumber FROM Subframe_Table WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table " + 
+    "WHERE TypeName='" + SubframeType + "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + FacilityName + "');"
+    
+    var q = found_serialnumber; 
 
     connection.query(q, function (error, result) {
         if (error) throw error;
-        console.log(result);
-        var facilityID = result[0][0].facilityid;
-        var subframeTypeID = result[1][0].subframetypeid;
-        var finalID = FacilityName + SubframeType + serial_number_text;
-        console.log(finalID);
-        res.render("show_subframe_id", {serial_number, FacilityName, SubframeType, finalID}); 
+        console.log(result[0].serialnumber);
+        serial_number = result[0].serialnumber;
+
+        var concat_zeros = 6 - serial_number.toString().length;
+        if(concat_zeros>0){
+            serial_number_text = serial_number.toString();
+            for(let i=0; i<concat_zeros; i++){
+                serial_number_text = '0' + serial_number_text;
+            }
+        }
+
+        var getFacilityID_query = "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'; ";
+        var getSubframeTypeID_query = "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'; ";
+        var createSubframeEntry = "INSERT INTO Subframe_Table (FacilityID, SubframeTypeID, SerialNumber) VALUES ((" + 
+        "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'), (" + 
+        "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'), " + serial_number + ");"    
+    
+        q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
+
+        connection.query(q, function (error, result) { 
+            var facilityID = result[0][0].facilityid;
+            var subframeTypeID = result[1][0].subframetypeid;
+            var finalID = FacilityName + SubframeType + serial_number_text;
+            console.log(finalID);
+            res.render("show_subframe_id", {serial_number, FacilityName, SubframeType, finalID}); 
     });
-});
+})});
 
 app.post("/finishCreatingSubframeEntry", function(req, res){
     res.redirect("/");
@@ -307,7 +131,6 @@ app.post("/finishCreatingSubframeEntry", function(req, res){
 app.post("/submitSubframeInfoManually", function(req, res){
     variables.subframe_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
     var subframe_id = req.body.subframe_id;
-
     if(variables.subframe_itemNamesData.subframe_validity){
         variables.subframe_itemNamesData.facility_name = subframe_id.substr(0, 5);
         variables.subframe_itemNamesData.subframe_type = subframe_id.substr(5, 3);
@@ -328,8 +151,8 @@ app.post("/submitSubframeInfoManually", function(req, res){
         variables.subframe_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
         variables.subframe_itemNamesData.subframe_fid1_y_position = req.body.subframe_fid1_y_position;
         variables.subframe_itemNamesData.subframe_fid1_z_position = req.body.subframe_fid1_z_position;
-        variables.subframe_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date
-        variables.variables.subframe_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time
+        variables.subframe_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date;
+        variables.subframe_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time;
         variables.subframe_itemNamesData.subframe_fid2_validity = (req.body.subframe_fid2_validity ? true:false);
         variables.subframe_itemNamesData.subframe_fid2_position_name = req.body.subframe_fid2_position_name;
         variables.subframe_itemNamesData.subframe_fid2_x_position = req.body.subframe_fid2_x_position;
@@ -348,23 +171,16 @@ app.post("/submitSubframeInfoManually", function(req, res){
         variables.subframe_itemNamesData.subframe_invalid_date = req.body.subframe_invalid_date;
         variables.subframe_itemNamesData.subframe_invalid_time = req.body.subframe_invalid_time;
     }
-        
-    if (checkEmpty(subframe_itemNamesData, "subframe")) {
-        let query = "SELECT COUNT(*) as count FROM Subframe_Table; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe_Table;";
-        connection.query(query, function(err, results){
-            if(err) 
-                throw err;
-            else
-                var count = results[0][0].count;
-            var max_sr = results[1][0].max_sr;        
-            res.render("home_manually_subframe", {serialnumber: max_sr});
-        });
+    if (functions.checkEmpty(variables.subframe_itemNamesData, "subframe")) {
+            res.render("home_manually_subframe");
     } else {
             res.render("manually_roi_image");
     }    
 });
 
 app.post("/submitROIImageManually", function(req, res){
+    console.log(req.body.roi_type);
+    console.log(variables);
     variables.roi_itemNamesData.roi_type = req.body.roi_type;
     variables.roi_itemNamesData.roi_detection_method = req.body.roi_detection_method;
     variables.roi_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
@@ -403,8 +219,8 @@ app.post("/submitROIImageManually", function(req, res){
     variables.roi_itemNamesData.roi_event_fid3_z_position = req.body.roi_event_fid3_z_position;
     variables.roi_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
     variables.roi_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
-        
-    if (checkEmpty(roi_itemNamesData, "roi")) {
+    
+    if (functions.checkEmpty(variables.roi_itemNamesData, "roi")) {
         res.render("manually_roi_image");
     } else { 
         res.render("manually_sample_image");
@@ -450,8 +266,8 @@ app.post("/submitSampleImageManually", function(req, res){
     variables.sample_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
     variables.sample_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
 
-    if (checkEmpty(sample_itemNamesData, "sampleimage")) {
-        res.render("manually_sample_image");
+    if (functions.checkEmpty(variables.sample_itemNamesData, "sampleimage")) {
+            res.render("manually_sample_image");
     } else {
         res.render("manually_target_data");
     }
@@ -493,10 +309,10 @@ app.post("/submitAllData", function(req, res){
     variables.target_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
     variables.target_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
 
-    if (checkEmpty(target_itemNamesData, "targetdata")) {
+    if (functions.checkEmpty(variables.target_itemNamesData, "targetdata")) {
         res.render("manually_target_data");
     } else {
-        var subframe_query = "INSERT INTO Subframe_Table (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments, CreateTimeStamp, Validity)" + 
+      /*  var subframe_query = "INSERT INTO Subframe_Table (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments, CreateTimeStamp, Validity)" + 
         " VALUES ((SELECT ID FROM GroupInformation_Table WHERE GroupName='" + subframe_itemNamesData.GroupName + 
         "'), (SELECT ID FROM SubframeType_Table WHERE Type='" + subframe_itemNamesData.SubframeTypeSelect +
         "'), (SELECT ID FROM Facility_Table WHERE CodeName='" + subframe_itemNamesData.FacilityNameSelect + 
@@ -579,6 +395,8 @@ app.post("/submitAllData", function(req, res){
             console.log(result);
             res.redirect("/");
         });*/ 
+
+        res.redirect("/");
     }
 });
 
@@ -891,6 +709,110 @@ app.post("/submitExperimentXML", function(req, res){
         res.redirect("/");
     }); 
     //}
+});
+
+app.get("/login", function(req, res){
+    res.render('login', { message: req.flash('loginMessage') });
+});
+
+app.get('/register', function(req, res) {
+    res.render('register', { message: req.flash('registerMessage') });
+});
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+  
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
+
+
+passport.use(
+    'local-login',
+    new LocalStrategy({
+        // by default, local strategy uses username and password, we will override with email
+        usernameField : 'username',
+        passwordField : 'password',
+        passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+    function(req, username, password, done) { // callback with email and password from our form
+        //connection.connect();
+        connection.query("SELECT * FROM Users_Table WHERE EmailAddress = ?",[username], function(err, rows){
+            if (err)
+                return done(err);
+            if (!rows.length) {
+                return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+            }
+
+            // if the user is found but the password is wrong
+            console.log(password);
+            console.log(rows[0]);
+            
+            if (!bcrypt.compare(password, rows[0].Password)){
+                console.log("Hello");
+                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+            }
+            // all is well, return successful user
+            return done(null, rows[0]);
+        });
+        //connection.end();
+    })
+);
+
+passport.use(
+    'local-signup',
+    new LocalStrategy({
+        usernameField : 'username',
+        passwordField : 'password',
+        passReqToCallback : true 
+    },
+    function(req, username, password, done) {
+        //connection.connect();
+        connection.query("SELECT * FROM Users_Table WHERE EmailAddress = ?",[username], function(err, rows) {
+            if (err)
+                return done(err);
+            if (rows.length) {
+                return done(null, false, req.flash('signupMessage', 'That username is already taken!'));
+            } else {
+                var newUserMysql = {
+                    username: username,
+                    password: bcrypt.hashSync(password, 10) //null, null)  
+                };
+
+                var insertQuery = "INSERT INTO Users_Table ( EmailAddress, Password ) values (?,?)";
+                //connection.connect();
+                connection.query(insertQuery,[newUserMysql.username, newUserMysql.password],function(err, rows) {
+                    newUserMysql.id = rows.insertId;
+                    return done(null, newUserMysql);
+                });
+                //connection.end();
+            }
+        });
+        //connection.end();
+    })
+);
+
+app.post('/register', passport.authenticate('local-signup', {
+        successRedirect : '/login', // redirect to the secure profile section
+        failureRedirect : '/register', // redirect back to the signup page if there is an error
+        failureFlash : false // allow flash messages
+    }));
+
+app.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/editTables', // redirect to the secure profile section
+        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }),
+    function(req, res) {
+        console.log("hello");
+
+        if (req.body.remember) {
+          req.session.cookie.maxAge = 1000 * 60 * 3;
+        } else {
+          req.session.cookie.expires = false;
+        }
+    res.redirect('/');
 });
 
 //app.get("/joke", function(req, res){

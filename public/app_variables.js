@@ -160,7 +160,7 @@ var target_itemNamesData = {
 
 module.exports = {
     subframe_itemNamesData,
-    sample_itemNamesData,
+    roi_itemNamesData,
     sample_itemNamesData,
     target_itemNamesData
 }

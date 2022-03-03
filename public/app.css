@@ -66,6 +66,11 @@ p {
   font-size: 1rem;
 }
 
+p.tablename {
+  margin: 10 0;
+  font-size: 1.5rem;
+}
+
 a.title {
   font-family: "Montserrat Extra-light 200";
   font-size: 1.8rem;
@@ -102,6 +107,20 @@ button {
 	background: transparent;
 }
 */
+
+.box {
+  max-width: 800px;
+  margin: 50px auto;
+  /*background: white;*/
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+#heading {
+  /*background-color: #A683E3;*/
+  font-size: 2rem;
+  text-align: center;
+}
 
 .row {
   padding: 0% 15%;

@@ -1,0 +1,46 @@
+<%- include("header") -%>
+    <br>
+    <br>
+    <div class="box" id="heading">
+        <p class="tablename"> <%= listTitle %> </p>
+    </div>
+
+    <div class="box">
+
+        <% newListItems.forEach(function(item){ %>
+          <form action="/delete" method="post">
+            <div class="item">
+              <!--<input type="checkbox" name="checkbox" value="<%=item._id%>" onChange="this.form.submit()"> -->
+              <div class="row twopanel">
+                <div class="col-lg-6">
+                    <label class="label-text"><%=  item.MethodName  %></label>
+                </div>
+                <div class="col-lg-6">
+                    <label class="label-text"><%=  item.MethodDescription  %></label>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+          </form>
+          <hr>
+        <% }) %>
+    
+          <form class="item" action="/" method="post">
+            <div class="row twopanel">
+                <div class="col-lg-5">
+                    <input  class="form-control" type="text" name="newItem"   placeholder="Method Name" autocomplete="off">
+                </div>
+                <div class="col-lg-5">
+                    <input  class="form-control" type="text" name="newItem_1" placeholder="Method Description" autocomplete="off">
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn btn-secondary" type="submit" name="list" value="<%= listTitle %>">+</button>
+                </div>
+            </div>
+          </form>
+    </div>
+
+    
+<%- include("footer") -%>
+
+
