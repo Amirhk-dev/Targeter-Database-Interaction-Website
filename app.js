@@ -170,17 +170,18 @@ app.post("/submitSubframeInfoManually", function(req, res){
     } else {
         variables.subframe_itemNamesData.subframe_invalid_date = req.body.subframe_invalid_date;
         variables.subframe_itemNamesData.subframe_invalid_time = req.body.subframe_invalid_time;
+        variables.subframe_itemNamesData.facility_name = subframe_id.substr(0, 5);
+        variables.subframe_itemNamesData.subframe_type = subframe_id.substr(5, 3);
+        variables.subframe_itemNamesData.serial_number = Number(subframe_id.substr(8,));
     }
-    if (functions.checkEmpty(variables.subframe_itemNamesData, "subframe")) {
-            res.render("home_manually_subframe");
-    } else {
+    //if (functions.checkEmpty(variables.subframe_itemNamesData, "subframe")) {
+    //        res.render("home_manually_subframe");
+    //} else {
             res.render("manually_roi_image");
-    }    
+    //}    
 });
 
 app.post("/submitROIImageManually", function(req, res){
-    console.log(req.body.roi_type);
-    console.log(variables);
     variables.roi_itemNamesData.roi_type = req.body.roi_type;
     variables.roi_itemNamesData.roi_detection_method = req.body.roi_detection_method;
     variables.roi_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
@@ -220,11 +221,11 @@ app.post("/submitROIImageManually", function(req, res){
     variables.roi_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
     variables.roi_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
     
-    if (functions.checkEmpty(variables.roi_itemNamesData, "roi")) {
-        res.render("manually_roi_image");
-    } else { 
+    //if (functions.checkEmpty(variables.roi_itemNamesData, "roi")) {
+    //    res.render("manually_roi_image");
+    //} else { 
         res.render("manually_sample_image");
-    }
+    //}
 });
 
 app.post("/submitSampleImageManually", function(req, res){
@@ -266,11 +267,11 @@ app.post("/submitSampleImageManually", function(req, res){
     variables.sample_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
     variables.sample_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
 
-    if (functions.checkEmpty(variables.sample_itemNamesData, "sampleimage")) {
-            res.render("manually_sample_image");
-    } else {
+    //if (functions.checkEmpty(variables.sample_itemNamesData, "sampleimage")) {
+    //        res.render("manually_sample_image");
+    //} else {
         res.render("manually_target_data");
-    }
+    //}
 });
 
 app.post("/submitAllData", function(req, res){
@@ -309,15 +310,124 @@ app.post("/submitAllData", function(req, res){
     variables.target_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
     variables.target_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
 
-    if (functions.checkEmpty(variables.target_itemNamesData, "targetdata")) {
-        res.render("manually_target_data");
-    } else {
-      /*  var subframe_query = "INSERT INTO Subframe_Table (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments, CreateTimeStamp, Validity)" + 
-        " VALUES ((SELECT ID FROM GroupInformation_Table WHERE GroupName='" + subframe_itemNamesData.GroupName + 
-        "'), (SELECT ID FROM SubframeType_Table WHERE Type='" + subframe_itemNamesData.SubframeTypeSelect +
-        "'), (SELECT ID FROM Facility_Table WHERE CodeName='" + subframe_itemNamesData.FacilityNameSelect + 
-        "'), " + serial_number + ", " +  subframe_itemNamesData.SizeX + ", " + subframe_itemNamesData.SizeY + ", '" + subframe_itemNamesData.SubframeComments + "', '" + 
-        subframe_itemNamesData.SubframeExperimentDate + " " + subframe_itemNamesData.SubframeExperimentTime + ":00', " + subframe_itemNamesData.SubframeValidity  + "); ";
+    //if (functions.checkEmpty(variables.target_itemNamesData, "targetdata")) {
+    //    res.render("manually_target_data");
+    //} else {
+
+        var q = [];
+        if (!variables.subframe_itemNamesData.subframe_validity) {
+            q = "UPDATE Subframe_Table SET Validity=0, InvalidSinceTimeStamp='" +  variables.subframe_itemNamesData.subframe_invalid_date + 
+            " " + variables.subframe_itemNamesData.subframe_invalid_time + ":00' WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + 
+            variables.subframe_itemNamesData.subframe_type + "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" +
+            variables.subframe_itemNamesData.facility_name + "') AND SerialNumber=" + variables.subframe_itemNamesData.serial_number + ";";            
+        } else {
+            var subframe_query = "UPDATE Subframe_Table SET Validity=1, GroupID=(SELECT ID FROM GroupInformation_Table WHERE GroupName='" + 
+            variables.subframe_itemNamesData.group_name + "'), CreateTimeStamp='" + variables.subframe_itemNamesData.subframe_experiment_date + " " + 
+            variables.subframe_itemNamesData.subframe_experiment_time + ":00', Comments='" + variables.subframe_itemNamesData.subframe_comments  + "' WHERE " + 
+            "SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_itemNamesData.subframe_type + 
+            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_itemNamesData.facility_name + "') AND SerialNumber=" +
+            variables.subframe_itemNamesData.serial_number + "; ";
+
+            var subframe_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.subframe_itemNamesData.subframe_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_itemNamesData.subframe_fid1_position_name + "'), " + variables.subframe_itemNamesData.subframe_fid1_x_position + 
+            ", " + variables.subframe_itemNamesData.subframe_fid1_y_position + ", " + variables.subframe_itemNamesData.subframe_fid1_z_position + 
+            ", '" + variables.subframe_itemNamesData.subframe_fid1_date + " " + variables.subframe_itemNamesData.subframe_fid1_time + ":00'); ";
+
+            var subframe_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.subframe_itemNamesData.subframe_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_itemNamesData.subframe_fid2_position_name + "'), " + variables.subframe_itemNamesData.subframe_fid2_x_position + 
+            ", " + variables.subframe_itemNamesData.subframe_fid2_y_position + ", " + variables.subframe_itemNamesData.subframe_fid2_z_position + 
+            ", '" + variables.subframe_itemNamesData.subframe_fid2_date + " " + variables.subframe_itemNamesData.subframe_fid2_time + ":00'); ";
+
+            var subframe_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.subframe_itemNamesData.subframe_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_itemNamesData.subframe_fid3_position_name + "'), " + variables.subframe_itemNamesData.subframe_fid3_x_position + 
+            ", " + variables.subframe_itemNamesData.subframe_fid3_y_position + ", " + variables.subframe_itemNamesData.subframe_fid3_z_position + 
+            ", '" + variables.subframe_itemNamesData.subframe_fid3_date + " " + variables.subframe_itemNamesData.subframe_fid3_time + ":00'); ";
+
+            var subframe_event = "INSERT INTO SubframeEvent_Table (SubframeID, DeviceID, Fiducial1ID, Fiducial2ID, Fiducial3ID, LinkToDate, " + 
+            "LinkToMetaData, Comments, CreateTimeStamp, EventTypeID) VALUES ((SELECT ID FROM Subframe_Table WHERE SubframeTypeID=" +
+            "(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_itemNamesData.subframe_type + 
+            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_itemNamesData.facility_name + 
+            "') AND SerialNumber=" + variables.subframe_itemNamesData.serial_number + "), (SELECT ID FROM "
+
+            SELECT ID FROM Fiducial_Table ORDER BY ID DESC LIMIT 3
+
+
+
+
+
+
+            q = subframe_query + subframe_event_fiducial1 + subframe_event_fiducial2 + subframe_event_fiducial3;
+        }
+
+
+        
+
+        console.log(q);
+
+        /*
+        var subframe_event_fiducials = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES ("
+
+
+        var subframe_itemNamesData = {
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"",
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            subframe_device_select:"", 
+            subframe_event_select:"", 
+            subframe_link_to_data:"", 
+            subframe_link_to_meta_data:"", 
+            subframe_event_experiment_date:"", 
+            subframe_event_experiment_time:"", 
+            subframe_events_comments:"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :"", 
+            :""
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         console.log(serial_number);
 
@@ -388,16 +498,13 @@ app.post("/submitAllData", function(req, res){
     
         var q = subframe_query + subframeeventtype_query + fiducial_query + overviewimage_query + roiimage_query + sampletable_query + 
         imagedata_query + target_query + positiondata_query + xfeldata_query;
-
-        /*
-        connection.query(q, function (error, result) {
-            if (error) throw error;
-            console.log(result);
-            res.redirect("/");
-        });*/ 
-
-        res.redirect("/");
-    }
+*/
+        //connection.query(q, function (error, result) {
+        //    if (error) throw error;
+        //    console.log(result);
+        //    res.redirect("/");
+        //}); 
+    //}
 });
 
 app.post("/submitXMLFile", function(req, res){
