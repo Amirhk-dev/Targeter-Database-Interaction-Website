@@ -95,6 +95,16 @@ button {
   margin: 0% 0% 10% 0%;
 }
 
+.card {
+  display: inline;
+}
+
+.card-header {
+  font-family: "Montserrat Extra-light 100";
+  text-align: center;
+  font-size: 1.5rem;
+}
+
 /*.form {
 	line-height: 1.5;
 	border: none;
@@ -122,6 +132,11 @@ button {
   text-align: center;
 }
 
+.col-lg-6.table_header {
+  text-align: center;
+  font-family: "Montserrat Extra-light 100";
+}
+
 .row {
   padding: 0% 15%;
 }
@@ -130,6 +145,10 @@ button {
   padding: 0% 0%;
 }
 
+.row.table_header {
+  padding: 0% 0%;
+  font-family: "Montserrat Extra-light 100";
+}
 
 .row.title {
   text-align: center;
@@ -175,6 +194,28 @@ button:hover{
 .btn.btn-secondary {
   font-family: "Montserrat-Bold";
   font-size: 1.0rem;
+}
+
+.btn.btn-success {
+  font-family: "Montserrat-Bold";
+  font-size: 1.0rem;
+}
+
+.btn.btn-success {
+  font-family: "Montserrat-Bold";
+  font-size: 1.0rem;
+}
+
+.btn.btn-secondary.add {
+  font-family: "Montserrat Extra-light 100";
+  font-size: 1.0rem;
+  margin: 0% 5%;
+}
+
+.btn.btn-success.add {
+  font-family: "Montserrat Extra-light 100";
+  font-size: 1.0rem;
+  margin: 0% 5%;
 }
 
 .lead_text {

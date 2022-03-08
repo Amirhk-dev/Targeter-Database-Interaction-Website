@@ -67,19 +67,107 @@ app.post("/submitDataManually", function(req, res){
 
 
 app.get("/editTables", function(req, res){
-    let query = "SELECT * FROM DetectionMethod_Table";
+    let query0 = "SELECT * FROM GroupInformation_Table; ";
+    let query1 = "SELECT * FROM Facility_Table; ";
+    let query2 = "SELECT * FROM SubframeType_Table; ";
+    let query3 = "SELECT * FROM DeviceList_Table; ";
+    let query31 = "SELECT * FROM DeviceType_Table; ";
+    let query4 = "SELECT * FROM ROIType_Table; ";
+    let query5 = "SELECT * FROM DetectionMethod_Table; ";
+    let query6 = "SELECT * FROM EventType_Table; ";
+    let query7 = "SELECT * FROM FiducialPosition_Table; ";
+
+    let query = query0 + query1 + query2 + query3 + query31 + query4 + query5 + query6 + query7;
+
     connection.query(query, function(err, results){
         if(err) 
             throw err;
-        else            
-            console.log(results);
             
-        res.render("edit_tables", {listTitle: "DetectionMethod_Table", newListItems: results}); 
+        res.render("edit_tables", {listTitle0: "Group Information", newListItems0: results[0],
+                                   listTitle1: "Facility", newListItems1: results[1],
+                                   listTitle2: "Subframe Type", newListItems2: results[2],
+                                   listTitle3: "Device List", newListItems3: results[3],
+                                   listTitle4: "Device Type", newListItems4: results[4],
+                                   listTitle5: "ROI Type", newListItems5: results[5],
+                                   listTitle6: "Detection Method", newListItems6: results[6],
+                                   listTitle7: "Event Type", newListItems7: results[7],
+                                   listTitle8: "Fiducial Position", newListItems8: results[8]}); 
     });
 
 });
 
+app.post("/addToTable", function(req, res){
+    console.log(req.body);
 
+    var table_name = req.body.list;
+
+    if(table_name==="Group Information")
+        q = "INSERT INTO GroupInformation_Table (GroupName, Comments) VALUES ('" + req.body.groupinfo_name + "', '" + req.body.groupinfo_comment + "'); ";
+    else if(table_name==="Facility")
+        q = "INSERT INTO Facility_Table (Name, CodeName, LinkOfFacility, Comments) VALUES ('" + req.body.name + "', '" + req.body.code_name + "', '" +
+        req.body.link_of_facility + "', '" + req.body.comments  + "'); ";
+    else if(table_name==="Subframe Type")
+        q = "INSERT INTO SubframeType_Table (TypeName, SizeX, SizeY, Comments) VALUES ('" + req.body.type_name + "', '" + req.body.size_x + 
+        "', '" + req.body.size_y + "', '" + req.body.comment + "'); ";    
+    else if(table_name==="Device List")
+        q = "INSERT INTO DeviceList_Table (DeviceTypeID, VendorName, ModelName, Comments) VALUES (" + req.body.vendor_name + ", " + 
+        req.body.model_name + ", '" + req.body.comment + "'); ";
+    else if(table_name==="ROI Type")
+        q = "INSERT INTO GroupInformation_Table (GroupName, Comments) VALUES (" + req.body.name + ", '" + req.body.comment + "'); ";
+    else if(table_name==="Detection Method")
+        q = "INSERT INTO DetectionMethod_Table (MethodName, MethodDescription) VALUES (" + req.body.method_name + ", '" + req.body.method_description + "'); ";
+    else if(table_name==="Event Type"){
+        var checkbox_subframe = (req.body.checkbox_subframe==='on' ? 1:0);
+        var checkbox_roi = (req.body.checkbox_roi==='on' ? 1:0);
+        var checkbox_sample = (req.body.checkbox_sample==='on' ? 1:0);
+        var checkbox_target = (req.body.checkbox_target==='on' ? 1:0);
+
+        q = "INSERT INTO EventType_Table (EventType, ForSubframe, ForROI, ForSample, ForTarget, Comments) VALUES (" + req.body.event_type + 
+        ", " + checkbox_subframe + ", " + checkbox_roi + ", " + checkbox_sample + ", " + checkbox_target + ", '" + req.body.comment + "'); ";
+    }
+    else if(table_name==="Fiducial Position")
+        q = "INSERT INTO FiducialPosition_Table (PositionName) VALUES (" + req.body.position_name + "); ";
+    
+    connection.query(q, function(err, results){
+        if(err)
+            throw err;
+            
+        res.redirect("editTables");
+    });
+});
+
+app.post("/removeFromTable", function(req, res){
+    var table_name = req.body.listName;
+    var row_id = req.body.remove_row;
+
+    console.log(table_name);
+    console.log(row_id);
+
+    var q = [];
+    if(table_name==="Group Information")
+        q = "DELETE FROM GroupInformation_Table WHERE ID=" + row_id + "; ";
+    else if(table_name==="Facility")
+        q = "DELETE FROM Facility_Table WHERE ID=" + row_id + "; ";
+    else if(table_name==="Subframe Type")
+        q = "DELETE FROM SubframeType_Table WHERE ID=" + row_id + "; ";    
+    else if(table_name==="Device List")
+        q = "DELETE FROM DeviceList_Table WHERE ID=" + row_id + "; ";
+    else if(table_name==="ROI Type")
+        q = "DELETE FROM GroupInformation_Table WHERE ID=" + row_id + "; ";
+    else if(table_name==="Detection Method")
+        q = "DELETE FROM DetectionMethod_Table WHERE ID=" + row_id + "; ";
+    else if(table_name==="Event Type")
+        q = "DELETE FROM EventType_Table WHERE ID=" + row_id + "; ";
+    else if(table_name==="Fiducial Position")
+        q = "DELETE FROM FiducialPosition_Table WHERE ID=" + row_id + "; ";
+     
+    connection.query(q, function(err, results){
+        if(err)
+            throw err;
+        
+        res.redirect("editTables");
+    });
+});
 
 app.post("/createSubframe", function(req, res){ 
     res.render("get_subframe_id");      
@@ -346,13 +434,17 @@ app.post("/submitAllData", function(req, res){
             ", " + variables.subframe_itemNamesData.subframe_fid3_y_position + ", " + variables.subframe_itemNamesData.subframe_fid3_z_position + 
             ", '" + variables.subframe_itemNamesData.subframe_fid3_date + " " + variables.subframe_itemNamesData.subframe_fid3_time + ":00'); ";
 
-            var subframe_event = "INSERT INTO SubframeEvent_Table (SubframeID, DeviceID, Fiducial1ID, Fiducial2ID, Fiducial3ID, LinkToDate, " + 
+            var subframe_event = "INSERT INTO SubframeEvent_Table (SubframeID, DeviceID, Fiducial1ID, Fiducial2ID, Fiducial3ID, LinkToData, " + 
             "LinkToMetaData, Comments, CreateTimeStamp, EventTypeID) VALUES ((SELECT ID FROM Subframe_Table WHERE SubframeTypeID=" +
             "(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_itemNamesData.subframe_type + 
             "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_itemNamesData.facility_name + 
-            "') AND SerialNumber=" + variables.subframe_itemNamesData.serial_number + "), (SELECT ID FROM "
+            "') AND SerialNumber=" + variables.subframe_itemNamesData.serial_number + "), (SELECT ID FROM DeviceList_Table WHERE VendorName=" +
+            variables.subframe_itemNamesData.subframe_device_select + "), (SELECT ID FROM Fiducial_Table ORDER BY ID DESC LIMIT 3), " +
+            variables.subframe_itemNamesData.subframe_link_to_data + ", " + variables.subframe_itemNamesData.subframe_link_to_meta_data +
+            ", " + variables.subframe_itemNamesData.subframe_events_comments + ", '" + variables.subframe_itemNamesData.subframe_event_experiment_date +
+            " " + variables.subframe_itemNamesData.subframe_event_experiment_time + ":00', (SELECT ID FROM EventType_Table WHERE EventType=" +
+            variables.subframe_itemNamesData.subframe_event_select + ")); ";
 
-            SELECT ID FROM Fiducial_Table ORDER BY ID DESC LIMIT 3
 
 
 
@@ -367,67 +459,23 @@ app.post("/submitAllData", function(req, res){
 
         console.log(q);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /*
-        var subframe_event_fiducials = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES ("
-
-
-        var subframe_itemNamesData = {
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"",
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            subframe_device_select:"", 
-            subframe_event_select:"", 
-            subframe_link_to_data:"", 
-            subframe_link_to_meta_data:"", 
-            subframe_event_experiment_date:"", 
-            subframe_event_experiment_time:"", 
-            subframe_events_comments:"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :"", 
-            :""
-        };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         console.log(serial_number);
 
@@ -498,7 +546,8 @@ app.post("/submitAllData", function(req, res){
     
         var q = subframe_query + subframeeventtype_query + fiducial_query + overviewimage_query + roiimage_query + sampletable_query + 
         imagedata_query + target_query + positiondata_query + xfeldata_query;
-*/
+        */
+
         //connection.query(q, function (error, result) {
         //    if (error) throw error;
         //    console.log(result);
