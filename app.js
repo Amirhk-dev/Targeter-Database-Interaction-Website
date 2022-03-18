@@ -55,9 +55,12 @@ app.get("/", function(req, res){
 });
 
 app.post("/submitDataManually", function(req, res){
-    res.render("home_manually_subframe");
+    res.render("home_manually_subframe_fiducials");
 });
 
+app.post("/submitSubframeFiducialsInfoManually", function(req, res){
+     res.render("home_manually_subframe");
+});
 
 
 
@@ -187,6 +190,9 @@ app.post("/createSubframeOnDatabase", function(req, res){
         console.log(result[0].serialnumber);
         serial_number = result[0].serialnumber;
 
+        if (serial_number===null)
+            serial_number = 1;
+
         var concat_zeros = 6 - serial_number.toString().length;
         if(concat_zeros>0){
             serial_number_text = serial_number.toString();
@@ -203,6 +209,8 @@ app.post("/createSubframeOnDatabase", function(req, res){
     
         q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
 
+        console.log(q);
+
         connection.query(q, function (error, result) { 
             var facilityID = result[0][0].facilityid;
             var subframeTypeID = result[1][0].subframetypeid;
@@ -217,6 +225,7 @@ app.post("/finishCreatingSubframeEntry", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
+    /*
     variables.subframe_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
     var subframe_id = req.body.subframe_id;
     if(variables.subframe_itemNamesData.subframe_validity){
@@ -264,9 +273,14 @@ app.post("/submitSubframeInfoManually", function(req, res){
     }
     //if (functions.checkEmpty(variables.subframe_itemNamesData, "subframe")) {
     //        res.render("home_manually_subframe");
-    //} else {
-            res.render("manually_roi_image");
+    //} else { */
+            // res.render("manually_roi_image");
+            res.render("manually_roi_fiducials");
     //}    
+});
+
+app.post("/submitROIFiducialsManually", function(req, res){
+    res.render("manually_roi_image");
 });
 
 app.post("/submitROIImageManually", function(req, res){
@@ -312,8 +326,13 @@ app.post("/submitROIImageManually", function(req, res){
     //if (functions.checkEmpty(variables.roi_itemNamesData, "roi")) {
     //    res.render("manually_roi_image");
     //} else { 
-        res.render("manually_sample_image");
+        // res.render("manually_sample_image");
+        res.render("manually_sample_fiducials");
     //}
+});
+
+app.post("/submitSampleFiducialsManually", function(req, res){
+    res.render("manually_sample_image");
 });
 
 app.post("/submitSampleImageManually", function(req, res){
@@ -358,8 +377,13 @@ app.post("/submitSampleImageManually", function(req, res){
     //if (functions.checkEmpty(variables.sample_itemNamesData, "sampleimage")) {
     //        res.render("manually_sample_image");
     //} else {
-        res.render("manually_target_data");
+        // res.render("manually_target_data");
+        res.render("manually_target_fiducials");
     //}
+});
+
+app.post("/submitTargetFiducialsManually", function(req, res){
+    res.render("manually_target_data");
 });
 
 app.post("/submitAllData", function(req, res){

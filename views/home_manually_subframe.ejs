@@ -2,8 +2,6 @@
     <div class="row">
         <div class="col-lg-12">
             <form method="POST" action='/submitSubframeInfoManually'>
-                <br>
-                <br>
                 <p class="lead_text">Enter the Subframe Information</p>
                 <div class="row twopanel">
                     <div class="col-lg-6">
@@ -55,14 +53,14 @@
                     <div class="row twopanel">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="label-text">Enter the Subframe Invalidy Date</label>
+                                <label class="label-text">Enter the Subframe Invalidity Date</label>
                                 <input class="form-control" type="date" id="subframe_invalid_date"
                                     name="subframe_invalid_date" min="2012-01-01" max="2040-12-31">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="label-text">Enter the Subframe Invalidy Time</label>
+                                <label class="label-text">Enter the Subframe Invalidity Time</label>
                                 <input class="form-control" type="time" id="subframe_invalid_time"
                                     name="subframe_invalid_time">
                             </div>
@@ -143,202 +141,7 @@
                         rows="2" minlength="0" maxlength="100"
                         placeholder="Maximum 100 characters are accepted"></textarea>
                 </div>
-                <hr>
-                <p class="lead_text">Enter the Fiducial Points Information</p>
-                <div class="row twopanel">
-                    <div class="col-lg-4">
-                        <div>
-                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#subframe_fiducial1" aria-expanded="false"
-                                aria-controls="subframe_fiducial1">
-                                Fiducial 1 Information
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div>
-                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#subframe_fiducial2" aria-expanded="false"
-                                aria-controls="subframe_fiducial2">
-                                Fiducial 2 Information
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div>
-                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#subframe_fiducial3" aria-expanded="false"
-                                aria-controls="subframe_fiducial3">
-                                Fiducial 3 Information
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row twopanel">
-                    <div class="col-lg-4">
-                        <div class="collapse" id="subframe_fiducial1">
-                            <div class="card card-body">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="subframe_fid1_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="subframe_fid1_validity"
-                                        name="subframe_fid1_validity">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text" for="subframe_fid1_FiducialPoistionSelect">Position of the
-                                        Fiducial
-                                        Point</label>
-                                    <select class="form-control" id="subframe_fid1_FiducialPoistionSelect"
-                                        name="subframe_fid1_position_name">
-                                        <option selected>Choose...</option>
-                                        <option>top-left</option>
-                                        <option>top-right</option>
-                                        <option>bottom-left</option>
-                                        <option>bottom-right</option>
-                                        <option>top-center</option>
-                                        <option>bottom-center</option>
-                                        <option>left-center</option>
-                                        <option>right-center</option>
-                                        <option>center</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid1_x_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid1_y_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid1_z_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Date</label>
-                                    <input class="form-control" type="date" id="subframe_fid1_date"
-                                        name="subframe_fid1_date" min="2012-01-01" max="2040-12-31">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Time</label>
-                                    <input class="form-control" type="time" id="subframe_fid1_time"
-                                        name="subframe_fid1_time">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="collapse" id="subframe_fiducial2">
-                            <div class="card card-body">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="subframe_fid2_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="subframe_fid2_validity"
-                                        name="subframe_fid2_validity">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text" for="subframe_fid2_FiducialPoistionSelect">Position of the
-                                        Fiducial
-                                        Point</label>
-                                    <select class="form-control" id="subframe_fid2_FiducialPoistionSelect"
-                                        name="subframe_fid2_position_name">
-                                        <option selected>Choose...</option>
-                                        <option>top-left</option>
-                                        <option>top-right</option>
-                                        <option>bottom-left</option>
-                                        <option>bottom-right</option>
-                                        <option>top-center</option>
-                                        <option>bottom-center</option>
-                                        <option>left-center</option>
-                                        <option>right-center</option>
-                                        <option>center</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid2_x_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid2_y_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid2_z_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Date</label>
-                                    <input class="form-control" type="date" id="subframe_fid2_date"
-                                        name="subframe_fid2_date" min="2012-01-01" max="2040-12-31">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Time</label>
-                                    <input class="form-control" type="time" id="subframe_fid2_time"
-                                        name="subframe_fid2_time">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="collapse" id="subframe_fiducial3">
-                            <div class="card card-body">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="subframe_fid3_validity">Validity</label>
-                                    <input type="checkbox" class="form-check-input" id="subframe_fid3_validity"
-                                        name="subframe_fid3_validity">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text" for="subframe_fid3_FiducialPoistionSelect">Position of the
-                                        Fiducial
-                                        Point</label>
-                                    <select class="form-control" id="subframe_fid3_FiducialPoistionSelect"
-                                        name="subframe_fid3_position_name">
-                                        <option selected>Choose...</option>
-                                        <option>top-left</option>
-                                        <option>top-right</option>
-                                        <option>bottom-left</option>
-                                        <option>bottom-right</option>
-                                        <option>top-center</option>
-                                        <option>bottom-center</option>
-                                        <option>left-center</option>
-                                        <option>right-center</option>
-                                        <option>center</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid3_x_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid3_y_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
-                                    <input type="number" name="subframe_fid3_z_position" class="form-control"
-                                        placeholder="values between 0 and 800 are accepted" min="0" max="800">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Date</label>
-                                    <input class="form-control" type="date" id="subframe_fid3_date"
-                                        name="subframe_fid3_date" min="2012-01-01" max="2040-12-31">
-                                </div>
-                                <div class="form-group">
-                                    <label class="label-text">Enter the Time</label>
-                                    <input class="form-control" type="time" id="subframe_fid3_time"
-                                        name="subframe_fid3_time">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn btn-secondary">Enter the Region of Interest Data</button>
+                <button class="btn btn-secondary">Enter the Fiducial Points Infromation to be used by Regions of Interest (ROI)</button>
             </form>
         </div>
     </div>

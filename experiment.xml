@@ -1,118 +1,256 @@
 <experiment>
     <subframe>
-	<Validity>1</Validity>
-        <FacilityName>ELIBL</FacilityName>
-        <TypeName>FOI</TypeName>
-        <GroupName>HED</GroupName>
-        <SizeX>120</SizeX>
-        <SizeY>120</SizeY>
-        <Comments>Test Demo</Comments>
-        <ExperimentDate>2022-01-18</ExperimentDate>
-        <ExperimentTime>14:45</ExperimentTime>
-        <EventType>Created</EventType>
+        <subframe_info>
+            <subframe_fiducials>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>top-left</position_name>
+                    <xposition>1</xposition>
+                    <yposition>1</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:34 AM</entered_time>
+                </fiducial>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>top-right</position_name>
+                    <xposition>100</xposition>
+                    <yposition>1</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:35 AM</entered_time>
+                </fiducial>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>bottom-left</position_name>
+                    <xposition>1</xposition>
+                    <yposition>100</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:36 AM</entered_time>
+                </fiducial>
+            </subframe_fiducials>
+            <subframe_data>
+                <subframe_id>XFEL4IN000006</subframe_id>
+                <group_name>SEC</group_name>
+                <entered_date>03/15/2022</entered_date>
+                <entered_time>11:36 AM</entered_time>
+                <comments></comments>
+                <validity>1</validity>
+                <invalid_since_date></invalid_since_date>
+                <invalid_since_time></invalid_since_time>
+            </subframe_data>
+            <subframe_event>
+                <device>Keyence</device>
+                <event_type>Imaging</event_type>
+                <loaded_data>image1.png</loaded_data>
+                <text_data>temp.txt</text_data>
+                <event_date>03/15/2022</event_date>
+                <event_time>11:43</event_time>
+                <comments><comments>
+            </subframe_event>
+        </subframe_info>
     </subframe>
-    <fiducials>
-        <fiducial1>    
-            <Validity>1</Validity>
-            <PositionName>top-left</PositionName>
-            <X_position>0</X_position>
-            <Y_position>0</Y_position>
-            <Z_position>0</Z_position>
-        </fiducial1>
-        <fiducial2>
-            <Validity>1</Validity>
-            <PositionName>top-right</PositionName>
-            <X_position>100</X_position>
-            <Y_position>0</Y_position>
-            <Z_position>0</Z_position>
-        </fiducial2>
-        <fiducial3>    
-            <Validity>1</Validity>
-            <PositionName>bottom-left</PositionName>
-            <X_position>0</X_position>
-            <Y_position>100</Y_position>
-            <Z_position>0</Z_position>
-        </fiducial3>
-        <fiducial4>    
-            <Validity>1</Validity>
-            <PositionName>bottom-right</PositionName>
-            <X_position>100</X_position>
-            <Y_position>100</Y_position>
-            <Z_position>0</Z_position>
-        </fiducial4>
-    </fiducials>
-    <overviewimage>
-        <Validity>1</Validity>
-        <MicroscopeType>Keyence</MicroscopeType>
-        <DetectionMethod>Mask R-CNN</DetectionMethod>
-        <ImageLoad>Overview_Image.png</ImageLoad>
-        <ExperimentDate>2022-01-18</ExperimentDate>
-        <ExperimentTime>11:48 AM</ExperimentTime>
-        <Comments></Comments>
-    </overviewimage>  
-    <roiimages>
-        <roi1>
-            <Validity>1</Validity>
-            <MicroscopeType>Keyence</MicroscopeType>
-            <DetectionMethod>Mask R-CNN</DetectionMethod>
-            <BBXPosition>50</BBXPosition>
-            <BBYPosition>10</BBYPosition>
-            <BBWidth>43</BBWidth>
-            <BBHeight>86</BBHeight>
-            <ImageLoad>ROI_Image_1.png</ImageLoad>
-            <ExperimentDate>2022-01-18</ExperimentDate>
-            <ExperimentTime>11:50 AM</ExperimentTime>
-            <Comments></Comments>
-        </roi1>
-    </roiimages>
-    <sampleimages>
-        <sample1>
-            <Validity>1</Validity>
-            <PixelSizeX>2</PixelSizeX>
-            <PixelSizeY>2</PixelSizeY>
-            <BBXPosition>0</BBXPosition>
-            <BBYPosition>20</BBYPosition>
-            <BBWidth>50</BBWidth>
-            <BBHeight>34</BBHeight>
-            <MaskImageLoad>Sample_Image_1.png</MaskImageLoad>
-            <SampleExperimentDate>2022-01-18</SampleExperimentDate>
-            <SampleExperimentTime>11:58 AM</SampleExperimentTime>
-            <SampleComments>Sample Comment</SampleComments>
-            <SampleImageValidity>1</SampleImageValidity>
-            <MicroscopeType>Keyence</MicroscopeType>
-            <DetectionMethod>Mask R-CNN</DetectionMethod>
-            <ImageType>PNG</ImageType>
-            <ImageWidth>1000</ImageWidth>
-            <ImageHeight>1200</ImageHeight>
-            <ImageSize>100</ImageSize>
-	        <ImageComments></ImageComments>
-            <ImageLoad>Image_1.png</ImageLoad>
-            <ExperimentDate>2022-01-18</ExperimentDate>
-            <ExperimentTime>12:17 PM</ExperimentTime>
-        </sample1>
-    </sampleimages>
-    <targets>
-        <target1>
-            <Validity>1</Validity>
-            <Status>Shot</Status>
-            <ThetaAngle>0</ThetaAngle>
-            <PhiAngle>-120</PhiAngle>
-            <RhoAngle>10</RhoAngle>
-            <ExperimentDate>2022-01-18</ExperimentDate>
-            <ExperimentTime>12:29 PM</ExperimentTime>
-	        <Comments></Comments>
-            <PositionValidity>1</PositionValidity>
-            <XPosition>0</XPosition>
-            <YPosition>100</YPosition>
-            <ZPosition>0</ZPosition>
-            <InplaneAccuracy>0.8</InplaneAccuracy>
-            <OutofplaneAccuracy>0.9</OutofplaneAccuracy>
-            <PositionExperimentDate>2022-01-18</PositionExperimentDate>
-            <PositionExperimentTime>12:32 PM</PositionExperimentTime>
-            <Instrument>SCS</Instrument>
-            <XFELExperimentDate>2022-01-18</XFELExperimentDate>
-            <XFELExperimentTime>12:35</XFELExperimentTime>
-	        <XFELExperimentComments></XFELExperimentComments>
-        </target1>
-    </targets>
+    <roi>
+        <roi_fiducials>
+            <fiducial>
+                <validity>1</validity>
+                <position_name>top-left</position_name>
+                <xposition>1</xposition>
+                <yposition>1</yposition>
+                <zposition>0</zposition>
+                <entered_date>03/15/2022</entered_date>
+                <entered_time>11:34 AM</entered_time>
+            </fiducial>
+            <fiducial>
+                <validity>1</validity>
+                <position_name>top-right</position_name>
+                <xposition>100</xposition>
+                <yposition>1</yposition>
+                <zposition>0</zposition>
+                <entered_date>03/15/2022</entered_date>
+                <entered_time>11:35 AM</entered_time>
+            </fiducial>
+            <fiducial>
+                <validity>1</validity>
+                <position_name>bottom-left</position_name>
+                <xposition>1</xposition>
+                <yposition>100</yposition>
+                <zposition>0</zposition>
+                <entered_date>03/15/2022</entered_date>
+                <entered_time>11:36 AM</entered_time>
+            </fiducial>
+        </roi_fiducials>
+        <roi_data>
+            <roi_type>Manual Selection</roi_type>
+            <detection_method></detection_method>
+            <bb_x_position>1</bb_x_position>
+            <bb_y_position>1</bb_y_position>
+            <bb_width>10</bb_width>
+            <bb_height>20</bb_height>
+            <mask_image>image.png</mask_image>
+            <entered_date>03/15/2022</entered_date>
+            <entered_time>12:19 PM</entered_time>
+            <comments></comments>
+        </roi_data>
+        <roi_event>
+            <event_type>Imaging</event_type>
+            <device>Keyence</device>
+            <loaded_data>image1.png</loaded_data>
+            <text_data>temp.txt</text_data>
+            <event_date>03/15/2022</event_date>
+            <event_time>11:43 AM</event_time>
+            <comments><comments>
+        </roi_event>
+        <sample>
+            <sample_fiducials>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>top-left</position_name>
+                    <xposition>1</xposition>
+                    <yposition>1</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:34 AM</entered_time>
+                </fiducial>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>top-right</position_name>
+                    <xposition>100</xposition>
+                    <yposition>1</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:35 AM</entered_time>
+                </fiducial>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>bottom-left</position_name>
+                    <xposition>1</xposition>
+                    <yposition>100</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:36 AM</entered_time>
+                </fiducial>
+            </sample_fiducials>
+            <sample_data>
+                <bb_x_position>15</bb_x_position>
+                <bb_y_position>10</bb_y_position>
+                <bb_width>23</bb_width>
+                <bb_height>40</bb_height>
+                <detection_method>Circle Detection</detection_method>
+                <mask_image>image.png</mask_image>
+                <entered_date>03/15/2022</entered_date>
+                <entered_time>12:36 PM</entered_time>
+                <comments></comments>
+            </sample_data>
+            <sample_event>
+                <event_type>Imaging</event_type>
+                <device>Keyence</device>
+                <loaded_data>image1.png</loaded_data>
+                <text_data>temp.txt</text_data>
+                <event_date>03/15/2022</event_date>
+                <event_time>12:43 PM</event_time>
+                <comments><comments>
+            </sample_event>
+            <target>
+                <target_fiducials>
+                    <fiducial>
+                        <validity>1</validity>
+                        <position_name>top-left</position_name>
+                        <xposition>1</xposition>
+                        <yposition>1</yposition>
+                        <zposition>0</zposition>
+                        <entered_date>03/15/2022</entered_date>
+                        <entered_time>11:34 AM</entered_time>
+                    </fiducial>
+                    <fiducial>
+                        <validity>1</validity>
+                        <position_name>top-right</position_name>
+                        <xposition>100</xposition>
+                        <yposition>1</yposition>
+                        <zposition>0</zposition>
+                        <entered_date>03/15/2022</entered_date>
+                        <entered_time>11:35 AM</entered_time>
+                    </fiducial>
+                    <fiducial>
+                        <validity>1</validity>
+                        <position_name>bottom-left</position_name>
+                        <xposition>1</xposition>
+                        <yposition>100</yposition>
+                        <zposition>0</zposition>
+                        <entered_date>03/15/2022</entered_date>
+                        <entered_time>11:36 AM</entered_time>
+                    </fiducial>
+                </target_fiducials>
+                <target_data>
+                    <x_position>10</x_position>
+                    <y_position>20</y_position>
+                    <z_position>0</z_position>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>12:56 PM</entered_time>
+                    <comments></comments>
+                </target_data>
+                <target_event>
+                    <event_type>Shot</event_type>
+                    <device>Keyence<device>
+                    <loaded_data>image1.png</loaded_data>
+                    <text_data>temp.txt</text_data>
+                    <event_date>03/15/2022</event_date>
+                    <event_time>12:58 PM</event_time>
+                    <comments><comments>
+                </target_event>
+            </target>
+        </sample>
+        <sample>
+            <sample_fiducials>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>top-left</position_name>
+                    <xposition>1</xposition>
+                    <yposition>1</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:34 AM</entered_time>
+                </fiducial>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>top-right</position_name>
+                    <xposition>100</xposition>
+                    <yposition>1</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:35 AM</entered_time>
+                </fiducial>
+                <fiducial>
+                    <validity>1</validity>
+                    <position_name>bottom-left</position_name>
+                    <xposition>1</xposition>
+                    <yposition>100</yposition>
+                    <zposition>0</zposition>
+                    <entered_date>03/15/2022</entered_date>
+                    <entered_time>11:36 AM</entered_time>
+                </fiducial>
+            </sample_fiducials>
+            <sample_data>
+                <bb_x_position>15</bb_x_position>
+                <bb_y_position>10</bb_y_position>
+                <bb_width>23</bb_width>
+                <bb_height>40</bb_height>
+                <detection_method>Circle Detection</detection_method>
+                <mask_image>image.png</mask_image>
+                <entered_date>03/15/2022</entered_date>
+                <entered_time>12:50 PM</entered_time>
+                <comments></comments>
+            </sample_data>
+            <sample_event>
+                <event_type>Imaging</event_type>
+                <device>Keyence</device>
+                <loaded_data>image1.png</loaded_data>
+                <text_data>temp.txt</text_data>
+                <event_date>03/15/2022</event_date>
+                <event_time>12:50 PM</event_time>
+                <comments><comments>
+            </sample_event>
+        </sample>
+    </roi>
 </experiment>

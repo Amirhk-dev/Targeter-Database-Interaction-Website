@@ -1,0 +1,185 @@
+<%- include("header") -%>
+<div class="row">
+    <div class="col-lg-12">
+        <form id="enterTargetData" method="POST" action='/submitTargetFiducialsManually'>
+            <p class="lead_text">Enter the Fiducial Points Infromation to be used by Targets</p>
+            <div class="row twopanel">
+                <div class="col-lg-4">
+                    <div>
+                        <p class="lead_text">Fiducial 1 Information</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div>
+                        <p class="lead_text">Fiducial 2 Information</p>                    
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div>
+                        <p class="lead_text">Fiducial 3 Information</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row twopanel">
+                <div class="col-lg-4">
+                        <div class="card card-body">
+                            <div class="form-check">
+                                <label class="form-check-label" for="target_event_fid1_validity">Validity</label>
+                                <input type="checkbox" class="form-check-input" id="target_event_fid1_validity"
+                                    name="target_event_fid1_validity">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text" for="target_event_fid1_FiducialPositionSelect">Position of
+                                    the Fiducial
+                                    Point</label>
+                                <select class="form-control" id="target_event_fid1_FiducialPositionSelect"
+                                    name="target_event_fid1_position_name">
+                                    <option selected>Choose...</option>
+                                    <option>top-left</option>
+                                    <option>top-right</option>
+                                    <option>bottom-left</option>
+                                    <option>bottom-right</option>
+                                    <option>top-center</option>
+                                    <option>bottom-center</option>
+                                    <option>left-center</option>
+                                    <option>right-center</option>
+                                    <option>center</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid1_x_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid1_y_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid1_z_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Date</label>
+                                <input class="form-control" type="date" id="target_event_fid1_experiment_date"
+                                    name="target_event_fid1_experiment_date" min="2012-01-01" max="2040-12-31">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Time</label>
+                                <input class="form-control" type="time" id="target_event_fid1_experiment_time"
+                                    name="target_event_fid1_experiment_time">
+                            </div>
+                        </div>
+                </div>
+                <div class="col-lg-4">
+                        <div class="card card-body">
+                            <div class="form-check">
+                                <label class="form-check-label" for="target_event_fid2_validity">Validity</label>
+                                <input type="checkbox" class="form-check-input" id="target_event_fid2_validity"
+                                    name="target_event_fid2_validity">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text" for="target_event_fid2_FiducialPositionSelect">Position of
+                                    the Fiducial
+                                    Point</label>
+                                <select class="form-control" id="target_event_fid2_FiducialPositionSelect"
+                                    name="target_event_fid2_position_name">
+                                    <option selected>Choose...</option>
+                                    <option>top-left</option>
+                                    <option>top-right</option>
+                                    <option>bottom-left</option>
+                                    <option>bottom-right</option>
+                                    <option>top-center</option>
+                                    <option>bottom-center</option>
+                                    <option>left-center</option>
+                                    <option>right-center</option>
+                                    <option>center</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid2_x_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid2_y_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid2_z_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Date</label>
+                                <input class="form-control" type="date" id="target_event_fid2_experiment_date"
+                                    name="target_event_fid2_experiment_date" min="2012-01-01" max="2040-12-31">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Time</label>
+                                <input class="form-control" type="time" id="target_event_fid2_experiment_time"
+                                    name="target_event_fid1_experiment_time">
+                            </div>
+                        </div>
+                </div>
+                <div class="col-lg-4">
+                        <div class="card card-body">
+                            <div class="form-check">
+                                <label class="form-check-label" for="target_event_fid3_validity">Validity</label>
+                                <input type="checkbox" class="form-check-input" id="target_event_fid3_validity"
+                                    name="target_event_fid3_validity">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text" for="target_event_fid3_FiducialPositionSelect">Position of
+                                    the Fiducial
+                                    Point</label>
+                                <select class="form-control" id="target_event_fid3_FiducialPositionSelect"
+                                    name="target_event_fid3_position_name">
+                                    <option selected>Choose...</option>
+                                    <option>top-left</option>
+                                    <option>top-right</option>
+                                    <option>bottom-left</option>
+                                    <option>bottom-right</option>
+                                    <option>top-center</option>
+                                    <option>bottom-center</option>
+                                    <option>left-center</option>
+                                    <option>right-center</option>
+                                    <option>center</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the X Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid3_x_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Y Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid3_y_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Z Position of the Fiducial Point (in mm)</label>
+                                <input type="number" name="target_event_fid3_z_position" class="form-control"
+                                    placeholder="values between 0 and 800 are accepted" min="0" max="800">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Date</label>
+                                <input class="form-control" type="date" id="target_event_fid3_experiment_date"
+                                    name="target_event_fid3_experiment_date" min="2012-01-01" max="2040-12-31">
+                            </div>
+                            <div class="form-group">
+                                <label class="label-text">Enter the Time</label>
+                                <input class="form-control" type="time" id="target_event_fid3_experiment_time"
+                                    name="target_event_fid3_experiment_time">
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" type="submit" form="enterTargetData">Enter the Target Information</button>
+        </form>
+    </div>
+</div>
+<%- include("footer") -%>
