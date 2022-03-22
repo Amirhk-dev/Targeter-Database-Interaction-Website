@@ -33,9 +33,9 @@ let connection = mysql.createConnection({
 const variables = require('./public/app_variables');
 const functions = require('./public/app_functions');
 var xml_data = [];
-function assignTheValues(value) {
-    xml_data = value;
-}
+//function assignTheValues(value) {
+//    xml_data = value;
+//}
 var serial_number = [];
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -469,12 +469,6 @@ app.post("/submitAllData", function(req, res){
             " " + variables.subframe_itemNamesData.subframe_event_experiment_time + ":00', (SELECT ID FROM EventType_Table WHERE EventType=" +
             variables.subframe_itemNamesData.subframe_event_select + ")); ";
 
-
-
-
-
-
-
             q = subframe_query + subframe_event_fiducial1 + subframe_event_fiducial2 + subframe_event_fiducial3;
         }
 
@@ -580,27 +574,37 @@ app.post("/submitAllData", function(req, res){
     //}
 });
 
+app.post("/submitXMLData", function(req, res){
+    res.redirect('/');
+});
+
 app.post("/submitXMLFile", function(req, res){
     // Find count of Subframes in DB and Respond with that count
-    var q = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
-    connection.query(q, function(err, results){
-        if(err) throw err;
-        var count = results[0][0].count;
-        serial_number = count+1;
-        var max_sr = results[1][0].max_sr; // maximum serial number + 1
-        
-        fs.readFile(req.body.xmlFile,function(err, data){
-            xml_data = data;
-            xmlParser.parseString(data, function(err, result){
-                //console.dir(result);
+    //var q = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
+    //connection.query(q, function(err, results){
+    //    if(err) throw err;
+    //    var count = results[0][0].count;
+    //    serial_number = count+1;
+    //    var max_sr = results[1][0].max_sr; // maximum serial number + 1
+        fs.readFile(req.body.xmlFile, function(err, data){
+            //xml_data = data;
+            xmlParser.parseString(data, function(xml_err, result){
+                if(xml_err)
+                    console.log(xml_err);
+
+                res.render("home_xml_data", {xml_data: result['experiment']['subframe'][0]});
+                
                 //console.dir(result.experiment.subframe[0].Comments);
                 //console.dir(result.experiment.overviewimage[0].MicroscopeType);
-                assignTheValues(result);
+                //assignTheValues(result);
                 //console.dir(result.experiment.subframe[0].GroupName);
                 //console.dir(result.experiment.fiducials[0].fiducial1[0].Validity);
                 //console.dir(result.experiment.fiducials[0].fiducial1);
                 //console.log('Read finished!');
                 // Looks for "home.ejs", and by default it is looking in "view"
+                
+                
+                /*
                 res.render("home_xml_data", {
                     data: count,
                     serialnumber: max_sr, 
@@ -694,10 +698,10 @@ app.post("/submitXMLFile", function(req, res){
                     target1_xfelexperimentdate: result.experiment.targets[0].target1[0].XFELExperimentDate,
                     target1_xfelexperimenttime: result.experiment.targets[0].target1[0].XFELExperimentTime,
                     target1_xfelexperimentcomments: result.experiment.targets[0].target1[0].XFELExperimentComments
-                });       
+                });   */    
             });
         });
-    });
+    //});
 });
 
 app.post("/submitExperimentXML", function(req, res){
