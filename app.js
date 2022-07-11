@@ -59,15 +59,34 @@ app.post("/submitDataManually", function(req, res){
 });
 
 app.post("/submitSubframeFiducialsInfoManually", function(req, res){
-     res.render("home_manually_subframe");
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_y_position = req.body.subframe_fid1_y_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_z_position = req.body.subframe_fid1_z_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_validity = (req.body.subframe_fid2_validity ? true:false);
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_position_name = req.body.subframe_fid2_position_name;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_x_position = req.body.subframe_fid2_x_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_y_position = req.body.subframe_fid2_y_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_z_position = req.body.subframe_fid2_z_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_date = req.body.subframe_fid2_date;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_time = req.body.subframe_fid2_time;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_validity = (req.body.subframe_fid3_validity ? true:false);
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_position_name = req.body.subframe_fid3_position_name;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_x_position = req.body.subframe_fid3_x_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_y_position = req.body.subframe_fid3_y_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_z_position = req.body.subframe_fid3_z_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_date = req.body.subframe_fid3_date;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_time = req.body.subframe_fid3_time;
+
+    if (functions.checkEmpty(variables.subframe_fiducials_itemNamesData, "subframe_fids")) {
+            res.render("home_manually_subframe_fiducials");
+    } else { 
+        res.render("home_manually_subframe");
+    }  
 });
-
-
-
-
-
-
-
 
 app.get("/editTables", function(req, res){
     let query0 = "SELECT * FROM GroupInformation_Table; ";
@@ -225,210 +244,209 @@ app.post("/finishCreatingSubframeEntry", function(req, res){
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
-    /*
-    variables.subframe_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
+    
+    variables.subframe_data_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
     var subframe_id = req.body.subframe_id;
-    if(variables.subframe_itemNamesData.subframe_validity){
-        variables.subframe_itemNamesData.facility_name = subframe_id.substr(0, 5);
-        variables.subframe_itemNamesData.subframe_type = subframe_id.substr(5, 3);
-        variables.subframe_itemNamesData.serial_number = Number(subframe_id.substr(8,));
-        variables.subframe_itemNamesData.group_name = req.body.group_name;
-        variables.subframe_itemNamesData.subframe_experiment_date = req.body.subframe_experiment_date;
-        variables.subframe_itemNamesData.subframe_experiment_time = req.body.subframe_experiment_time;
-        variables.subframe_itemNamesData.subframe_comments = req.body.subframe_comments;
-        variables.subframe_itemNamesData.subframe_device_select = req.body.subframe_device_select;
-        variables.subframe_itemNamesData.subframe_event_select = req.body.subframe_event_select;
-        variables.subframe_itemNamesData.subframe_link_to_data = req.body.subframe_link_to_data;
-        variables.subframe_itemNamesData.subframe_link_to_meta_data = req.body.subframe_link_to_meta_data;
-        variables.subframe_itemNamesData.subframe_event_experiment_date = req.body.subframe_event_experiment_date;
-        variables.subframe_itemNamesData.subframe_event_experiment_time = req.body.subframe_event_experiment_time;
-        variables.subframe_itemNamesData.subframe_events_comments = req.body.subframe_events_comments;
-        variables.subframe_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
-        variables.subframe_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
-        variables.subframe_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
-        variables.subframe_itemNamesData.subframe_fid1_y_position = req.body.subframe_fid1_y_position;
-        variables.subframe_itemNamesData.subframe_fid1_z_position = req.body.subframe_fid1_z_position;
-        variables.subframe_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date;
-        variables.subframe_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time;
-        variables.subframe_itemNamesData.subframe_fid2_validity = (req.body.subframe_fid2_validity ? true:false);
-        variables.subframe_itemNamesData.subframe_fid2_position_name = req.body.subframe_fid2_position_name;
-        variables.subframe_itemNamesData.subframe_fid2_x_position = req.body.subframe_fid2_x_position;
-        variables.subframe_itemNamesData.subframe_fid2_y_position = req.body.subframe_fid2_y_position;
-        variables.subframe_itemNamesData.subframe_fid2_z_position = req.body.subframe_fid2_z_position;
-        variables.subframe_itemNamesData.subframe_fid2_date = req.body.subframe_fid2_date;
-        variables.subframe_itemNamesData.subframe_fid2_time = req.body.subframe_fid2_time;
-        variables.subframe_itemNamesData.subframe_fid3_validity = (req.body.subframe_fid3_validity ? true:false);
-        variables.subframe_itemNamesData.subframe_fid3_position_name = req.body.subframe_fid3_position_name;
-        variables.subframe_itemNamesData.subframe_fid3_x_position = req.body.subframe_fid3_x_position;
-        variables.subframe_itemNamesData.subframe_fid3_y_position = req.body.subframe_fid3_y_position;
-        variables.subframe_itemNamesData.subframe_fid3_z_position = req.body.subframe_fid3_z_position;
-        variables.subframe_itemNamesData.subframe_fid3_date = req.body.subframe_fid3_date;
-        variables.subframe_itemNamesData.subframe_fid3_time = req.body.subframe_fid3_time;
+    if(variables.subframe_data_itemNamesData.subframe_validity){
+        variables.subframe_data_itemNamesData.facility_name = subframe_id.substr(0, 5);
+        variables.subframe_data_itemNamesData.subframe_type = subframe_id.substr(5, 3);
+        variables.subframe_data_itemNamesData.serial_number = Number(subframe_id.substr(8,));
+        variables.subframe_data_itemNamesData.group_name = req.body.group_name;
+        variables.subframe_data_itemNamesData.subframe_experiment_date = req.body.subframe_experiment_date;
+        variables.subframe_data_itemNamesData.subframe_experiment_time = req.body.subframe_experiment_time;
+        variables.subframe_data_itemNamesData.subframe_comments = req.body.subframe_comments;
+        variables.subframe_data_itemNamesData.subframe_device_select = req.body.subframe_device_select;
+        variables.subframe_data_itemNamesData.subframe_event_select = req.body.subframe_event_select;
+        variables.subframe_data_itemNamesData.subframe_link_to_data = req.body.subframe_link_to_data;
+        variables.subframe_data_itemNamesData.subframe_link_to_meta_data = req.body.subframe_link_to_meta_data;
+        variables.subframe_data_itemNamesData.subframe_event_experiment_date = req.body.subframe_event_experiment_date;
+        variables.subframe_data_itemNamesData.subframe_event_experiment_time = req.body.subframe_event_experiment_time;
+        variables.subframe_data_itemNamesData.subframe_events_comments = req.body.subframe_events_comments;
     } else {
-        variables.subframe_itemNamesData.subframe_invalid_date = req.body.subframe_invalid_date;
-        variables.subframe_itemNamesData.subframe_invalid_time = req.body.subframe_invalid_time;
-        variables.subframe_itemNamesData.facility_name = subframe_id.substr(0, 5);
-        variables.subframe_itemNamesData.subframe_type = subframe_id.substr(5, 3);
-        variables.subframe_itemNamesData.serial_number = Number(subframe_id.substr(8,));
+        variables.subframe_data_itemNamesData.subframe_invalid_date = req.body.subframe_invalid_date;
+        variables.subframe_data_itemNamesData.subframe_invalid_time = req.body.subframe_invalid_time;
+        variables.subframe_data_itemNamesData.facility_name = subframe_id.substr(0, 5);
+        variables.subframe_data_itemNamesData.subframe_type = subframe_id.substr(5, 3);
+        variables.subframe_data_itemNamesData.serial_number = Number(subframe_id.substr(8,));
     }
-    //if (functions.checkEmpty(variables.subframe_itemNamesData, "subframe")) {
-    //        res.render("home_manually_subframe");
-    //} else { */
-            // res.render("manually_roi_image");
+
+    if (functions.checkEmpty(variables.subframe_data_itemNamesData, "subframe_data")) {
+            res.render("home_manually_subframe");
+    } else { 
             res.render("manually_roi_fiducials");
-    //}    
+    }    
 });
 
 app.post("/submitROIFiducialsManually", function(req, res){
-    res.render("manually_roi_image");
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_validity = (req.body.roi_event_fid1_validity ? true:false);
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_position_name = req.body.roi_event_fid1_position_name;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_x_position = req.body.roi_event_fid1_x_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_y_position = req.body.roi_event_fid1_y_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_z_position = req.body.roi_event_fid1_z_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_date = req.body.roi_event_fid1_experiment_date;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_validity = (req.body.roi_event_fid2_validity ? true:false);
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_position_name = req.body.roi_event_fid2_position_name;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_x_position = req.body.roi_event_fid2_x_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_y_position = req.body.roi_event_fid2_y_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_z_position = req.body.roi_event_fid2_z_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_date = req.body.roi_event_fid2_experiment_date;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_time = req.body.roi_event_fid2_experiment_time;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_validity = (req.body.roi_event_fid3_validity ? true:false);
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_position_name = req.body.roi_event_fid3_position_name;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_x_position = req.body.roi_event_fid3_x_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_y_position = req.body.roi_event_fid3_y_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_z_position = req.body.roi_event_fid3_z_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
+
+    if (functions.checkEmpty(variables.roi_fiducials_itemNamesData, "roi_fids")) {
+            res.render("manually_roi_fiducials");
+    } else { 
+        res.render("manually_roi_image");
+    }  
 });
 
 app.post("/submitROIImageManually", function(req, res){
-    variables.roi_itemNamesData.roi_type = req.body.roi_type;
-    variables.roi_itemNamesData.roi_detection_method = req.body.roi_detection_method;
-    variables.roi_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
-    variables.roi_itemNamesData.roi_experiment_y_position = req.body.roi_experiment_y_position;
-    variables.roi_itemNamesData.roi_experiment_width = req.body.roi_experiment_width;
-    variables.roi_itemNamesData.roi_experiment_height = req.body.roi_experiment_height;
-    variables.roi_itemNamesData.roi_mask_load = req.body.roi_mask_load;
-    variables.roi_itemNamesData.roi_experiment_date = req.body.roi_experiment_date;
-    variables.roi_itemNamesData.roi_experiment_time = req.body.roi_experiment_time;
-    variables.roi_itemNamesData.roi_experiment_comments = req.body.roi_experiment_comments;
-    variables.roi_itemNamesData.roi_device = req.body.roi_device;
-    variables.roi_itemNamesData.roi_event_type = req.body.roi_event_type;
-    variables.roi_itemNamesData.roi_event_link_to_data = req.body.roi_event_link_to_data;
-    variables.roi_itemNamesData.roi_event_link_to_meta_data = req.body.roi_event_link_to_meta_data;
-    variables.roi_itemNamesData.roi_event_date = req.body.roi_event_date;
-    variables.roi_itemNamesData.roi_event_time = req.body.roi_event_time;
-    variables.roi_itemNamesData.roi_event_comments = req.body.roi_event_comments;
-    variables.roi_itemNamesData.roi_event_fid1_validity = (req.body.roi_event_fid1_validity ? true:false);
-    variables.roi_itemNamesData.roi_event_fid1_position_name = req.body.roi_event_fid1_position_name;
-    variables.roi_itemNamesData.roi_event_fid1_x_position = req.body.roi_event_fid1_x_position;
-    variables.roi_itemNamesData.roi_event_fid1_y_position = req.body.roi_event_fid1_y_position;
-    variables.roi_itemNamesData.roi_event_fid1_z_position = req.body.roi_event_fid1_z_position;
-    variables.roi_itemNamesData.roi_event_fid1_experiment_date = req.body.roi_event_fid1_experiment_date;
-    variables.roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
-    variables.roi_itemNamesData.roi_event_fid2_validity = (req.body.roi_event_fid2_validity ? true:false);
-    variables.roi_itemNamesData.roi_event_fid2_position_name = req.body.roi_event_fid2_position_name;
-    variables.roi_itemNamesData.roi_event_fid2_x_position = req.body.roi_event_fid2_x_position;
-    variables.roi_itemNamesData.roi_event_fid2_y_position = req.body.roi_event_fid2_y_position;
-    variables.roi_itemNamesData.roi_event_fid2_z_position = req.body.roi_event_fid2_z_position;
-    variables.roi_itemNamesData.roi_event_fid2_experiment_date = req.body.roi_event_fid2_experiment_date;
-    variables.roi_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
-    variables.roi_itemNamesData.roi_event_fid3_validity = (req.body.roi_event_fid3_validity ? true:false);
-    variables.roi_itemNamesData.roi_event_fid3_position_name = req.body.roi_event_fid3_position_name;
-    variables.roi_itemNamesData.roi_event_fid3_x_position = req.body.roi_event_fid3_x_position;
-    variables.roi_itemNamesData.roi_event_fid3_y_position = req.body.roi_event_fid3_y_position;
-    variables.roi_itemNamesData.roi_event_fid3_z_position = req.body.roi_event_fid3_z_position;
-    variables.roi_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
-    variables.roi_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
+    variables.roi_data_itemNamesData.roi_type = req.body.roi_type;
+    variables.roi_data_itemNamesData.roi_detection_method = req.body.roi_detection_method;
+    variables.roi_data_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
+    variables.roi_data_itemNamesData.roi_experiment_y_position = req.body.roi_experiment_y_position;
+    variables.roi_data_itemNamesData.roi_experiment_width = req.body.roi_experiment_width;
+    variables.roi_data_itemNamesData.roi_experiment_height = req.body.roi_experiment_height;
+    variables.roi_data_itemNamesData.roi_mask_load = req.body.roi_mask_load;
+    variables.roi_data_itemNamesData.roi_experiment_date = req.body.roi_experiment_date;
+    variables.roi_data_itemNamesData.roi_experiment_time = req.body.roi_experiment_time;
+    variables.roi_data_itemNamesData.roi_experiment_comments = req.body.roi_experiment_comments;
+    variables.roi_data_itemNamesData.roi_device = req.body.roi_device;
+    variables.roi_data_itemNamesData.roi_event_type = req.body.roi_event_type;
+    variables.roi_data_itemNamesData.roi_event_link_to_data = req.body.roi_event_link_to_data;
+    variables.roi_data_itemNamesData.roi_event_link_to_meta_data = req.body.roi_event_link_to_meta_data;
+    variables.roi_data_itemNamesData.roi_event_date = req.body.roi_event_date;
+    variables.roi_data_itemNamesData.roi_event_time = req.body.roi_event_time;
+    variables.roi_data_itemNamesData.roi_event_comments = req.body.roi_event_comments;
     
-    //if (functions.checkEmpty(variables.roi_itemNamesData, "roi")) {
-    //    res.render("manually_roi_image");
-    //} else { 
-        // res.render("manually_sample_image");
+    if (functions.checkEmpty(variables.roi_data_itemNamesData, "roi_data")) {
+        res.render("manually_roi_image");
+    } else { 
         res.render("manually_sample_fiducials");
-    //}
+    }
 });
 
 app.post("/submitSampleFiducialsManually", function(req, res){
-    res.render("manually_sample_image");
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_validity = (req.body.sample_event_fid1_validity ? true:false);
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_position_name = req.body.sample_event_fid1_position_name;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_x_position = req.body.sample_event_fid1_x_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_y_position = req.body.sample_event_fid1_y_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_z_position = req.body.sample_event_fid1_z_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_date = req.body.sample_event_fid1_experiment_date;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_validity = (req.body.sample_event_fid2_validity ? true:false);
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_position_name = req.body.sample_event_fid2_position_name;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_x_position = req.body.sample_event_fid2_x_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_y_position = req.body.sample_event_fid2_y_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_z_position = req.body.sample_event_fid2_z_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_experiment_date = req.body.sample_event_fid2_experiment_date;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_validity = (req.body.sample_event_fid3_validity ? true:false);
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_position_name = req.body.sample_event_fid3_position_name
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_x_position = req.body.sample_event_fid3_x_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_y_position = req.body.sample_event_fid3_y_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_z_position = req.body.sample_event_fid3_z_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
+
+    if (functions.checkEmpty(variables.sample_fiducials_itemNamesData, "sampleimage_fids")) {
+        res.render("manually_sample_fiducials");
+    } else {
+        res.render("manually_sample_image");
+    }
 });
 
 app.post("/submitSampleImageManually", function(req, res){
-    variables.sample_itemNamesData.sample_experiment_x_position = req.body.sample_experiment_x_position;
-    variables.sample_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
-    variables.sample_itemNamesData.sample_experiment_width = req.body.sample_experiment_width;
-    variables.sample_itemNamesData.sample_experiment_height = req.body.sample_experiment_height;
-    variables.sample_itemNamesData.sample_detection_method = req.body.sample_detection_method;
-    variables.sample_itemNamesData.sample_mask_load = req.body.sample_mask_load;
-    variables.sample_itemNamesData.sample_experiment_date = req.body.sample_experiment_date;
-    variables.sample_itemNamesData.sample_experiment_time = req.body.sample_experiment_time;
-    variables.sample_itemNamesData.sample_experiment_comments = req.body.sample_experiment_comments;
-    variables.sample_itemNamesData.sample_device = req.body.sample_device;
-    variables.sample_itemNamesData.sample_event_type = req.body.sample_event_type;
-    variables.sample_itemNamesData.sample_event_link_to_data = req.body.sample_event_link_to_data;
-    variables.sample_itemNamesData.sample_event_link_to_meta_data = req.body.sample_event_link_to_meta_data;
-    variables.sample_itemNamesData.sample_event_date = req.body.sample_event_date;
-    variables.sample_itemNamesData.sample_event_time = req.body.sample_event_time;
-    variables.sample_itemNamesData.sample_event_comments = req.body.sample_event_comments;
-    variables.sample_itemNamesData.sample_event_fid1_validity = (req.body.sample_event_fid1_validity ? true:false);
-    variables.sample_itemNamesData.sample_event_fid1_position_name = req.body.sample_event_fid1_position_name;
-    variables.sample_itemNamesData.sample_event_fid1_x_position = req.body.sample_event_fid1_x_position;
-    variables.sample_itemNamesData.sample_event_fid1_y_position = req.body.sample_event_fid1_y_position;
-    variables.sample_itemNamesData.sample_event_fid1_z_position = req.body.sample_event_fid1_z_position;
-    variables.sample_itemNamesData.sample_event_fid1_experiment_date = req.body.sample_event_fid1_experiment_date;
-    variables.sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
-    variables.sample_itemNamesData.sample_event_fid2_validity = (req.body.sample_event_fid2_validity ? true:false);
-    variables.sample_itemNamesData.sample_event_fid2_position_name = req.body.sample_event_fid2_position_name;
-    variables.sample_itemNamesData.sample_event_fid2_x_position = req.body.sample_event_fid2_x_position;
-    variables.sample_itemNamesData.sample_event_fid2_y_position = req.body.sample_event_fid2_y_position;
-    variables.sample_itemNamesData.sample_event_fid2_z_position = req.body.sample_event_fid2_z_position;
-    variables.sample_itemNamesData.sample_event_fid2_experiment_date = req.body.sample_event_fid2_experiment_date;
-    variables.sample_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
-    variables.sample_itemNamesData.sample_event_fid3_validity = (req.body.sample_event_fid3_validity ? true:false);
-    variables.sample_itemNamesData.sample_event_fid3_position_name = req.body.sample_event_fid3_position_name
-    variables.sample_itemNamesData.sample_event_fid3_x_position = req.body.sample_event_fid3_x_position;
-    variables.sample_itemNamesData.sample_event_fid3_y_position = req.body.sample_event_fid3_y_position;
-    variables.sample_itemNamesData.sample_event_fid3_z_position = req.body.sample_event_fid3_z_position;
-    variables.sample_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
-    variables.sample_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
-
-    //if (functions.checkEmpty(variables.sample_itemNamesData, "sampleimage")) {
-    //        res.render("manually_sample_image");
-    //} else {
-        // res.render("manually_target_data");
+    variables.sample_data_itemNamesData.sample_experiment_x_position = req.body.sample_experiment_x_position;
+    variables.sample_data_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
+    variables.sample_data_itemNamesData.sample_experiment_width = req.body.sample_experiment_width;
+    variables.sample_data_itemNamesData.sample_experiment_height = req.body.sample_experiment_height;
+    variables.sample_data_itemNamesData.sample_detection_method = req.body.sample_detection_method;
+    variables.sample_data_itemNamesData.sample_mask_load = req.body.sample_mask_load;
+    variables.sample_data_itemNamesData.sample_experiment_date = req.body.sample_experiment_date;
+    variables.sample_data_itemNamesData.sample_experiment_time = req.body.sample_experiment_time;
+    variables.sample_data_itemNamesData.sample_experiment_comments = req.body.sample_experiment_comments;
+    variables.sample_data_itemNamesData.sample_device = req.body.sample_device;
+    variables.sample_data_itemNamesData.sample_event_type = req.body.sample_event_type;
+    variables.sample_data_itemNamesData.sample_event_link_to_data = req.body.sample_event_link_to_data;
+    variables.sample_data_itemNamesData.sample_event_link_to_meta_data = req.body.sample_event_link_to_meta_data;
+    variables.sample_data_itemNamesData.sample_event_date = req.body.sample_event_date;
+    variables.sample_data_itemNamesData.sample_event_time = req.body.sample_event_time;
+    variables.sample_data_itemNamesData.sample_event_comments = req.body.sample_event_comments;
+    
+    if (functions.checkEmpty(variables.sample_data_itemNamesData, "sampleimage_data")) {
+            res.render("manually_sample_image");
+    } else {
         res.render("manually_target_fiducials");
-    //}
+    }
 });
 
 app.post("/submitTargetFiducialsManually", function(req, res){
-    res.render("manually_target_data");
+    variables.target_fiducials_itemNamesData.target_event_fid1_validity = (req.body.target_event_fid1_validity ? true:false);
+    variables.target_fiducials_itemNamesData.target_event_fid1_position_name = req.body.target_event_fid1_position_name;
+    variables.target_fiducials_itemNamesData.target_event_fid1_x_position = req.body.target_event_fid1_x_position;
+    variables.target_fiducials_itemNamesData.target_event_fid1_y_position = req.body.target_event_fid1_y_position;
+    variables.target_fiducials_itemNamesData.target_event_fid1_z_position = req.body.target_event_fid1_z_position;
+    variables.target_fiducials_itemNamesData.target_event_fid1_experiment_date = req.body.target_event_fid1_experiment_date;
+    variables.target_fiducials_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    variables.target_fiducials_itemNamesData.target_event_fid2_validity = (req.body.target_event_fid2_validity ? true:false);
+    variables.target_fiducials_itemNamesData.target_event_fid2_position_name = req.body.target_event_fid2_position_name;
+    variables.target_fiducials_itemNamesData.target_event_fid2_x_position = req.body.target_event_fid2_x_position;
+    variables.target_fiducials_itemNamesData.target_event_fid2_y_position = req.body.target_event_fid2_y_position;
+    variables.target_fiducials_itemNamesData.target_event_fid2_z_position = req.body.target_event_fid2_z_position;
+    variables.target_fiducials_itemNamesData.target_event_fid2_experiment_date = req.body.target_event_fid2_experiment_date;
+    variables.target_fiducials_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    variables.target_fiducials_itemNamesData.target_event_fid3_validity = (req.body.target_event_fid3_validity ? true:false);
+    variables.target_fiducials_itemNamesData.target_event_fid3_position_name = req.body.target_event_fid3_position_name;
+    variables.target_fiducials_itemNamesData.target_event_fid3_x_position = req.body.target_event_fid3_x_position;
+    variables.target_fiducials_itemNamesData.target_event_fid3_y_position = req.body.target_event_fid3_y_position;
+    variables.target_fiducials_itemNamesData.target_event_fid3_z_position = req.body.target_event_fid3_z_position;
+    variables.target_fiducials_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
+    variables.target_fiducials_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
+
+    if (functions.checkEmpty(variables.target_fiducials_itemNamesData, "target_fids")) {
+        res.render("manually_target_fiducials");
+    } else {
+        res.render("manually_target_data");
+    }    
 });
 
 app.post("/submitAllData", function(req, res){
-    variables.target_itemNamesData.target_x_position = req.body.target_x_position;
-    variables.target_itemNamesData.target_y_position = req.body.target_y_position;
-    variables.target_itemNamesData.target_z_position = req.body.target_z_position;
-    variables.target_itemNamesData.targetinfo_experiment_date = req.body.targetinfo_experiment_date;
-    variables.target_itemNamesData.targetinfo_experiment_time = req.body.targetinfo_experiment_time;
-    variables.target_itemNamesData.target_comments = req.body.target_comments;
-    variables.target_itemNamesData.target_device = req.body.target_device;
-    variables.target_itemNamesData.target_event_type = req.body.target_event_type;
-    variables.target_itemNamesData.target_link_to_data = req.body.target_link_to_data;
-    variables.target_itemNamesData.target_link_to_meta_data = req.body.target_link_to_meta_data;
-    variables.target_itemNamesData.target_event_experiment_date = req.body.target_event_experiment_date;
-    variables.target_itemNamesData.target_event_experiment_time = req.body.target_event_experiment_time;
-    variables.target_itemNamesData.target_event_comments = req.body.target_event_comments;
-    variables.target_itemNamesData.target_event_fid1_validity = (req.body.target_event_fid1_validity ? true:false);
-    variables.target_itemNamesData.target_event_fid1_position_name = req.body.target_event_fid1_position_name;
-    variables.target_itemNamesData.target_event_fid1_x_position = req.body.target_event_fid1_x_position;
-    variables.target_itemNamesData.target_event_fid1_y_position = req.body.target_event_fid1_y_position;
-    variables.target_itemNamesData.target_event_fid1_z_position = req.body.target_event_fid1_z_position;
-    variables.target_itemNamesData.target_event_fid1_experiment_date = req.body.target_event_fid1_experiment_date;
-    variables.target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
-    variables.target_itemNamesData.target_event_fid2_validity = (req.body.target_event_fid2_validity ? true:false);
-    variables.target_itemNamesData.target_event_fid2_position_name = req.body.target_event_fid2_position_name;
-    variables.target_itemNamesData.target_event_fid2_x_position = req.body.target_event_fid2_x_position;
-    variables.target_itemNamesData.target_event_fid2_y_position = req.body.target_event_fid2_y_position;
-    variables.target_itemNamesData.target_event_fid2_z_position = req.body.target_event_fid2_z_position;
-    variables.target_itemNamesData.target_event_fid2_experiment_date = req.body.target_event_fid2_experiment_date;
-    variables.target_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
-    variables.target_itemNamesData.target_event_fid3_validity = (req.body.target_event_fid3_validity ? true:false);
-    variables.target_itemNamesData.target_event_fid3_position_name = req.body.target_event_fid3_position_name;
-    variables.target_itemNamesData.target_event_fid3_x_position = req.body.target_event_fid3_x_position;
-    variables.target_itemNamesData.target_event_fid3_y_position = req.body.target_event_fid3_y_position;
-    variables.target_itemNamesData.target_event_fid3_z_position = req.body.target_event_fid3_z_position;
-    variables.target_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
-    variables.target_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
+    variables.target_data_itemNamesData.target_x_position = req.body.target_x_position;
+    variables.target_data_itemNamesData.target_y_position = req.body.target_y_position;
+    variables.target_data_itemNamesData.target_z_position = req.body.target_z_position;
+    variables.target_data_itemNamesData.targetinfo_experiment_date = req.body.targetinfo_experiment_date;
+    variables.target_data_itemNamesData.targetinfo_experiment_time = req.body.targetinfo_experiment_time;
+    variables.target_data_itemNamesData.target_comments = req.body.target_comments;
+    variables.target_data_itemNamesData.target_device = req.body.target_device;
+    variables.target_data_itemNamesData.target_event_type = req.body.target_event_type;
+    variables.target_data_itemNamesData.target_link_to_data = req.body.target_link_to_data;
+    variables.target_data_itemNamesData.target_link_to_meta_data = req.body.target_link_to_meta_data;
+    variables.target_data_itemNamesData.target_event_experiment_date = req.body.target_event_experiment_date;
+    variables.target_data_itemNamesData.target_event_experiment_time = req.body.target_event_experiment_time;
+    variables.target_data_itemNamesData.target_event_comments = req.body.target_event_comments;
+    
+    console.log(variables.target_data_itemNamesData);
 
-    //if (functions.checkEmpty(variables.target_itemNamesData, "targetdata")) {
-    //    res.render("manually_target_data");
-    //} else {
+    if (functions.checkEmpty(variables.target_data_itemNamesData, "target_data")) {
+        res.render("manually_target_data");
+    } else {
 
+        console.log(variables);
+        
+        /*
         var q = [];
-        if (!variables.subframe_itemNamesData.subframe_validity) {
-            q = "UPDATE Subframe_Table SET Validity=0, InvalidSinceTimeStamp='" +  variables.subframe_itemNamesData.subframe_invalid_date + 
+        console.log(variables.subframe_data_itemNamesData.subframe_validity);
+        
+        if (!variables.subframe_data_itemNamesData.subframe_validity) {
+            q = "UPDATE Subframe_Table SET Validity=0, InvalidSinceTimeStamp='" +  variables.subframe_data_itemNamesData.subframe_invalid_date + 
             " " + variables.subframe_itemNamesData.subframe_invalid_time + ":00' WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + 
             variables.subframe_itemNamesData.subframe_type + "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" +
             variables.subframe_itemNamesData.facility_name + "') AND SerialNumber=" + variables.subframe_itemNamesData.serial_number + ";";            
@@ -471,11 +489,9 @@ app.post("/submitAllData", function(req, res){
 
             q = subframe_query + subframe_event_fiducial1 + subframe_event_fiducial2 + subframe_event_fiducial3;
         }
+        */
 
-
-        
-
-        console.log(q);
+        // console.log(q);
 
 
 
@@ -571,7 +587,7 @@ app.post("/submitAllData", function(req, res){
         //    console.log(result);
         //    res.redirect("/");
         //}); 
-    //}
+    }
 });
 
 app.post("/submitXMLData", function(req, res){
