@@ -228,7 +228,7 @@ app.post("/createSubframeOnDatabase", function(req, res){
     
         q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
 
-        console.log(q);
+        // console.log(q);
 
         connection.query(q, function (error, result) { 
             var facilityID = result[0][0].facilityid;
@@ -273,7 +273,7 @@ app.post("/submitSubframeInfoManually", function(req, res){
     if (functions.checkEmpty(variables.subframe_data_itemNamesData, "subframe_data")) {
             res.render("home_manually_subframe");
     } else { 
-            res.render("manually_roi_fiducials");
+        res.render("manually_roi_fiducials");
     }    
 });
 
@@ -368,6 +368,9 @@ app.post("/submitSampleImageManually", function(req, res){
     variables.sample_data_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
     variables.sample_data_itemNamesData.sample_experiment_width = req.body.sample_experiment_width;
     variables.sample_data_itemNamesData.sample_experiment_height = req.body.sample_experiment_height;
+    variables.sample_data_itemNamesData.sample_experiment_theta = req.body.sample_experiment_theta;
+    variables.sample_data_itemNamesData.sample_experiment_phi = req.body.sample_experiment_phi;
+    variables.sample_data_itemNamesData.sample_experiment_rho = req.body.sample_experiment_rho;
     variables.sample_data_itemNamesData.sample_detection_method = req.body.sample_detection_method;
     variables.sample_data_itemNamesData.sample_mask_load = req.body.sample_mask_load;
     variables.sample_data_itemNamesData.sample_experiment_date = req.body.sample_experiment_date;
@@ -419,6 +422,7 @@ app.post("/submitTargetFiducialsManually", function(req, res){
 });
 
 app.post("/submitAllData", function(req, res){
+    
     variables.target_data_itemNamesData.target_x_position = req.body.target_x_position;
     variables.target_data_itemNamesData.target_y_position = req.body.target_y_position;
     variables.target_data_itemNamesData.target_z_position = req.body.target_z_position;
@@ -429,164 +433,310 @@ app.post("/submitAllData", function(req, res){
     variables.target_data_itemNamesData.target_event_type = req.body.target_event_type;
     variables.target_data_itemNamesData.target_link_to_data = req.body.target_link_to_data;
     variables.target_data_itemNamesData.target_link_to_meta_data = req.body.target_link_to_meta_data;
-    variables.target_data_itemNamesData.target_event_experiment_date = req.body.target_event_experiment_date;
-    variables.target_data_itemNamesData.target_event_experiment_time = req.body.target_event_experiment_time;
+    variables.target_data_itemNamesData.target_event_date = req.body.target_event_date;
+    variables.target_data_itemNamesData.target_event_time = req.body.target_event_time;
     variables.target_data_itemNamesData.target_event_comments = req.body.target_event_comments;
     
-    console.log(variables.target_data_itemNamesData);
-
     if (functions.checkEmpty(variables.target_data_itemNamesData, "target_data")) {
         res.render("manually_target_data");
     } else {
 
-        console.log(variables);
-        
-        /*
-        var q = [];
-        console.log(variables.subframe_data_itemNamesData.subframe_validity);
+        var db_query = [];
         
         if (!variables.subframe_data_itemNamesData.subframe_validity) {
-            q = "UPDATE Subframe_Table SET Validity=0, InvalidSinceTimeStamp='" +  variables.subframe_data_itemNamesData.subframe_invalid_date + 
-            " " + variables.subframe_itemNamesData.subframe_invalid_time + ":00' WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + 
-            variables.subframe_itemNamesData.subframe_type + "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" +
-            variables.subframe_itemNamesData.facility_name + "') AND SerialNumber=" + variables.subframe_itemNamesData.serial_number + ";";            
+            db_query = "UPDATE Subframe_Table SET Validity=0, InvalidSinceTimeStamp='" +  variables.subframe_data_itemNamesData.subframe_invalid_date + 
+            " " + variables.subframe_data_itemNamesData.subframe_invalid_time + ":00' WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + 
+            variables.subframe_data_itemNamesData.subframe_type + "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" +
+            variables.subframe_data_itemNamesData.facility_name + "') AND SerialNumber=" + variables.subframe_data_itemNamesData.serial_number + ";";      
+            
+            connection.query(db_query, function (error, result) {
+                if (error) throw error;
+                console.log(result);
+                res.redirect("/");
+            }); 
         } else {
+            console.log("inserting the subframe information to the database");
             var subframe_query = "UPDATE Subframe_Table SET Validity=1, GroupID=(SELECT ID FROM GroupInformation_Table WHERE GroupName='" + 
-            variables.subframe_itemNamesData.group_name + "'), CreateTimeStamp='" + variables.subframe_itemNamesData.subframe_experiment_date + " " + 
-            variables.subframe_itemNamesData.subframe_experiment_time + ":00', Comments='" + variables.subframe_itemNamesData.subframe_comments  + "' WHERE " + 
-            "SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_itemNamesData.subframe_type + 
-            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_itemNamesData.facility_name + "') AND SerialNumber=" +
-            variables.subframe_itemNamesData.serial_number + "; ";
+            variables.subframe_data_itemNamesData.group_name + "'), CreateTimeStamp='" + variables.subframe_data_itemNamesData.subframe_experiment_date + " " + 
+            variables.subframe_data_itemNamesData.subframe_experiment_time + ":00', Comments='" + variables.subframe_data_itemNamesData.subframe_comments  + "' WHERE " + 
+            "SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_data_itemNamesData.subframe_type + 
+            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_data_itemNamesData.facility_name + "') AND SerialNumber=" +
+            variables.subframe_data_itemNamesData.serial_number + "; ";
 
+            connection.query(subframe_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+
+            console.log("inserting the subframe related fiducial information to the database");
             var subframe_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
-            variables.subframe_itemNamesData.subframe_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
-            variables.subframe_itemNamesData.subframe_fid1_position_name + "'), " + variables.subframe_itemNamesData.subframe_fid1_x_position + 
-            ", " + variables.subframe_itemNamesData.subframe_fid1_y_position + ", " + variables.subframe_itemNamesData.subframe_fid1_z_position + 
-            ", '" + variables.subframe_itemNamesData.subframe_fid1_date + " " + variables.subframe_itemNamesData.subframe_fid1_time + ":00'); ";
+            variables.subframe_fiducials_itemNamesData.subframe_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_fiducials_itemNamesData.subframe_fid1_position_name + "'), " + variables.subframe_fiducials_itemNamesData.subframe_fid1_x_position + 
+            ", " + variables.subframe_fiducials_itemNamesData.subframe_fid1_y_position + ", " + variables.subframe_fiducials_itemNamesData.subframe_fid1_z_position + 
+            ", '" + variables.subframe_fiducials_itemNamesData.subframe_fid1_date + " " + variables.subframe_fiducials_itemNamesData.subframe_fid1_time + ":00'); ";
 
             var subframe_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
-            variables.subframe_itemNamesData.subframe_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
-            variables.subframe_itemNamesData.subframe_fid2_position_name + "'), " + variables.subframe_itemNamesData.subframe_fid2_x_position + 
-            ", " + variables.subframe_itemNamesData.subframe_fid2_y_position + ", " + variables.subframe_itemNamesData.subframe_fid2_z_position + 
-            ", '" + variables.subframe_itemNamesData.subframe_fid2_date + " " + variables.subframe_itemNamesData.subframe_fid2_time + ":00'); ";
+            variables.subframe_fiducials_itemNamesData.subframe_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_fiducials_itemNamesData.subframe_fid2_position_name + "'), " + variables.subframe_fiducials_itemNamesData.subframe_fid2_x_position + 
+            ", " + variables.subframe_fiducials_itemNamesData.subframe_fid2_y_position + ", " + variables.subframe_fiducials_itemNamesData.subframe_fid2_z_position + 
+            ", '" + variables.subframe_fiducials_itemNamesData.subframe_fid2_date + " " + variables.subframe_fiducials_itemNamesData.subframe_fid2_time + ":00'); ";
 
             var subframe_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
-            variables.subframe_itemNamesData.subframe_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
-            variables.subframe_itemNamesData.subframe_fid3_position_name + "'), " + variables.subframe_itemNamesData.subframe_fid3_x_position + 
-            ", " + variables.subframe_itemNamesData.subframe_fid3_y_position + ", " + variables.subframe_itemNamesData.subframe_fid3_z_position + 
-            ", '" + variables.subframe_itemNamesData.subframe_fid3_date + " " + variables.subframe_itemNamesData.subframe_fid3_time + ":00'); ";
+            variables.subframe_fiducials_itemNamesData.subframe_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_fiducials_itemNamesData.subframe_fid3_position_name + "'), " + variables.subframe_fiducials_itemNamesData.subframe_fid3_x_position + 
+            ", " + variables.subframe_fiducials_itemNamesData.subframe_fid3_y_position + ", " + variables.subframe_fiducials_itemNamesData.subframe_fid3_z_position + 
+            ", '" + variables.subframe_fiducials_itemNamesData.subframe_fid3_date + " " + variables.subframe_fiducials_itemNamesData.subframe_fid3_time + ":00'); ";
 
-            var subframe_event = "INSERT INTO SubframeEvent_Table (SubframeID, DeviceID, Fiducial1ID, Fiducial2ID, Fiducial3ID, LinkToData, " + 
+            var three_fids_correctly_added = false;
+            subframe_fiducials_query = subframe_event_fiducial1 + subframe_event_fiducial2 + subframe_event_fiducial3;
+            connection.query(subframe_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+    
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the subframe event information to the database");
+            var subframe_event_query = "INSERT INTO SubframeEvent_Table (SubframeID, FiducialSetID, DeviceID, LinkToData, " + 
             "LinkToMetaData, Comments, CreateTimeStamp, EventTypeID) VALUES ((SELECT ID FROM Subframe_Table WHERE SubframeTypeID=" +
-            "(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_itemNamesData.subframe_type + 
-            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_itemNamesData.facility_name + 
-            "') AND SerialNumber=" + variables.subframe_itemNamesData.serial_number + "), (SELECT ID FROM DeviceList_Table WHERE VendorName=" +
-            variables.subframe_itemNamesData.subframe_device_select + "), (SELECT ID FROM Fiducial_Table ORDER BY ID DESC LIMIT 3), " +
-            variables.subframe_itemNamesData.subframe_link_to_data + ", " + variables.subframe_itemNamesData.subframe_link_to_meta_data +
-            ", " + variables.subframe_itemNamesData.subframe_events_comments + ", '" + variables.subframe_itemNamesData.subframe_event_experiment_date +
-            " " + variables.subframe_itemNamesData.subframe_event_experiment_time + ":00', (SELECT ID FROM EventType_Table WHERE EventType=" +
-            variables.subframe_itemNamesData.subframe_event_select + ")); ";
+            "(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_data_itemNamesData.subframe_type + 
+            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_data_itemNamesData.facility_name + 
+            "') AND SerialNumber=" + variables.subframe_data_itemNamesData.serial_number + "), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + 
+            "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.subframe_data_itemNamesData.subframe_device_select + "'), '" +
+            variables.subframe_data_itemNamesData.subframe_link_to_data + "', '" + variables.subframe_data_itemNamesData.subframe_link_to_meta_data +
+            "', '" + variables.subframe_data_itemNamesData.subframe_events_comments + "', '" + variables.subframe_data_itemNamesData.subframe_event_experiment_date +
+            " " + variables.subframe_data_itemNamesData.subframe_event_experiment_time + ":00', (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.subframe_data_itemNamesData.subframe_event_select + "')); ";
+            
+            connection.query(subframe_event_query, function (error, result) {
+                if (error) throw error;
+            });
 
-            q = subframe_query + subframe_event_fiducial1 + subframe_event_fiducial2 + subframe_event_fiducial3;
+            console.log("inserting the ROI related information to the database");
+            var roi_query = "INSERT INTO ROI_Table (SubframeID, ROITypeID, BoundingBoxPositionX, BoundingBoxPositionY, BoundingBoxWidth, BoundingBoxHeight, " +
+             "MaskDirectory, Comments, CreateTimeStamp) VALUES (" + "(SELECT ID FROM Subframe_Table WHERE SubframeTypeID=" +
+             "(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_data_itemNamesData.subframe_type + 
+             "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_data_itemNamesData.facility_name + 
+             "') AND SerialNumber=" + variables.subframe_data_itemNamesData.serial_number + "), " + "(SELECT ID FROM ROIType_Table WHERE Name='" + variables.roi_data_itemNamesData.roi_type + 
+             "'), " + variables.roi_data_itemNamesData.roi_experiment_x_position + ", " + variables.roi_data_itemNamesData.roi_experiment_y_position + ", " +
+             variables.roi_data_itemNamesData.roi_experiment_width + ", " + variables.roi_data_itemNamesData.roi_experiment_height + ", '" + 
+             variables.roi_data_itemNamesData.roi_mask_load + "' , '" + variables.roi_data_itemNamesData.roi_experiment_comments + "', '" + 
+             variables.roi_data_itemNamesData.roi_experiment_date + " " + variables.roi_data_itemNamesData.roi_experiment_time + ":00'" + ");";
+
+            connection.query(roi_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+            
+            console.log("inserting the ROI related fiducial information to the database");
+            var roi_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.roi_fiducials_itemNamesData.roi_event_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.roi_fiducials_itemNamesData.roi_event_fid1_position_name + "'), " + variables.roi_fiducials_itemNamesData.roi_event_fid1_x_position + 
+            ", " + variables.roi_fiducials_itemNamesData.roi_event_fid1_y_position + ", " + variables.roi_fiducials_itemNamesData.roi_event_fid1_z_position + 
+            ", '" + variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_date + " " + variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_time + ":00'); ";
+
+            var roi_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.roi_fiducials_itemNamesData.roi_event_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.roi_fiducials_itemNamesData.roi_event_fid2_position_name + "'), " + variables.roi_fiducials_itemNamesData.roi_event_fid2_x_position + 
+            ", " + variables.roi_fiducials_itemNamesData.roi_event_fid2_y_position + ", " + variables.roi_fiducials_itemNamesData.roi_event_fid2_z_position + 
+            ", '" + variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_date + " " + variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_time + ":00'); ";
+
+            var roi_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.roi_fiducials_itemNamesData.roi_event_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.roi_fiducials_itemNamesData.roi_event_fid3_position_name + "'), " + variables.roi_fiducials_itemNamesData.roi_event_fid3_x_position + 
+            ", " + variables.roi_fiducials_itemNamesData.roi_event_fid3_y_position + ", " + variables.roi_fiducials_itemNamesData.roi_event_fid3_z_position + 
+            ", '" + variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_date + " " + variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_time + ":00'); ";
+
+            three_fids_correctly_added = false;
+            roi_fiducials_query = roi_event_fiducial1 + roi_event_fiducial2 + roi_event_fiducial3;
+            connection.query(roi_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the ROI event information to the database");
+            console.log("*** we assume that the event corresponds to the ID of the last ROI added ***");
+            var roi_event_query = "INSERT INTO ROIEvent_Table (ROIID, EventTypeID, FiducialSetID, DeviceID, " + 
+            "LinkToData, LinkToMetaData, Comments, CreateTimeStamp) VALUES ((SELECT ID FROM ROI_Table ORDER BY ID LIMIT 1), (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.roi_data_itemNamesData.roi_event_type + "'), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.roi_data_itemNamesData.roi_device + "'), '" + variables.roi_data_itemNamesData.roi_event_link_to_data + "', '" + variables.roi_data_itemNamesData.roi_event_link_to_meta_data +
+            "', '" + variables.roi_data_itemNamesData.roi_event_comments + "', '" + variables.roi_data_itemNamesData.roi_event_date +
+            " " + variables.roi_data_itemNamesData.roi_event_time + ":00'); ";
+
+            connection.query(roi_event_query, function (error, result) {
+                if (error) throw error;
+            });
+            
+            console.log("inserting the sample related information to the database");
+            var sample_query = "INSERT INTO Sample_Table (ROIID, BoundingBoxPositionX, BoundingBoxPositionY, BoundingBoxWidth, BoundingBoxHeight, " +
+            "Theta, Phi, Rho, MaskDirectory, Comments, CreateTimeStamp) VALUES (" + "(SELECT ID FROM ROI_Table ORDER BY DBInsertTimeStamp DESC LIMIT 1), " +
+            + variables.sample_data_itemNamesData.sample_experiment_x_position + ", " + variables.sample_data_itemNamesData.sample_experiment_y_position + ", " +
+            variables.sample_data_itemNamesData.sample_experiment_width + ", " + variables.sample_data_itemNamesData.sample_experiment_height + ", " + 
+            variables.sample_data_itemNamesData.sample_experiment_theta + ", " + variables.sample_data_itemNamesData.sample_experiment_phi + ", " +
+            variables.sample_data_itemNamesData.sample_experiment_rho + ", '" + variables.sample_data_itemNamesData.sample_mask_load + "' , '" + 
+            variables.sample_data_itemNamesData.sample_experiment_comments + "', '" + variables.sample_data_itemNamesData.sample_experiment_date + " " + 
+            variables.sample_data_itemNamesData.sample_experiment_time + ":00'" + ");";
+
+            connection.query(sample_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+
+            console.log("inserting the sample related fiducial information to the database");
+            var sample_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.sample_fiducials_itemNamesData.sample_event_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.sample_fiducials_itemNamesData.sample_event_fid1_position_name + "'), " + variables.sample_fiducials_itemNamesData.sample_event_fid1_x_position + 
+            ", " + variables.sample_fiducials_itemNamesData.sample_event_fid1_y_position + ", " + variables.sample_fiducials_itemNamesData.sample_event_fid1_z_position + 
+            ", '" + variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_date + " " + variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_time + ":00'); ";
+
+            var sample_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.sample_fiducials_itemNamesData.sample_event_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.sample_fiducials_itemNamesData.sample_event_fid2_position_name + "'), " + variables.sample_fiducials_itemNamesData.sample_event_fid2_x_position + 
+            ", " + variables.sample_fiducials_itemNamesData.sample_event_fid2_y_position + ", " + variables.sample_fiducials_itemNamesData.sample_event_fid2_z_position + 
+            ", '" + variables.sample_fiducials_itemNamesData.sample_event_fid2_experiment_date + " " + variables.sample_fiducials_itemNamesData.sample_event_fid2_experiment_time + ":00'); ";
+
+            var sample_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.sample_fiducials_itemNamesData.sample_event_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.sample_fiducials_itemNamesData.sample_event_fid3_position_name + "'), " + variables.sample_fiducials_itemNamesData.sample_event_fid3_x_position + 
+            ", " + variables.sample_fiducials_itemNamesData.sample_event_fid3_y_position + ", " + variables.sample_fiducials_itemNamesData.sample_event_fid3_z_position + 
+            ", '" + variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_date + " " + variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_time + ":00'); ";
+
+            three_fids_correctly_added = false;
+            sample_fiducials_query = sample_event_fiducial1 + sample_event_fiducial2 + sample_event_fiducial3;
+            connection.query(sample_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+                
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the sample event information to the database");
+            console.log("*** we assume that the event corresponds to the ID of the last Sample added ***");
+            var sample_event_query = "INSERT INTO SampleEvent_Table (SampleID, EventTypeID, FiducialSetID, DeviceID, " + 
+            "LinkToData, LinkToMetaData, Comments, CreateTimeStamp) VALUES ((SELECT ID FROM Sample_Table ORDER BY ID LIMIT 1), (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.sample_data_itemNamesData.sample_event_type + "'), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.sample_data_itemNamesData.sample_device + "'), '" + variables.sample_data_itemNamesData.sample_event_link_to_data + "', '" + variables.sample_data_itemNamesData.sample_event_link_to_meta_data +
+            "', '" + variables.sample_data_itemNamesData.sample_event_comments + "', '" + variables.sample_data_itemNamesData.sample_event_date +
+            " " + variables.sample_data_itemNamesData.sample_event_time + ":00'); ";
+
+            connection.query(sample_event_query, function (error, result) {
+                if (error) throw error;
+            });
+
+            console.log("inserting the target related information to the database");
+            var target_query = "INSERT INTO Target_Table (SampleID, X, Y, Z, Comments, CreateTimeStamp) VALUES (" + 
+            "(SELECT ID FROM Sample_Table ORDER BY DBInsertTimeStamp DESC LIMIT 1), " +
+            + variables.target_data_itemNamesData.target_x_position + ", " + variables.target_data_itemNamesData.target_y_position + ", " +
+            variables.target_data_itemNamesData.target_z_position + ", '" + variables.target_data_itemNamesData.target_comments + "', '" + 
+            variables.target_data_itemNamesData.targetinfo_experiment_date + " " + variables.target_data_itemNamesData.targetinfo_experiment_time + ":00'" + ");";
+
+            connection.query(target_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+
+            console.log("inserting the target related fiducial information to the database");
+            var target_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.target_fiducials_itemNamesData.target_event_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.target_fiducials_itemNamesData.target_event_fid1_position_name + "'), " + variables.target_fiducials_itemNamesData.target_event_fid1_x_position + 
+            ", " + variables.target_fiducials_itemNamesData.target_event_fid1_y_position + ", " + variables.target_fiducials_itemNamesData.target_event_fid1_z_position + 
+            ", '" + variables.target_fiducials_itemNamesData.target_event_fid1_experiment_date + " " + variables.target_fiducials_itemNamesData.target_event_fid1_experiment_time + ":00'); ";
+
+            var target_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.target_fiducials_itemNamesData.target_event_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.target_fiducials_itemNamesData.target_event_fid2_position_name + "'), " + variables.target_fiducials_itemNamesData.target_event_fid2_x_position + 
+            ", " + variables.target_fiducials_itemNamesData.target_event_fid2_y_position + ", " + variables.target_fiducials_itemNamesData.target_event_fid2_z_position + 
+            ", '" + variables.target_fiducials_itemNamesData.target_event_fid2_experiment_date + " " + variables.target_fiducials_itemNamesData.target_event_fid2_experiment_time + ":00'); ";
+
+            var target_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.target_fiducials_itemNamesData.target_event_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.target_fiducials_itemNamesData.target_event_fid3_position_name + "'), " + variables.target_fiducials_itemNamesData.target_event_fid3_x_position + 
+            ", " + variables.target_fiducials_itemNamesData.target_event_fid3_y_position + ", " + variables.target_fiducials_itemNamesData.target_event_fid3_z_position + 
+            ", '" + variables.target_fiducials_itemNamesData.target_event_fid3_experiment_date + " " + variables.target_fiducials_itemNamesData.target_event_fid3_experiment_time + ":00'); ";
+
+            three_fids_correctly_added = false;
+            target_fiducials_query = target_event_fiducial1 + target_event_fiducial2 + target_event_fiducial3;
+            connection.query(target_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the target event information to the database");
+            console.log("*** we assume that the event corresponds to the ID of the last target added ***");
+            var target_event_query = "INSERT INTO TargetEvent_Table (TargetID, EventTypeID, FiducialSetID, DeviceID, " + 
+            "LinkToData, LinkToMetaData, Comments, CreateTimeStamp) VALUES ((SELECT ID FROM Target_Table ORDER BY ID LIMIT 1), (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.target_data_itemNamesData.target_event_type + "'), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.target_data_itemNamesData.target_device + "'), '" + variables.target_data_itemNamesData.target_link_to_data + "', '" + 
+            variables.target_data_itemNamesData.target_link_to_meta_data + "', '" + variables.target_data_itemNamesData.target_event_comments + 
+            "', '" + variables.target_data_itemNamesData.target_event_date + " " + variables.target_data_itemNamesData.target_event_time + ":00'); ";
+            
+            console.log(target_event_query);
+
+            connection.query(target_event_query, function (error, result) {
+                if (error) throw error;
+                console.log("Finished");            
+                res.redirect("/");
+            });
         }
-        */
-
-        // console.log(q);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-
-        console.log(serial_number);
-
-        var subframeeventtype_query = "INSERT INTO SubframeEvent_Table (SubframeID, CreateTimeStamp, EventTypeID) VALUES ((SELECT MAX(ID) FROM Subframe), '" +
-        subframe_itemNamesData.SubframeExperimentDate + " " + subframe_itemNamesData.SubframeExperimentTime + ":00', " + 
-        "(SELECT ID FROM Subframe_Event_Type WHERE EventType='" + subframe_itemNamesData.SubframeEventTypeName + "')); ";   
-
-        var fiducial_query = "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid1Validity + 
-        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid1PositionName +"'), " + 
-        fiducials_itemNamesData.Fid1XPosition + ", " + fiducials_itemNamesData.Fid1YPosition + ", " + fiducials_itemNamesData.Fid1ZPosition + "); " +
-        "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid2Validity + 
-        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid2PositionName +"'), " + 
-        fiducials_itemNamesData.Fid2XPosition + ", " + fiducials_itemNamesData.Fid2YPosition + ", " + fiducials_itemNamesData.Fid2ZPosition + "); " +
-        "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid3Validity + 
-        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid3PositionName +"'), " + 
-        fiducials_itemNamesData.Fid3XPosition + ", " + fiducials_itemNamesData.Fid3YPosition + ", " + fiducials_itemNamesData.Fid3ZPosition + "); " +
-        "INSERT INTO Fiducial (SubFrameID, Validity, PositionID, X, Y, Z)" +
-        " VALUES ((SELECT MAX(ID) FROM Subframe), " + fiducials_itemNamesData.Fid4Validity + 
-        ", (SELECT ID FROM Fiducial_Position WHERE PositionName='" + fiducials_itemNamesData.Fid4PositionName +"'), " + 
-        fiducials_itemNamesData.Fid4XPosition + ", " + fiducials_itemNamesData.Fid4YPosition + ", " + fiducials_itemNamesData.Fid4ZPosition + "); ";
-    
-        var overviewimage_query = "INSERT INTO OverviewImage_Event (SubframeID, CreateTimeStamp, MicroscopeID, MethodID, LinkToImage, Validity, Comments)" +
-        " VALUES ((SELECT MAX(ID) FROM Subframe), '" + overviewimage_itemNamesData.OverviewImageExperimentDate + " " +  
-        overviewimage_itemNamesData.OverviewImageExperimentTime + ":00', " + 
-        "(SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + overviewimage_itemNamesData.MicroscopeData + "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + overviewimage_itemNamesData.DetectionMethod + "'), '" + overviewimage_itemNamesData.OverviewImageLoad + "', " + 
-        overviewimage_itemNamesData.OverviewImageValidity + ", '" + overviewimage_itemNamesData.OverviewImageComments + "'); ";
-
-        var roiimage_query = "INSERT INTO ROITable (OverviewImageEventID, MicroscopeID, MethodID, CreateTimeStamp, LinkToImage, " + 
-        "BoundingBoxXPosition, BoundingBoxYPosition, BoundingBoxWidth, BoundingBoxHeight, Validity, Comments) VALUES (" +
-        "(SELECT MAX(ID) FROM OverviewImage_Event), (SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + roi_itemNamesData.MicroscopeData + 
-        "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + roi_itemNamesData.DetectionMethod + "'), '" + roi_itemNamesData.ROIExperimentDate + " " + 
-        roi_itemNamesData.ROIExperimentTime + ":00', '" + roi_itemNamesData.ROIOverviewImageLoad + "', " + roi_itemNamesData.ROIExperimentXPosition + ", " + 
-        roi_itemNamesData.ROIExperimentYPosition + ", " + roi_itemNamesData.ROIExperimentWidth + ", " + roi_itemNamesData.ROIExperimentHeight + ", " + 
-        roi_itemNamesData.ROIImageValidity + ", '" + roi_itemNamesData.ROIExperimentComments + "'); "; 
-
-        var sampletable_query = "INSERT INTO SampleTable (ROIID, PixelSizeX, PixelSizeY, BoundingBoxXPosition, BoundingBoxYPosition, " + 
-        "BoundingBoxWidth, BoundingBoxHeight, MaskDirectory, Validity, Comments, CreateTimeStamp) VALUES ((SELECT MAX(ID) FROM ROITable), " +
-        sample_itemNamesData.PixelSizeX + ", " + sample_itemNamesData.PixelSizeY + ", " + sample_itemNamesData.BBXPosition + ", " + 
-        sample_itemNamesData.BBYPosition + ", " + sample_itemNamesData.BBWidth + ", " + sample_itemNamesData.BBHeight + ", '" + 
-        sample_itemNamesData.MaskImageLoad + "', " + sample_itemNamesData.SampleImageValidity + ", '" + sample_itemNamesData.SampleComments + "', '" + 
-        sample_itemNamesData.SampleimageExperimentDate + " " + sample_itemNamesData.SampleimageExperimentTime + ":00'); ";
-
-        var imagedata_query = "INSERT INTO Image_Data (SampleID, MicroscopeID, MethodID, ImageType, ImageWidth, ImageHeight, ImageMemorySize, " +
-        "LinkToImage, Validity, CreateTimeStamp, Comments) VALUES ((SELECT MAX(ID) FROM SampleTable), (SELECT ID FROM Microscope_Type WHERE MicroscopeName='" + 
-        sample_itemNamesData.SampleMicroscopeData + "'), (SELECT ID FROM Detection_Method WHERE MethodName='" + sample_itemNamesData.SampleDetectionMethod + "'), '" + 
-        sample_itemNamesData.ImageType + "', " + sample_itemNamesData.ImageWidth + ", " + sample_itemNamesData.ImageHeight + ", " + 
-        sample_itemNamesData.ImageSize + ", '" + sample_itemNamesData.ROIImageLoad + "', " + sample_itemNamesData.SampleInfoValidity + ", '" + 
-        sample_itemNamesData.SampleinfoExperimentDate + " " + sample_itemNamesData.SampleinfoExperimentTime + ":00', '" + sample_itemNamesData.ImageComments + "'); ";
-
-        var target_query = "INSERT INTO Target (SampleID, Theta, Phi, Rho, StatusID, Validity, CreateTimeStamp, Comments) VALUES (" +
-        "(SELECT MAX(ID) FROM SampleTable), " + target_itemNamesData.ThetaAngle + ", " + target_itemNamesData.PhiAngle + ", " + target_itemNamesData.RhoAngle + 
-        ", (SELECT ID FROM Target_Status WHERE Status='" + target_itemNamesData.TargetStatus + "'), " + target_itemNamesData.TargetImageValidity + ", '" + 
-        target_itemNamesData.TargetinfoExperimentDate + " " + target_itemNamesData.TargetinfoExperimentTime + ":00', '" + 
-        target_itemNamesData.TargetComments + "'); ";
-
-        var positiondata_query = "INSERT INTO Position_Data (TargetID, X, Y, Z, InPlaneAccuracy, OutOfPlaneAccuracy, Validity, CreateTimeStamp) VALUES (" +
-        "(SELECT MAX(ID) FROM Target), " + target_itemNamesData.TargetXPosition + ", " + target_itemNamesData.TargetYPosition + ", " + 
-        target_itemNamesData.TargetZPosition + ", " + target_itemNamesData.InplaneAccuracy + ", " + target_itemNamesData.OutOfPlaneAccuracy + 
-        ", " + target_itemNamesData.TargetValidity + ", '" + target_itemNamesData.TargetpositioninfoExperimentDate + " " +  
-        target_itemNamesData.TargetpositioninfoExperimentTime + ":00'); ";
-
-        var xfeldata_query = "INSERT INTO XFEL_Data (TargetID, InstrumentID, CreateTimeStamp, Comments) VALUES ((SELECT MAX(ID) FROM Target), " + 
-        "(SELECT ID FROM Instrument WHERE Name='" + target_itemNamesData.InstrumentUsed + "'), '" +  target_itemNamesData.XFELDataExperimentDate + " " + 
-        target_itemNamesData.XFELDataExperimentTime + "', '" + target_itemNamesData.TargetInstrumentComments + "'); ";
-    
-        var q = subframe_query + subframeeventtype_query + fiducial_query + overviewimage_query + roiimage_query + sampletable_query + 
-        imagedata_query + target_query + positiondata_query + xfeldata_query;
-        */
-
-        //connection.query(q, function (error, result) {
-        //    if (error) throw error;
-        //    console.log(result);
-        //    res.redirect("/");
-        //}); 
     }
 });
 
