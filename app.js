@@ -33,9 +33,6 @@ let connection = mysql.createConnection({
 const variables = require('./public/app_variables');
 const functions = require('./public/app_functions');
 var xml_data = [];
-//function assignTheValues(value) {
-//    xml_data = value;
-//}
 var serial_number = [];
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -741,8 +738,496 @@ app.post("/submitAllData", function(req, res){
 });
 
 app.post("/submitXMLData", function(req, res){
-    res.redirect('/');
+    
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_y_position = req.body.subframe_fid1_y_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_z_position = req.body.subframe_fid1_z_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_date = req.body.subframe_fid1_date;
+    variables.subframe_fiducials_itemNamesData.subframe_fid1_time = req.body.subframe_fid1_time;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_validity = (req.body.subframe_fid2_validity ? true:false);
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_position_name = req.body.subframe_fid2_position_name;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_x_position = req.body.subframe_fid2_x_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_y_position = req.body.subframe_fid2_y_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_z_position = req.body.subframe_fid2_z_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_date = req.body.subframe_fid2_date;
+    variables.subframe_fiducials_itemNamesData.subframe_fid2_time = req.body.subframe_fid2_time;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_validity = (req.body.subframe_fid3_validity ? true:false);
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_position_name = req.body.subframe_fid3_position_name;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_x_position = req.body.subframe_fid3_x_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_y_position = req.body.subframe_fid3_y_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_z_position = req.body.subframe_fid3_z_position;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_date = req.body.subframe_fid3_date;
+    variables.subframe_fiducials_itemNamesData.subframe_fid3_time = req.body.subframe_fid3_time;
+    variables.subframe_data_itemNamesData.facility_name = req.body.subframe_id.substr(0, 5);
+    variables.subframe_data_itemNamesData.subframe_type = req.body.subframe_id.substr(5, 3);
+    variables.subframe_data_itemNamesData.serial_number = Number(req.body.subframe_id.substr(8,));
+    variables.subframe_data_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
+    variables.subframe_data_itemNamesData.group_name = req.body.group_name;
+    variables.subframe_data_itemNamesData.subframe_experiment_date = req.body.subframe_experiment_date;
+    variables.subframe_data_itemNamesData.subframe_experiment_time = req.body.subframe_experiment_time;
+    variables.subframe_data_itemNamesData.subframe_comments = req.body.subframe_comments;
+    variables.subframe_data_itemNamesData.subframe_device_select = req.body.subframe_device_select;
+    variables.subframe_data_itemNamesData.subframe_event_select = req.body.subframe_event_select;
+    variables.subframe_data_itemNamesData.subframe_link_to_data = req.body.subframe_link_to_data;
+    variables.subframe_data_itemNamesData.subframe_link_to_meta_data = req.body.subframe_link_to_meta_data;
+    variables.subframe_data_itemNamesData.subframe_event_experiment_date = req.body.subframe_event_experiment_date;
+    variables.subframe_data_itemNamesData.subframe_event_experiment_time = req.body.subframe_event_experiment_time;
+    variables.subframe_data_itemNamesData.subframe_events_comments = req.body.subframe_events_comments;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_validity = (req.body.roi_event_fid1_validity ? true:false);
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_position_name = req.body.roi_event_fid1_position_name;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_x_position = req.body.roi_event_fid1_x_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_y_position = req.body.roi_event_fid1_y_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_z_position = req.body.roi_event_fid1_z_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_date = req.body.roi_event_fid1_experiment_date;
+    variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_time = req.body.roi_event_fid1_experiment_time;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_validity = (req.body.roi_event_fid2_validity ? true:false);
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_position_name = req.body.roi_event_fid2_position_name;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_x_position = req.body.roi_event_fid2_x_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_y_position = req.body.roi_event_fid2_y_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_z_position = req.body.roi_event_fid2_z_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_date = req.body.roi_event_fid2_experiment_date;
+    variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_time = req.body.roi_event_fid2_experiment_time;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_validity = (req.body.roi_event_fid3_validity ? true:false);
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_position_name = req.body.roi_event_fid3_position_name;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_x_position = req.body.roi_event_fid3_x_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_y_position = req.body.roi_event_fid3_y_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_z_position = req.body.roi_event_fid3_z_position;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_date = req.body.roi_event_fid3_experiment_date;
+    variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
+    variables.roi_data_itemNamesData.roi_type = req.body.roi_type;
+    variables.roi_data_itemNamesData.roi_detection_method = req.body.roi_detection_method;
+    variables.roi_data_itemNamesData.roi_experiment_x_position = req.body.roi_experiment_x_position;
+    variables.roi_data_itemNamesData.roi_experiment_y_position = req.body.roi_experiment_y_position;
+    variables.roi_data_itemNamesData.roi_experiment_width = req.body.roi_experiment_width;
+    variables.roi_data_itemNamesData.roi_experiment_height = req.body.roi_experiment_height;
+    variables.roi_data_itemNamesData.roi_mask_load = req.body.roi_mask_load;
+    variables.roi_data_itemNamesData.roi_experiment_date = req.body.roi_experiment_date;
+    variables.roi_data_itemNamesData.roi_experiment_time = req.body.roi_experiment_time;
+    variables.roi_data_itemNamesData.roi_experiment_comments = req.body.roi_experiment_comments;
+    variables.roi_data_itemNamesData.roi_device = req.body.roi_device;
+    variables.roi_data_itemNamesData.roi_event_type = req.body.roi_event_type;
+    variables.roi_data_itemNamesData.roi_event_link_to_data = req.body.roi_event_link_to_data;
+    variables.roi_data_itemNamesData.roi_event_link_to_meta_data = req.body.roi_event_link_to_meta_data;
+    variables.roi_data_itemNamesData.roi_event_date = req.body.roi_event_date;
+    variables.roi_data_itemNamesData.roi_event_time = req.body.roi_event_time;
+    variables.roi_data_itemNamesData.roi_event_comments = req.body.roi_event_comments;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_validity = (req.body.sample_event_fid1_validity ? true:false);
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_position_name = req.body.sample_event_fid1_position_name;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_x_position = req.body.sample_event_fid1_x_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_y_position = req.body.sample_event_fid1_y_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_z_position = req.body.sample_event_fid1_z_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_date = req.body.sample_event_fid1_experiment_date;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_validity = (req.body.sample_event_fid2_validity ? true:false);
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_position_name = req.body.sample_event_fid2_position_name;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_x_position = req.body.sample_event_fid2_x_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_y_position = req.body.sample_event_fid2_y_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_z_position = req.body.sample_event_fid2_z_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid2_experiment_date = req.body.sample_event_fid2_experiment_date;
+    variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_time = req.body.sample_event_fid1_experiment_time;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_validity = (req.body.sample_event_fid3_validity ? true:false);
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_position_name = req.body.sample_event_fid3_position_name
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_x_position = req.body.sample_event_fid3_x_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_y_position = req.body.sample_event_fid3_y_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_z_position = req.body.sample_event_fid3_z_position;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_date = req.body.sample_event_fid3_experiment_date;
+    variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
+    variables.sample_data_itemNamesData.sample_experiment_x_position = req.body.sample_experiment_x_position;
+    variables.sample_data_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
+    variables.sample_data_itemNamesData.sample_experiment_width = req.body.sample_experiment_width;
+    variables.sample_data_itemNamesData.sample_experiment_height = req.body.sample_experiment_height;
+    variables.sample_data_itemNamesData.sample_experiment_theta = req.body.sample_experiment_theta;
+    variables.sample_data_itemNamesData.sample_experiment_phi = req.body.sample_experiment_phi;
+    variables.sample_data_itemNamesData.sample_experiment_rho = req.body.sample_experiment_rho;
+    variables.sample_data_itemNamesData.sample_detection_method = req.body.sample_detection_method;
+    variables.sample_data_itemNamesData.sample_mask_load = req.body.sample_mask_load;
+    variables.sample_data_itemNamesData.sample_experiment_date = req.body.sample_experiment_date;
+    variables.sample_data_itemNamesData.sample_experiment_time = req.body.sample_experiment_time;
+    variables.sample_data_itemNamesData.sample_experiment_comments = req.body.sample_experiment_comments;
+    variables.sample_data_itemNamesData.sample_device = req.body.sample_device;
+    variables.sample_data_itemNamesData.sample_event_type = req.body.sample_event_type;
+    variables.sample_data_itemNamesData.sample_event_link_to_data = req.body.sample_event_link_to_data;
+    variables.sample_data_itemNamesData.sample_event_link_to_meta_data = req.body.sample_event_link_to_meta_data;
+    variables.sample_data_itemNamesData.sample_event_date = req.body.sample_event_date;
+    variables.sample_data_itemNamesData.sample_event_time = req.body.sample_event_time;
+    variables.sample_data_itemNamesData.sample_event_comments = req.body.sample_event_comments;
+    variables.target_fiducials_itemNamesData.target_event_fid1_validity = (req.body.target_event_fid1_validity ? true:false);
+    variables.target_fiducials_itemNamesData.target_event_fid1_position_name = req.body.target_event_fid1_position_name;
+    variables.target_fiducials_itemNamesData.target_event_fid1_x_position = req.body.target_event_fid1_x_position;
+    variables.target_fiducials_itemNamesData.target_event_fid1_y_position = req.body.target_event_fid1_y_position;
+    variables.target_fiducials_itemNamesData.target_event_fid1_z_position = req.body.target_event_fid1_z_position;
+    variables.target_fiducials_itemNamesData.target_event_fid1_experiment_date = req.body.target_event_fid1_experiment_date;
+    variables.target_fiducials_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    variables.target_fiducials_itemNamesData.target_event_fid2_validity = (req.body.target_event_fid2_validity ? true:false);
+    variables.target_fiducials_itemNamesData.target_event_fid2_position_name = req.body.target_event_fid2_position_name;
+    variables.target_fiducials_itemNamesData.target_event_fid2_x_position = req.body.target_event_fid2_x_position;
+    variables.target_fiducials_itemNamesData.target_event_fid2_y_position = req.body.target_event_fid2_y_position;
+    variables.target_fiducials_itemNamesData.target_event_fid2_z_position = req.body.target_event_fid2_z_position;
+    variables.target_fiducials_itemNamesData.target_event_fid2_experiment_date = req.body.target_event_fid2_experiment_date;
+    variables.target_fiducials_itemNamesData.target_event_fid1_experiment_time = req.body.target_event_fid1_experiment_time;
+    variables.target_fiducials_itemNamesData.target_event_fid3_validity = (req.body.target_event_fid3_validity ? true:false);
+    variables.target_fiducials_itemNamesData.target_event_fid3_position_name = req.body.target_event_fid3_position_name;
+    variables.target_fiducials_itemNamesData.target_event_fid3_x_position = req.body.target_event_fid3_x_position;
+    variables.target_fiducials_itemNamesData.target_event_fid3_y_position = req.body.target_event_fid3_y_position;
+    variables.target_fiducials_itemNamesData.target_event_fid3_z_position = req.body.target_event_fid3_z_position;
+    variables.target_fiducials_itemNamesData.target_event_fid3_experiment_date = req.body.target_event_fid3_experiment_date;
+    variables.target_fiducials_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
+    variables.target_data_itemNamesData.target_x_position = req.body.target_x_position;
+    variables.target_data_itemNamesData.target_y_position = req.body.target_y_position;
+    variables.target_data_itemNamesData.target_z_position = req.body.target_z_position;
+    variables.target_data_itemNamesData.targetinfo_experiment_date = req.body.targetinfo_experiment_date;
+    variables.target_data_itemNamesData.targetinfo_experiment_time = req.body.targetinfo_experiment_time;
+    variables.target_data_itemNamesData.target_comments = req.body.target_comments;
+    variables.target_data_itemNamesData.target_device = req.body.target_device;
+    variables.target_data_itemNamesData.target_event_type = req.body.target_event_type;
+    variables.target_data_itemNamesData.target_link_to_data = req.body.target_link_to_data;
+    variables.target_data_itemNamesData.target_link_to_meta_data = req.body.target_link_to_meta_data;
+    variables.target_data_itemNamesData.target_event_date = req.body.target_event_experiment_date;
+    variables.target_data_itemNamesData.target_event_time = req.body.target_event_experiment_time;
+    variables.target_data_itemNamesData.target_event_comments = req.body.target_event_comments;
+
+    //console.log(req.body.target_event_experiment_date);
+    //console.log(req.body.target_event_experiment_time);
+    
+    var db_query = [];
+        
+        if (!variables.subframe_data_itemNamesData.subframe_validity) {
+            db_query = "UPDATE Subframe_Table SET Validity=0, InvalidSinceTimeStamp='" +  variables.subframe_data_itemNamesData.subframe_invalid_date + 
+            " " + variables.subframe_data_itemNamesData.subframe_invalid_time + ":00' WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + 
+            variables.subframe_data_itemNamesData.subframe_type + "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" +
+            variables.subframe_data_itemNamesData.facility_name + "') AND SerialNumber=" + variables.subframe_data_itemNamesData.serial_number + ";";      
+            
+            connection.query(db_query, function (error, result) {
+                if (error) throw error;
+                console.log(result);
+                res.redirect("/");
+            }); 
+        } else {
+            console.log("inserting the subframe information to the database");
+            var subframe_query = "UPDATE Subframe_Table SET Validity=1, GroupID=(SELECT ID FROM GroupInformation_Table WHERE GroupName='" + 
+            variables.subframe_data_itemNamesData.group_name + "'), CreateTimeStamp='" + variables.subframe_data_itemNamesData.subframe_experiment_date + " " + 
+            variables.subframe_data_itemNamesData.subframe_experiment_time + ":00', Comments='" + variables.subframe_data_itemNamesData.subframe_comments  + "' WHERE " + 
+            "SubframeTypeID=(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_data_itemNamesData.subframe_type + 
+            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_data_itemNamesData.facility_name + "') AND SerialNumber=" +
+            variables.subframe_data_itemNamesData.serial_number + "; ";
+
+            connection.query(subframe_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+
+            console.log("inserting the subframe related fiducial information to the database");
+            var subframe_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.subframe_fiducials_itemNamesData.subframe_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_fiducials_itemNamesData.subframe_fid1_position_name + "'), " + variables.subframe_fiducials_itemNamesData.subframe_fid1_x_position + 
+            ", " + variables.subframe_fiducials_itemNamesData.subframe_fid1_y_position + ", " + variables.subframe_fiducials_itemNamesData.subframe_fid1_z_position + 
+            ", '" + variables.subframe_fiducials_itemNamesData.subframe_fid1_date + " " + variables.subframe_fiducials_itemNamesData.subframe_fid1_time + ":00'); ";
+
+            var subframe_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.subframe_fiducials_itemNamesData.subframe_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_fiducials_itemNamesData.subframe_fid2_position_name + "'), " + variables.subframe_fiducials_itemNamesData.subframe_fid2_x_position + 
+            ", " + variables.subframe_fiducials_itemNamesData.subframe_fid2_y_position + ", " + variables.subframe_fiducials_itemNamesData.subframe_fid2_z_position + 
+            ", '" + variables.subframe_fiducials_itemNamesData.subframe_fid2_date + " " + variables.subframe_fiducials_itemNamesData.subframe_fid2_time + ":00'); ";
+
+            var subframe_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.subframe_fiducials_itemNamesData.subframe_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.subframe_fiducials_itemNamesData.subframe_fid3_position_name + "'), " + variables.subframe_fiducials_itemNamesData.subframe_fid3_x_position + 
+            ", " + variables.subframe_fiducials_itemNamesData.subframe_fid3_y_position + ", " + variables.subframe_fiducials_itemNamesData.subframe_fid3_z_position + 
+            ", '" + variables.subframe_fiducials_itemNamesData.subframe_fid3_date + " " + variables.subframe_fiducials_itemNamesData.subframe_fid3_time + ":00'); ";
+
+            var three_fids_correctly_added = false;
+            subframe_fiducials_query = subframe_event_fiducial1 + subframe_event_fiducial2 + subframe_event_fiducial3;
+            connection.query(subframe_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+    
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the subframe event information to the database");
+            var subframe_event_query = "INSERT INTO SubframeEvent_Table (SubframeID, FiducialSetID, DeviceID, LinkToData, " + 
+            "LinkToMetaData, Comments, CreateTimeStamp, EventTypeID) VALUES ((SELECT ID FROM Subframe_Table WHERE SubframeTypeID=" +
+            "(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_data_itemNamesData.subframe_type + 
+            "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_data_itemNamesData.facility_name + 
+            "') AND SerialNumber=" + variables.subframe_data_itemNamesData.serial_number + "), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + 
+            "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.subframe_data_itemNamesData.subframe_device_select + "'), '" +
+            variables.subframe_data_itemNamesData.subframe_link_to_data + "', '" + variables.subframe_data_itemNamesData.subframe_link_to_meta_data +
+            "', '" + variables.subframe_data_itemNamesData.subframe_events_comments + "', '" + variables.subframe_data_itemNamesData.subframe_event_experiment_date +
+            " " + variables.subframe_data_itemNamesData.subframe_event_experiment_time + ":00', (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.subframe_data_itemNamesData.subframe_event_select + "')); ";
+            
+            connection.query(subframe_event_query, function (error, result) {
+                if (error) throw error;
+            });
+
+            console.log("inserting the ROI related information to the database");
+            var roi_query = "INSERT INTO ROI_Table (SubframeID, ROITypeID, BoundingBoxPositionX, BoundingBoxPositionY, BoundingBoxWidth, BoundingBoxHeight, " +
+             "MaskDirectory, Comments, CreateTimeStamp) VALUES (" + "(SELECT ID FROM Subframe_Table WHERE SubframeTypeID=" +
+             "(SELECT ID FROM SubframeType_Table WHERE TypeName='" + variables.subframe_data_itemNamesData.subframe_type + 
+             "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + variables.subframe_data_itemNamesData.facility_name + 
+             "') AND SerialNumber=" + variables.subframe_data_itemNamesData.serial_number + "), " + "(SELECT ID FROM ROIType_Table WHERE Name='" + variables.roi_data_itemNamesData.roi_type + 
+             "'), " + variables.roi_data_itemNamesData.roi_experiment_x_position + ", " + variables.roi_data_itemNamesData.roi_experiment_y_position + ", " +
+             variables.roi_data_itemNamesData.roi_experiment_width + ", " + variables.roi_data_itemNamesData.roi_experiment_height + ", '" + 
+             variables.roi_data_itemNamesData.roi_mask_load + "' , '" + variables.roi_data_itemNamesData.roi_experiment_comments + "', '" + 
+             variables.roi_data_itemNamesData.roi_experiment_date + " " + variables.roi_data_itemNamesData.roi_experiment_time + ":00'" + ");";
+
+            connection.query(roi_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+            
+            console.log("inserting the ROI related fiducial information to the database");
+            var roi_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.roi_fiducials_itemNamesData.roi_event_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.roi_fiducials_itemNamesData.roi_event_fid1_position_name + "'), " + variables.roi_fiducials_itemNamesData.roi_event_fid1_x_position + 
+            ", " + variables.roi_fiducials_itemNamesData.roi_event_fid1_y_position + ", " + variables.roi_fiducials_itemNamesData.roi_event_fid1_z_position + 
+            ", '" + variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_date + " " + variables.roi_fiducials_itemNamesData.roi_event_fid1_experiment_time + ":00'); ";
+
+            var roi_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.roi_fiducials_itemNamesData.roi_event_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.roi_fiducials_itemNamesData.roi_event_fid2_position_name + "'), " + variables.roi_fiducials_itemNamesData.roi_event_fid2_x_position + 
+            ", " + variables.roi_fiducials_itemNamesData.roi_event_fid2_y_position + ", " + variables.roi_fiducials_itemNamesData.roi_event_fid2_z_position + 
+            ", '" + variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_date + " " + variables.roi_fiducials_itemNamesData.roi_event_fid2_experiment_time + ":00'); ";
+
+            var roi_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.roi_fiducials_itemNamesData.roi_event_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.roi_fiducials_itemNamesData.roi_event_fid3_position_name + "'), " + variables.roi_fiducials_itemNamesData.roi_event_fid3_x_position + 
+            ", " + variables.roi_fiducials_itemNamesData.roi_event_fid3_y_position + ", " + variables.roi_fiducials_itemNamesData.roi_event_fid3_z_position + 
+            ", '" + variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_date + " " + variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_time + ":00'); ";
+
+            three_fids_correctly_added = false;
+            roi_fiducials_query = roi_event_fiducial1 + roi_event_fiducial2 + roi_event_fiducial3;
+            connection.query(roi_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the ROI event information to the database");
+            console.log("*** we assume that the event corresponds to the ID of the last ROI added ***");
+            var roi_event_query = "INSERT INTO ROIEvent_Table (ROIID, EventTypeID, FiducialSetID, DeviceID, " + 
+            "LinkToData, LinkToMetaData, Comments, CreateTimeStamp) VALUES ((SELECT ID FROM ROI_Table ORDER BY ID LIMIT 1), (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.roi_data_itemNamesData.roi_event_type + "'), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.roi_data_itemNamesData.roi_device + "'), '" + variables.roi_data_itemNamesData.roi_event_link_to_data + "', '" + variables.roi_data_itemNamesData.roi_event_link_to_meta_data +
+            "', '" + variables.roi_data_itemNamesData.roi_event_comments + "', '" + variables.roi_data_itemNamesData.roi_event_date +
+            " " + variables.roi_data_itemNamesData.roi_event_time + ":00'); ";
+
+            connection.query(roi_event_query, function (error, result) {
+                if (error) throw error;
+            });
+            
+            console.log("inserting the sample related information to the database");
+            var sample_query = "INSERT INTO Sample_Table (ROIID, BoundingBoxPositionX, BoundingBoxPositionY, BoundingBoxWidth, BoundingBoxHeight, " +
+            "Theta, Phi, Rho, MaskDirectory, Comments, CreateTimeStamp) VALUES (" + "(SELECT ID FROM ROI_Table ORDER BY DBInsertTimeStamp DESC LIMIT 1), " +
+            + variables.sample_data_itemNamesData.sample_experiment_x_position + ", " + variables.sample_data_itemNamesData.sample_experiment_y_position + ", " +
+            variables.sample_data_itemNamesData.sample_experiment_width + ", " + variables.sample_data_itemNamesData.sample_experiment_height + ", " + 
+            variables.sample_data_itemNamesData.sample_experiment_theta + ", " + variables.sample_data_itemNamesData.sample_experiment_phi + ", " +
+            variables.sample_data_itemNamesData.sample_experiment_rho + ", '" + variables.sample_data_itemNamesData.sample_mask_load + "' , '" + 
+            variables.sample_data_itemNamesData.sample_experiment_comments + "', '" + variables.sample_data_itemNamesData.sample_experiment_date + " " + 
+            variables.sample_data_itemNamesData.sample_experiment_time + ":00'" + ");";
+
+            connection.query(sample_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+
+            console.log("inserting the sample related fiducial information to the database");
+            var sample_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.sample_fiducials_itemNamesData.sample_event_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.sample_fiducials_itemNamesData.sample_event_fid1_position_name + "'), " + variables.sample_fiducials_itemNamesData.sample_event_fid1_x_position + 
+            ", " + variables.sample_fiducials_itemNamesData.sample_event_fid1_y_position + ", " + variables.sample_fiducials_itemNamesData.sample_event_fid1_z_position + 
+            ", '" + variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_date + " " + variables.sample_fiducials_itemNamesData.sample_event_fid1_experiment_time + ":00'); ";
+
+            var sample_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.sample_fiducials_itemNamesData.sample_event_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.sample_fiducials_itemNamesData.sample_event_fid2_position_name + "'), " + variables.sample_fiducials_itemNamesData.sample_event_fid2_x_position + 
+            ", " + variables.sample_fiducials_itemNamesData.sample_event_fid2_y_position + ", " + variables.sample_fiducials_itemNamesData.sample_event_fid2_z_position + 
+            ", '" + variables.sample_fiducials_itemNamesData.sample_event_fid2_experiment_date + " " + variables.sample_fiducials_itemNamesData.sample_event_fid2_experiment_time + ":00'); ";
+
+            var sample_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.sample_fiducials_itemNamesData.sample_event_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.sample_fiducials_itemNamesData.sample_event_fid3_position_name + "'), " + variables.sample_fiducials_itemNamesData.sample_event_fid3_x_position + 
+            ", " + variables.sample_fiducials_itemNamesData.sample_event_fid3_y_position + ", " + variables.sample_fiducials_itemNamesData.sample_event_fid3_z_position + 
+            ", '" + variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_date + " " + variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_time + ":00'); ";
+
+            three_fids_correctly_added = false;
+            sample_fiducials_query = sample_event_fiducial1 + sample_event_fiducial2 + sample_event_fiducial3;
+            connection.query(sample_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+                
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the sample event information to the database");
+            console.log("*** we assume that the event corresponds to the ID of the last Sample added ***");
+            var sample_event_query = "INSERT INTO SampleEvent_Table (SampleID, EventTypeID, FiducialSetID, DeviceID, " + 
+            "LinkToData, LinkToMetaData, Comments, CreateTimeStamp) VALUES ((SELECT ID FROM Sample_Table ORDER BY ID LIMIT 1), (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.sample_data_itemNamesData.sample_event_type + "'), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.sample_data_itemNamesData.sample_device + "'), '" + variables.sample_data_itemNamesData.sample_event_link_to_data + "', '" + variables.sample_data_itemNamesData.sample_event_link_to_meta_data +
+            "', '" + variables.sample_data_itemNamesData.sample_event_comments + "', '" + variables.sample_data_itemNamesData.sample_event_date +
+            " " + variables.sample_data_itemNamesData.sample_event_time + ":00'); ";
+
+            connection.query(sample_event_query, function (error, result) {
+                if (error) throw error;
+            });
+
+            console.log("inserting the target related information to the database");
+            var target_query = "INSERT INTO Target_Table (SampleID, X, Y, Z, Comments, CreateTimeStamp) VALUES (" + 
+            "(SELECT ID FROM Sample_Table ORDER BY DBInsertTimeStamp DESC LIMIT 1), " +
+            + variables.target_data_itemNamesData.target_x_position + ", " + variables.target_data_itemNamesData.target_y_position + ", " +
+            variables.target_data_itemNamesData.target_z_position + ", '" + variables.target_data_itemNamesData.target_comments + "', '" + 
+            variables.target_data_itemNamesData.targetinfo_experiment_date + " " + variables.target_data_itemNamesData.targetinfo_experiment_time + ":00'" + ");";
+
+            connection.query(target_query, function (error, result) {
+                if (error) throw error;
+                //console.log(result);
+            });
+
+            console.log("inserting the target related fiducial information to the database");
+            var target_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.target_fiducials_itemNamesData.target_event_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.target_fiducials_itemNamesData.target_event_fid1_position_name + "'), " + variables.target_fiducials_itemNamesData.target_event_fid1_x_position + 
+            ", " + variables.target_fiducials_itemNamesData.target_event_fid1_y_position + ", " + variables.target_fiducials_itemNamesData.target_event_fid1_z_position + 
+            ", '" + variables.target_fiducials_itemNamesData.target_event_fid1_experiment_date + " " + variables.target_fiducials_itemNamesData.target_event_fid1_experiment_time + ":00'); ";
+
+            var target_event_fiducial2 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.target_fiducials_itemNamesData.target_event_fid2_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.target_fiducials_itemNamesData.target_event_fid2_position_name + "'), " + variables.target_fiducials_itemNamesData.target_event_fid2_x_position + 
+            ", " + variables.target_fiducials_itemNamesData.target_event_fid2_y_position + ", " + variables.target_fiducials_itemNamesData.target_event_fid2_z_position + 
+            ", '" + variables.target_fiducials_itemNamesData.target_event_fid2_experiment_date + " " + variables.target_fiducials_itemNamesData.target_event_fid2_experiment_time + ":00'); ";
+
+            var target_event_fiducial3 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
+            variables.target_fiducials_itemNamesData.target_event_fid3_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 
+            variables.target_fiducials_itemNamesData.target_event_fid3_position_name + "'), " + variables.target_fiducials_itemNamesData.target_event_fid3_x_position + 
+            ", " + variables.target_fiducials_itemNamesData.target_event_fid3_y_position + ", " + variables.target_fiducials_itemNamesData.target_event_fid3_z_position + 
+            ", '" + variables.target_fiducials_itemNamesData.target_event_fid3_experiment_date + " " + variables.target_fiducials_itemNamesData.target_event_fid3_experiment_time + ":00'); ";
+
+            three_fids_correctly_added = false;
+            target_fiducials_query = target_event_fiducial1 + target_event_fiducial2 + target_event_fiducial3;
+            connection.query(target_fiducials_query, function (error, result) {
+                            if (error) throw error;
+                            three_fids_correctly_added = true;
+                            //console.log(result);
+            });
+
+            if (three_fids_correctly_added) {
+                var get_last_3_fids_query = "SELECT ID as ids FROM Fiducial_Table ORDER BY DBInsertTimeStamp DESC LIMIT 3";
+                connection.query(get_last_3_fids_query, function (error, result) {
+                    if (error) throw error;
+                    id1 = result[0].ids;
+                    id2 = result[1].ids;
+                    id3 = result[2].ids;
+                    var insert_fid_set_quey = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" + id1 + ", " + id2 + ", " + id3 + "); ";
+                    connection.query(insert_fid_set_quey, function (error, result) {
+                        if (error) throw error;
+                    });
+                });
+            }
+
+            console.log("inserting the target event information to the database");
+            console.log("*** we assume that the event corresponds to the ID of the last target added ***");
+            var target_event_query = "INSERT INTO TargetEvent_Table (TargetID, EventTypeID, FiducialSetID, DeviceID, " + 
+            "LinkToData, LinkToMetaData, Comments, CreateTimeStamp) VALUES ((SELECT ID FROM Target_Table ORDER BY ID LIMIT 1), (SELECT ID FROM EventType_Table WHERE EventType='" +
+            variables.target_data_itemNamesData.target_event_type + "'), (SELECT ID FROM FiducialSet_Table ORDER BY ID DESC LIMIT 1), " + "(SELECT ID FROM DeviceList_Table WHERE VendorName='" +
+            variables.target_data_itemNamesData.target_device + "'), '" + variables.target_data_itemNamesData.target_link_to_data + "', '" + 
+            variables.target_data_itemNamesData.target_link_to_meta_data + "', '" + variables.target_data_itemNamesData.target_event_comments + 
+            "', '" + variables.target_data_itemNamesData.target_event_date + " " + variables.target_data_itemNamesData.target_event_time + ":00'); ";
+            
+            console.log(target_event_query);
+
+            connection.query(target_event_query, function (error, result) {
+                if (error) throw error;
+                console.log("Finished");            
+                res.redirect("/");
+            });
+        }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ******************************************************************************************************************************************************************
+
 
 app.post("/submitXMLFile", function(req, res){
     // Find count of Subframes in DB and Respond with that count
@@ -757,7 +1242,7 @@ app.post("/submitXMLFile", function(req, res){
             xmlParser.parseString(data, function(xml_err, result){
                 if(xml_err)
                     console.log(xml_err);
-
+                // console.log(result['experiment']['subframe'][0]['roi']);
                 res.render("home_xml_data", {xml_data: result['experiment']['subframe'][0]});
                 
                 //console.dir(result.experiment.subframe[0].Comments);

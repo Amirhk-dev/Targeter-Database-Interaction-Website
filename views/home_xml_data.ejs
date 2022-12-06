@@ -289,7 +289,8 @@
                                     <input type="text" name="subframe_id" class="form-control"
                                         placeholder="14 Characters" minlength="14" maxlength="14"
                                         value=<%=xml_data['subframe_info'][0]['subframe_data'][0]['subframe_id'][0] %>
-                                    disabled>
+                                    readonly>
+                                    <!--disabled>-->
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -695,7 +696,7 @@
                                                 <label class="label-text">Time</label>
                                                 <input class="form-control" type="time"
                                                     id="roi_event_fid2_experiment_time"
-                                                    name="roi_event_fid1_experiment_time"
+                                                    name="roi_event_fid2_experiment_time"
                                                     value=<%=roi['roi_fiducials'][0]['fiducial'][1]['entered_time'][0]
                                                     %> >
                                             </div>
@@ -1368,6 +1369,32 @@
                                             </div>
                                         </div>
                                         <div class="row twopanel">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="label-text">Theta Angle (in degree)</label>
+                                                    <input type="number" name="sample_experiment_theta" class="form-control"
+                                                        placeholder="angle w.r.t. XY plane" min="0" max="360"
+                                                        value=<%=sample['sample_data'][0]['theta'][0] %> >
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="label-text">Phi Angle (in degree)</label>
+                                                    <input type="number" name="sample_experiment_phi" class="form-control"
+                                                        placeholder="angle w.r.t. XZ plane" min="0" max="360"
+                                                        value=<%=sample['sample_data'][0]['phi'][0] %> >
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="label-text">Rho Angle (in degree)</label>
+                                                    <input type="number" name="sample_experiment_rho" class="form-control"
+                                                        placeholder="angle w.r.t. YZ plane" min="0" max="360"
+                                                        value=<%=sample['sample_data'][0]['rho'][0] %> >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row twopanel">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="label-text"
@@ -1786,7 +1813,7 @@
                                                                     <label class="label-text">Time</label>
                                                                     <input class="form-control" type="time"
                                                                         id="target_event_fid2_experiment_time"
-                                                                        name="target_event_fid1_experiment_time"
+                                                                        name="target_event_fid2_experiment_time"
                                                                         value=<%=target['target_fiducials'][0]['fiducial'][1]['entered_time'][0]
                                                                         %> >
                                                                 </div>
