@@ -1,27 +1,14 @@
-//jshint esversion:6
 require('dotenv').config();
-const fs = require('fs'),
-xml2js = require('xml2js');
-var xmlParser = new xml2js.Parser();
 const express = require('express');
+const app = express();
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-const session = require('express-session');
-var flash = require('connect-flash');
 const passport = require('passport');
-var LocalStrategy   = require('passport-local').Strategy;
-var bcrypt = require('bcrypt');
 const database_connect = require(__dirname + "/database_connection.js");
-const date = require(__dirname + "/date.js");
-const app = express();
-app.use(flash());
-app.use(session({
-    secret: "Our little secret.",
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+const variables = require('./public/app_variables');
+const functions = require('./public/app_functions');
+
+var LocalStrategy   = require('passport-local').Strategy;
 let mysql = require('mysql'); 
 let connection = mysql.createConnection({
     host	            : process.env.HOST_NAME, 
@@ -30,15 +17,13 @@ let connection = mysql.createConnection({
     password            : process.env.DB_PWD,
     multipleStatements  : true
 });
-const variables = require('./public/app_variables');
-const functions = require('./public/app_functions');
-var xml_data = [];
-var serial_number = [];
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/imgs"));    
-//==========================================================================================================
+//#############################################################################
+// load home page
 app.get("/", function(req, res){
     let query = "SELECT COUNT(*) as count FROM Subframe_Table";
     connection.query(query, function(err, results){
@@ -46,14 +31,139 @@ app.get("/", function(req, res){
             throw err;
         else            
             var count = results[0].count;
-            serial_number = count+1;
+            serial_number = count + 1;
         res.render("home", {data:count}); 
     });
 });
+//#############################################################################
+// create subframe page
+app.post("/createSubframe", function(req, res){ 
+    console.log('\nthe user attempts to create a subframe...')
+    res.render("create_subframe/get_subframe_id");      
+});
+
+// create subframe on the databae
+app.post("/createSubframeOnDatabase", function(req, res){
+    console.log('\nprocessing the request (connecting to the database)...');
+    FacilityName = req.body.facility_name_select;
+    SubframeType = req.body.subframe_type_select;
+
+    var found_serialnumber = "SELECT MAX(SerialNumber)+1 as serialnumber " +
+    "FROM Subframe_Table WHERE SubframeTypeID=(SELECT ID FROM " +
+    "SubframeType_Table WHERE TypeName='" + SubframeType +
+    "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" +
+    FacilityName + "');"
+    
+    var q = found_serialnumber; 
+
+    connection.query(q, function (error, result) {
+        if (error)
+            throw error;
+        
+        serial_number = result[0].serialnumber;
+
+        if (serial_number===null)
+            serial_number = 1;
+
+        var concat_zeros = 6 - serial_number.toString().length;
+        if(concat_zeros>0){
+            serial_number_text = serial_number.toString();
+            for(let i=0; i<concat_zeros; i++){
+                serial_number_text = '0' + serial_number_text;
+            }
+        }
+
+        var getFacilityID_query = "SELECT ID as facilityid FROM Facility_Table " +
+        "WHERE CodeName='" + FacilityName + "'; ";
+        var getSubframeTypeID_query = "SELECT ID as subframetypeid FROM " +
+        "SubframeType_Table WHERE TypeName='" + SubframeType + "'; ";
+        var createSubframeEntry = "INSERT INTO Subframe_Table (FacilityID, " +
+        "SubframeTypeID, SerialNumber, Validity) VALUES ((" + 
+        "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" +
+        FacilityName + "'), (SELECT ID as subframetypeid FROM SubframeType_Table" +
+        " WHERE TypeName='" + SubframeType + "'), " + serial_number + ", 1);"    
+    
+        q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
+        connection.query(q, function (error, result) { 
+            var facilityID = result[0][0].facilityid;
+            var subframeTypeID = result[1][0].subframetypeid;
+            var finalID = FacilityName + SubframeType + serial_number_text;
+            res.render("create_subframe/show_subframe_id",
+                        {
+                            serial_number,
+                            FacilityName,
+                            SubframeType,
+                            finalID}); 
+    });
+})});
+
+app.post("/finishCreatingSubframeEntry", function(req, res){
+    console.log('\nthe user created a subframe...')
+    res.redirect("/");
+});
+//#############################################################################
+// view tables and their content in the database
+app.post("/viewDBTables", function(req, res){
+    console.log('\nthe user attempts to view the tables and their entries...');
+    
+    let q = "SHOW TABLES";
+    connection.query(q, function(error, result){
+        if (error)
+            throw error;
+        
+        all_queries = "";
+        for(let index=0; index < result.length; index++){
+            if (index==0)
+                all_queries += "SHOW TABLES; SELECT * FROM " +
+                                result[index]['Tables_in_euxfeltargets_dev'] + 
+                                "; ";
+            else
+                all_queries += "SELECT * FROM " +
+                                result[index]['Tables_in_euxfeltargets_dev'] +
+                                "; ";
+        }
+
+        connection.query(all_queries, function(error, result){
+            if (error)
+                throw error;
+                
+            res.render("view_tables_in_db/view_tables",
+                            {
+                                result
+                            });
+        });
+    });
+});
+//#############################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.post("/submitDataManually", function(req, res){
     res.render("home_manually_subframe_fiducials");
 });
+
 
 app.post("/submitSubframeFiducialsInfoManually", function(req, res){
     variables.subframe_fiducials_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
@@ -188,56 +298,9 @@ app.post("/removeFromTable", function(req, res){
     });
 });
 
-app.post("/createSubframe", function(req, res){ 
-    res.render("get_subframe_id");      
-});
 
-app.post("/createSubframeOnDatabase", function(req, res){
-    FacilityName = req.body.facility_name_select;
-    SubframeType = req.body.subframe_type_select;
-
-    var found_serialnumber = "SELECT MAX(SerialNumber)+1 as serialnumber FROM Subframe_Table WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table " + 
-    "WHERE TypeName='" + SubframeType + "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" + FacilityName + "');"
-    
-    var q = found_serialnumber; 
-
-    connection.query(q, function (error, result) {
-        if (error) throw error;
-        console.log(result[0].serialnumber);
-        serial_number = result[0].serialnumber;
-
-        if (serial_number===null)
-            serial_number = 1;
-
-        var concat_zeros = 6 - serial_number.toString().length;
-        if(concat_zeros>0){
-            serial_number_text = serial_number.toString();
-            for(let i=0; i<concat_zeros; i++){
-                serial_number_text = '0' + serial_number_text;
-            }
-        }
-
-        var getFacilityID_query = "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'; ";
-        var getSubframeTypeID_query = "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'; ";
-        var createSubframeEntry = "INSERT INTO Subframe_Table (FacilityID, SubframeTypeID, SerialNumber) VALUES ((" + 
-        "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" + FacilityName + "'), (" + 
-        "SELECT ID as subframetypeid FROM SubframeType_Table WHERE TypeName='" + SubframeType + "'), " + serial_number + ");"    
-    
-        q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
-
-        // console.log(q);
-
-        connection.query(q, function (error, result) { 
-            var facilityID = result[0][0].facilityid;
-            var subframeTypeID = result[1][0].subframetypeid;
-            var finalID = FacilityName + SubframeType + serial_number_text;
-            console.log(finalID);
-            res.render("show_subframe_id", {serial_number, FacilityName, SubframeType, finalID}); 
-    });
-})});
-
-app.post("/finishCreatingSubframeEntry", function(req, res){
-    res.redirect("/");
+app.post("/viewDBTables", function(req, res){ 
+    res.render("view_db_tables");      
 });
 
 app.post("/submitSubframeInfoManually", function(req, res){
@@ -992,7 +1055,7 @@ app.post("/submitXMLData", function(req, res){
                 if (error) throw error;
                 //console.log(result);
             });
-            
+
             console.log("inserting the ROI related fiducial information to the database");
             var roi_event_fiducial1 = "INSERT INTO Fiducial_Table (Validity, PositionID, X, Y, Z, CreateTimeStamp) VALUES (" +
             variables.roi_fiducials_itemNamesData.roi_event_fid1_validity + ", (SELECT ID FROM FiducialPosition_Table WHERE PositionName='" + 

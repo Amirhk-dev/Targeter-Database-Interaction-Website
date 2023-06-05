@@ -225,3 +225,7 @@ button:hover{
   text-align: center;
 }
 
+th, td {
+  font-family: "Montserrat-Bold";
+  font-size: 1.0rem;
+}
