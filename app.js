@@ -93,7 +93,8 @@ app.post("/createSubframeOnDatabase", function(req, res){
                             serial_number,
                             FacilityName,
                             SubframeType,
-                            finalID}); 
+                            finalID
+                        }); 
     });
 })});
 
@@ -135,6 +136,68 @@ app.post("/viewDBTables", function(req, res){
     });
 });
 //#############################################################################
+// try chatbot
+app.post("/chatbot", function(req, res){
+    console.log('\nthe user attempts to chat with the system...');
+    console.log('\nrequires billing OpenAI to get free OpenAI-Key...');
+    res.redirect('/');
+});
+//#############################################################################
+// query the database
+app.post("/database_query", function(req, res){
+    console.log('\nthe user attempts to query the database...');
+    let Subframe_IDs = [];
+    res.render("query_db/query_the_database", {
+        Subframe_IDs,
+    });
+});
+
+// get subframe ids
+app.post("/get_subframe_ids", function(req, res){
+    console.log('\nthe user attempts to know the Subframe IDs...');
+    let q = "SELECT * FROM Subframe_Table";
+
+    connection.query(q, function(error, result){
+        if (error)
+            throw error;
+        
+        q = "";
+        serial_numbers = [];
+        for(let i=0; i < result.length; i++){
+            q += "SELECT CodeName FROM Facility_Table WHERE ID=" +
+                    result[i]['FacilityID'] + "; ";
+            q += "SELECT TypeName FROM SubframeType_Table WHERE ID=" +
+                    result[i]['SubframeTypeID'] + "; ";
+            serial_numbers.push(result[i]['SerialNumber']);
+        }
+        number_of_items = result.length;
+
+        connection.query(q, function(error, result){
+            Subframe_IDs = [];
+            for(i=0; i < result.length; i+=2) {
+                subframe_id = "";
+                subframe_id += result[i][0]['CodeName'];
+                subframe_id += result[i+1][0]['TypeName'];
+                
+                let padd_length = 6-serial_numbers[i/2].toString().length;
+                serial_number_str = serial_numbers[i/2].toString();
+                for (let j=0; j < padd_length; j++){
+                    serial_number_str = "0" + serial_number_str;
+                }
+
+                subframe_id += serial_number_str;
+                Subframe_IDs.push(subframe_id);
+            }
+
+            res.render("query_db/query_the_database", {
+                Subframe_IDs,
+            });
+        });
+    });
+});
+
+//#############################################################################
+
 
 
 
@@ -163,7 +226,6 @@ app.post("/viewDBTables", function(req, res){
 app.post("/submitDataManually", function(req, res){
     res.render("home_manually_subframe_fiducials");
 });
-
 
 app.post("/submitSubframeFiducialsInfoManually", function(req, res){
     variables.subframe_fiducials_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);

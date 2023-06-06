@@ -1,5 +1,11 @@
 <%- include("header") -%>
 
+<script type="text/javascript">
+    function showMessage() {
+        alert("The OpenAI requires account billing to be able to chat!");
+    }
+</script>
+
 <div class="container-fluid">
     <div class="row title">
         <div class="row">
@@ -27,7 +33,7 @@
             
             <form method="POST" action='/viewDBTables'>
                 <div class="form-group">
-                    <label class="label-text" id="create_subframe">
+                    <label class="label-text" id="view_db_tables">
                         Do you want to view tables and their entries?
                     </label>
                 </div>
@@ -35,6 +41,48 @@
                     View Tables
                 </button>
             </form>
+
+            <form method="POST" action='/chatbot'>
+                <div class="form-group">
+                    <label class="label-text" id="chatbot">
+                        Do you want to try OpenAI-based Chatbot?
+                    </label>
+                </div>
+                <button class="btn btn-secondary" onclick="showMessage()">
+                    Chat with the Database?<br>
+                    <em>
+                        (Powered by OpenAI)
+                    </em>
+                </button>
+            </form>
+
+            <form method="POST" action='/database_query'>
+                <div class="form-group">
+                    <label class="label-text" id="database_query">
+                        Do you want to query from the database?
+                    </label>
+                </div>
+                <button class="btn btn-secondary">
+                    Query the Database
+                </button>
+            </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <form method="POST" action='/submitDataManually'>
                 <div class="form-group">
@@ -46,7 +94,7 @@
                     Insert the Data Manually
                 </button>
             </form>
-            
+                        
             <form method="POST" action='/submitXMLFile'>
                 <div class="form-group">
                     <label class="label-text" id="xml_insert" for="xmlFileLoad">
