@@ -1,153 +1,73 @@
 <%- include("../header") -%>
 
-<form method="POST" action='/get_subframe_ids'>
-    <div class="row">
-        <button class="btn btn-secondary" data-bs-toggle="collapse"
-            data-bs-target="#get_subframe_ids" aria-expanded="false"
-            aria-controls="collapseExample" style="margin-top: 20px;">
-                Get Subframe IDs
+<!-- create filter -->
+<form id="submit_query" method="POST" action='/apply_query'>
+    <div class="row twopanel" style="margin-top: 5%;">
+        <div class="col-lg-12">
+            <label class="label-text">
+                    Apply Filters to Query the Database
+            </label>
+        </div>
+    </div>
+    <div class="row twopanel">        
+        <div class="col-lg-3">
+            <select class="form-control" id="filters_facility"
+                name="filters_facility">
+                <option selected>Choose Facility</option>
+                <% for(var idx=0; idx < filters[0].length; idx++) { %>
+                    <option>
+                        <%= Object.values(filters[0][idx])[0] %>
+                    </option>
+                <% } %>
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <select class="form-control" id="filters_group"
+                name="filters_group">
+                <option selected>Choose Group</option>
+                <% for(var idx=0; idx < filters[1].length; idx++) { %>
+                    <option><%= Object.values(filters[1][idx])[0] %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <select class="form-control" id="filters_type" name="filters_type">
+                <option selected>Choose Subframe Type</option>
+                <% for(var idx=0; idx < filters[2].length; idx++) { %>
+                    <option><%= Object.values(filters[2][idx])[0] %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <input class="form-control" type="date"
+                id="filters_date" name="filters_date"
+                min="2012-01-01" max="2040-12-31">
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 1%;">
+        <button class="btn btn-secondary" type="submit" form="submit_query">
+            Search
         </button>
     </div>
 </form>
 
-<% if (Subframe_IDs.length != 0) { %>
-    <div class="row">
-        <div class="collapse" id="get_subframe_ids" style="display: block;">
-            <table class="table">
-                <tbody>
-                    <% for(var idx=0; idx < Subframe_IDs.length; idx++) { %>
-                        <tr>
-                            <td>
-                                <%= Subframe_IDs[idx] %>
-                            </td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+<% if (typeof values !== 'undefined') { %>
+    <% if (values['Subframe_IDs'].length != 0) { %>
+        <div class="row">
+            <% for(var idx=0; idx < values['Subframe_IDs'].length; idx++) { %>
+                <form method="POST" id="submit_subframe_query"
+                    action='/get_subframe_information'>
+                    <button class="btn btn-secondary" type="submit"
+                    form="submit_subframe_query"
+                    name="<%= values['Subframe_IDs'][idx] %>">
+                        <%= values['Subframe_IDs'][idx] %>
+                    </button>
+                </form>    
+            <% } %>
         </div>
-    </div>
+    <% } %>
 <% } %>
-
-<form method="POST" action='/get_subframe_information'>
-    <div class="row">
-        <button class="btn btn-secondary" data-bs-toggle="collapse"
-            data-bs-target="#get_subframe_information" aria-expanded="false"
-            aria-controls="collapseExample" style="margin-bottom: 5px;">
-                Get Subframe Information
-        </button>
-        <div class="form-group">
-            <input type="text" name="subframe_id" class="form-control"
-            placeholder="Enter 14 Characters Subframe ID"
-            minlength="14" maxlength="14">
-        </div>
-    </div>
-</form>
-
-<form method="POST" action='/get_roi_information'>
-    <div class="row">
-        <button class="btn btn-secondary" data-bs-toggle="collapse"
-            data-bs-target="#get_roi_information" aria-expanded="false"
-            aria-controls="collapseExample" style="margin-bottom: 5px;">
-                Get Region of Interest (ROI) Information
-        </button>
-    </div> 
-    <div class="row twopanel">
-        <div class="col-lg-6">
-            <input type="text" name="subframe_id" class="form-control"
-            placeholder="Enter 14 Characters Subframe ID"
-            minlength="14" maxlength="14">    
-        </div>
-        <div class="col-lg-6">
-            <input type="text" name="roi_id" class="form-control"
-            placeholder="Enter Region of Interest (ROI) ID">
-        </div>
-    </div>
-</form>
-
-<form method="POST" action='/get_sample_information'>
-    <div class="row">
-        <button class="btn btn-secondary" data-bs-toggle="collapse"
-            data-bs-target="#get_sample_information" aria-expanded="false"
-            aria-controls="collapseExample" style="margin-bottom: 5px;">
-                Get Sample Information
-        </button>
-    </div> 
-    <div class="row twopanel">
-        <div class="col-lg-4">
-            <input type="text" name="subframe_id" class="form-control"
-            placeholder="Enter 14 Characters Subframe ID"
-            minlength="14" maxlength="14">    
-        </div>
-        <div class="col-lg-4">
-            <input type="text" name="roi_id" class="form-control"
-            placeholder="Enter Region of Interest (ROI) ID">
-        </div>
-        <div class="col-lg-4">
-            <input type="text" name="sample_id" class="form-control"
-            placeholder="Enter Sample ID">
-        </div>
-    </div>
-</form>
-
-<form method="POST" action='/get_target_information'>
-    <div class="row">
-        <button class="btn btn-secondary" data-bs-toggle="collapse"
-            data-bs-target="#get_target_information" aria-expanded="false"
-            aria-controls="collapseExample" style="margin-bottom: 5px;">
-                Get Target Information
-        </button>
-    </div> 
-    <div class="row twopanel">
-        <div class="col-lg-3">
-            <input type="text" name="subframe_id" class="form-control"
-            placeholder="Enter 14 Characters Subframe ID"
-            minlength="14" maxlength="14">    
-        </div>
-        <div class="col-lg-3">
-            <input type="text" name="roi_id" class="form-control"
-            placeholder="Enter Region of Interest (ROI) ID">
-        </div>
-        <div class="col-lg-3">
-            <input type="text" name="sample_id" class="form-control"
-            placeholder="Enter Sample ID">
-        </div>
-        <div class="col-lg-3">
-            <input type="text" name="target_id" class="form-control"
-            placeholder="Enter Target ID">
-        </div>
-    </div>
-</form>
-
-<form method="POST" action='/get_target_playlist_information'>
-    <div class="row">
-        <button class="btn btn-secondary" data-bs-toggle="collapse"
-            data-bs-target="#get_target_playlist_information" aria-expanded="false"
-            aria-controls="collapseExample" style="margin-bottom: 5px;">
-                Get Target Playlist Information
-        </button>
-        <div class="form-group">
-            <input type="text" name="subframe_id" class="form-control"
-            placeholder="Enter 14 Characters Subframe ID"
-            minlength="14" maxlength="14">
-        </div>
-    </div>
-</form>
-
-<form method="POST" action='/get_subframe_id_with_target_id'>
-    <div class="row">
-        <button class="btn btn-secondary" data-bs-toggle="collapse"
-            data-bs-target="#get_subframe_id_with_target_id" aria-expanded="false"
-            aria-controls="collapseExample" style="margin-bottom: 5px;">
-                Get Subframe ID Given the Target ID
-        </button>
-        <div class="form-group">
-            <input type="text" name="subframe_id" class="form-control"
-            placeholder="Target ID">
-        </div>
-    </div>
-</form>
-
-
-
 
 <%- include("../footer") -%>

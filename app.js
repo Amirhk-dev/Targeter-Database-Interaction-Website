@@ -102,6 +102,7 @@ app.post("/finishCreatingSubframeEntry", function(req, res){
     console.log('\nthe user created a subframe...')
     res.redirect("/");
 });
+
 //#############################################################################
 // view tables and their content in the database
 app.post("/viewDBTables", function(req, res){
@@ -144,19 +145,215 @@ app.post("/chatbot", function(req, res){
 });
 //#############################################################################
 // query the database
+let filters = "";
 app.post("/database_query", function(req, res){
     console.log('\nthe user attempts to query the database...');
-    let Subframe_IDs = [];
-    res.render("query_db/query_the_database", {
-        Subframe_IDs,
+    
+    let query = "SELECT CodeName FROM Facility_Table; ";
+    query += "SELECT GroupName FROM GroupInformation_Table; ";
+    query += "SELECT TypeName FROM SubframeType_Table; ";
+    query += "SELECT min(CreateTimeStamp) FROM Subframe_Table; ";
+
+    connection.query(query, function(error, result) {
+        if (error)
+            throw error;
+        
+        filters = result;
+        res.render("query_db/query_the_database", {
+            filters
+        });    
     });
 });
+
+// apply the filters to search the database
+app.post("/apply_query", function(req, res){
+    console.log('\nthe user applied some filters to search the database...');
+    
+    let filters_facility = req.body.filters_facility;
+    let filters_group = req.body.filters_group;
+    let filters_type = req.body.filters_type;
+    let filters_date = req.body.filters_date;
+
+    let q = "SELECT * FROM Subframe_Table";
+    let where_flag = false;
+
+    if (filters_facility != 'Choose Facility'){
+        q += " WHERE FacilityID=(SELECT ID FROM Facility_Table WHERE" +
+             " CodeName='" + filters_facility + "') ";
+        where_flag = true;
+    }
+    
+    if (filters_group != 'Choose Group'){
+        if (where_flag)
+            q += " AND GroupID=(SELECT ID FROM GroupInformation_Table" +
+                 " WHERE GroupName='" + filters_group + "') ";
+        else {
+            q += " WHERE GroupID=(SELECT ID FROM GroupInformation_Table" +
+                 " WHERE GroupName='" + filters_group + "') ";
+            where_flag = true;
+        }
+    }
+
+    if (filters_type != 'Choose Subframe Type') {
+        if (where_flag)
+            q += " AND SubframeTypeID=(SELECT ID FROM SubframeType_Table" +
+                 " WHERE TypeName='" + filters_type + "') ";
+        else {
+            q += " WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table" +
+            " WHERE TypeName='" + filters_type + "') ";
+            where_flag = true;
+        }
+    }
+
+    if (filters_date != '') {
+        if (where_flag)
+            q += " AND CreateTimeStamp >=" + filters_date;
+        else
+            q += " WHERE CreateTimeStamp >=" + filters_date;
+    }
+
+    // console.log(q);
+
+    connection.query(q , function(error, result){
+        if (error)
+            throw error;
+
+        q = "";
+
+        if (result.length == 0){
+            res.render("query_db/query_the_database", {
+                filters,
+            });
+        }
+
+        serial_numbers = [];
+        for(let i=0; i < result.length; i++){
+            q += "SELECT CodeName FROM Facility_Table WHERE ID=" +
+                    result[i]['FacilityID'] + "; ";
+            q += "SELECT TypeName FROM SubframeType_Table WHERE ID=" +
+                    result[i]['SubframeTypeID'] + "; ";
+            serial_numbers.push(result[i]['SerialNumber']);
+        }
+        number_of_items = result.length;
+
+        connection.query(q, function(error, result){
+            if (error)
+                throw error;
+                
+            Subframe_IDs = [];
+            for(i=0; i < result.length; i+=2) {
+                subframe_id = "";
+                subframe_id += result[i][0]['CodeName'];
+                subframe_id += result[i+1][0]['TypeName'];
+                    
+                let padd_length = 6-serial_numbers[i/2].toString().length;
+                serial_number_str = serial_numbers[i/2].toString();
+                for (let j=0; j < padd_length; j++){
+                    serial_number_str = "0" + serial_number_str;
+                }
+    
+                subframe_id += serial_number_str;
+                Subframe_IDs.push(subframe_id);
+            }
+    
+            res.render("query_db/query_the_database", {
+                filters,
+                values :
+                {
+                    Subframe_IDs
+                }
+            });
+        });       
+    });
+});
+
+// get subframe information
+app.post("/get_subframe_information", function(req, res){
+    let subframe_id = Object.keys(req.body)[0];
+    
+    let facility_name = subframe_id.substring(0,5);
+    let subframe_type = subframe_id.substring(5,8);
+    let serial_number = Number(subframe_id.substring(8,));
+    
+    let query = "SELECT * FROM Subframe_Table WHERE " +
+                "(SubframeTypeID=(SELECT ID FROM " + 
+                "SubframeType_Table WHERE TypeName='" + subframe_type +
+                "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE " + 
+                "CodeName='" + facility_name + "') AND " +
+                "SerialNumber=" + serial_number.toString() + "); ";
+
+    connection.query(query, function(error, subframe_information) {
+        if (error)
+            throw error;
+
+        query = "SELECT GroupName FROM GroupInformation_Table WHERE" +
+                " ID=" + subframe_information[0]['GroupID'] + "; ";
+
+        query += "SELECT TypeName FROM SubframeType_Table WHERE" +
+                 " ID=" +  subframe_information[0]['SubframeTypeID'] + "; ";
+
+        query += "SELECT CodeName FROM Facility_Table WHERE " +
+                "ID=" + subframe_information[0]['FacilityID'] + "; ";
+
+        connection.query(query, function(error, result_1){
+            if (error)
+                throw error;
+
+            subframe_information[0]['GroupID'] = result_1[0][0]['GroupName'];
+            subframe_information[0]['SubframeTypeID'] = result_1[1][0]['TypeName'];
+            subframe_information[0]['FacilityID'] = result_1[2][0]['CodeName'];
+            
+            console.log(Object.keys(subframe_information[0]).length);
+
+            res.render('query_db/query_the_database', {
+                subframe_information,
+                subframe_id
+            });
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // get subframe ids
 app.post("/get_subframe_ids", function(req, res){
     console.log('\nthe user attempts to know the Subframe IDs...');
     let q = "SELECT * FROM Subframe_Table";
 
+    let subframe_information = [];
     connection.query(q, function(error, result){
         if (error)
             throw error;
@@ -173,6 +370,9 @@ app.post("/get_subframe_ids", function(req, res){
         number_of_items = result.length;
 
         connection.query(q, function(error, result){
+            if (error)
+                throw error;
+            
             Subframe_IDs = [];
             for(i=0; i < result.length; i+=2) {
                 subframe_id = "";
@@ -191,14 +391,34 @@ app.post("/get_subframe_ids", function(req, res){
 
             res.render("query_db/query_the_database", {
                 Subframe_IDs,
+                subframe_information
             });
         });
     });
 });
 
+
+
+
+
+
+
+// get Region of Interest (ROI) information
+
+
+
+// get sample information
+
+
+// get target information
+
+// get target playlist information
+
+
+// get subframe information given the target ID
+
+
 //#############################################################################
-
-
 
 
 
