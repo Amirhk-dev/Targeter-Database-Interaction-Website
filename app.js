@@ -146,6 +146,8 @@ app.post("/chatbot", function(req, res){
 //#############################################################################
 // query the database
 let filters = "";
+let all_subframe_information = {'subframe':'', 'fiducials':'',
+                                'events':'', 'rois':'', 'targetplaylist':''};
 app.post("/database_query", function(req, res){
     console.log('\nthe user attempts to query the database...');
     
@@ -168,22 +170,26 @@ app.post("/database_query", function(req, res){
 // apply the filters to search the database
 app.post("/apply_query", function(req, res){
     console.log('\nthe user applied some filters to search the database...');
-    
+    let loaded_subframe_filters = {};
     let filters_facility = req.body.filters_facility;
     let filters_group = req.body.filters_group;
-    let filters_type = req.body.filters_type;
-    let filters_date = req.body.filters_date;
-
+    let filters_subframe_type = req.body.filters_subframe_type;
+    let filters_start_date = req.body.filters_start_date;
+    let filters_end_date = req.body.filters_end_date;
+    
     let q = "SELECT * FROM Subframe_Table";
     let where_flag = false;
 
-    if (filters_facility != 'Choose Facility'){
+    if (filters_facility != 'Not Specified'){
+        loaded_subframe_filters["filters_facility"] = filters_facility;
         q += " WHERE FacilityID=(SELECT ID FROM Facility_Table WHERE" +
              " CodeName='" + filters_facility + "') ";
         where_flag = true;
     }
     
-    if (filters_group != 'Choose Group'){
+    if (filters_group != 'Not Specified'){
+        loaded_subframe_filters["filters_group"] = filters_group;
+
         if (where_flag)
             q += " AND GroupID=(SELECT ID FROM GroupInformation_Table" +
                  " WHERE GroupName='" + filters_group + "') ";
@@ -194,36 +200,57 @@ app.post("/apply_query", function(req, res){
         }
     }
 
-    if (filters_type != 'Choose Subframe Type') {
+    if (filters_subframe_type != 'Not Specified') {
+        loaded_subframe_filters["filters_subframe_type"] = filters_subframe_type;
+
         if (where_flag)
             q += " AND SubframeTypeID=(SELECT ID FROM SubframeType_Table" +
-                 " WHERE TypeName='" + filters_type + "') ";
+                 " WHERE TypeName='" + filters_subframe_type + "') ";
         else {
             q += " WHERE SubframeTypeID=(SELECT ID FROM SubframeType_Table" +
-            " WHERE TypeName='" + filters_type + "') ";
+            " WHERE TypeName='" + filters_subframe_type + "') ";
             where_flag = true;
         }
     }
 
-    if (filters_date != '') {
+    if (filters_start_date != '') {
+        loaded_subframe_filters["filters_start_date"] = filters_start_date;
+
         if (where_flag)
-            q += " AND CreateTimeStamp >=" + filters_date;
-        else
-            q += " WHERE CreateTimeStamp >=" + filters_date;
+            q += " AND CreateTimeStamp >='" + filters_start_date + "'";
+        else {
+            q += " WHERE CreateTimeStamp >='" + filters_start_date + "'";
+            where_flag = true;
+        }
     }
 
-    // console.log(q);
+    if (filters_end_date != '') {
+        loaded_subframe_filters["filters_end_date"] = filters_end_date;
+
+        if (where_flag)
+            q += " AND CreateTimeStamp <='" + filters_end_date + "'";
+        else {
+            q += " WHERE CreateTimeStamp <='" + filters_end_date + "'";
+            where_flag = true;
+        }
+    }
 
     connection.query(q , function(error, result){
+        
         if (error)
             throw error;
 
-        q = "";
+        q="";
 
         if (result.length == 0){
+            console.log(Object.keys(loaded_subframe_filters));
+            console.log(Object.values(loaded_subframe_filters));
+
             res.render("query_db/query_the_database", {
                 filters,
+                loaded_subframe_filters,
             });
+            return;
         }
 
         serial_numbers = [];
@@ -261,16 +288,17 @@ app.post("/apply_query", function(req, res){
                 values :
                 {
                     Subframe_IDs
-                }
+                },
+                loaded_subframe_filters,
             });
         });       
     });
 });
 
 // get subframe information
-app.post("/get_subframe_information", function(req, res){
+app.post("/show_subframe_information", function(req, res){
     let subframe_id = Object.keys(req.body)[0];
-    
+        
     let facility_name = subframe_id.substring(0,5);
     let subframe_type = subframe_id.substring(5,8);
     let serial_number = Number(subframe_id.substring(8,));
@@ -286,8 +314,12 @@ app.post("/get_subframe_information", function(req, res){
         if (error)
             throw error;
 
-        query = "SELECT GroupName FROM GroupInformation_Table WHERE" +
-                " ID=" + subframe_information[0]['GroupID'] + "; ";
+        if (subframe_information[0]['GroupID'] != null){
+            query = "SELECT GroupName FROM GroupInformation_Table WHERE" +
+                    " ID=" + subframe_information[0]['GroupID'] + "; ";
+        } else {
+            query = "";
+        }
 
         query += "SELECT TypeName FROM SubframeType_Table WHERE" +
                  " ID=" +  subframe_information[0]['SubframeTypeID'] + "; ";
@@ -299,15 +331,100 @@ app.post("/get_subframe_information", function(req, res){
             if (error)
                 throw error;
 
-            subframe_information[0]['GroupID'] = result_1[0][0]['GroupName'];
-            subframe_information[0]['SubframeTypeID'] = result_1[1][0]['TypeName'];
-            subframe_information[0]['FacilityID'] = result_1[2][0]['CodeName'];
-            
-            console.log(Object.keys(subframe_information[0]).length);
+            if (subframe_information[0]['GroupID'] != null){
+                subframe_information[0]['GroupID'] = result_1[0][0]['GroupName'];
+                subframe_information[0]['SubframeTypeID'] = result_1[1][0]['TypeName'];
+                subframe_information[0]['FacilityID'] = result_1[2][0]['CodeName'];    
+            }
+            else {
+                subframe_information[0]['SubframeTypeID'] = result_1[0][0]['TypeName'];
+                subframe_information[0]['FacilityID'] = result_1[1][0]['CodeName'];
+            }
 
-            res.render('query_db/query_the_database', {
-                subframe_information,
-                subframe_id
+            all_subframe_information['subframe'] = subframe_information[0];
+            
+            query = "SELECT * FROM SubframeEvent_Table WHERE SubframeID=" +
+                    subframe_information[0]['ID'] + "; ";
+
+            query += "SELECT * FROM TargetLists_Table WHERE SubframeID=" +
+                    subframe_information[0]['ID'] + "; ";
+
+            query += "SELECT * FROM ROI_Table WHERE SubframeID=" +
+                    subframe_information[0]['ID'] + "; ";
+
+            connection.query(query, function(error, result_2) {
+                if (error)
+                    throw error;
+                
+                //console.log(result_2[0][0]['FiducialSetID']);
+                // console.log(result_2);
+                
+                //let all_subframe_information = {
+                //    'subframe':'',
+                //    'fiducials':'',
+                //    'events':'',
+                //    'rois':'',
+                //    'targetplaylist':''};
+
+                all_subframe_information['events'] = result_2[0];
+                all_subframe_information['targetplaylist'] = result_2[1];
+                all_subframe_information['rois'] = result_2[2];
+
+                query = "SELECT * FROM FiducialSet_Table WHERE ID=" +
+                        result_2[0][0]['FiducialSetID'] + "; ";
+                
+                query += "SELECT * FROM DeviceList_Table WHERE ID=" +
+                        result_2[0][0]['DeviceID'] + "; ";
+                 
+                query += "SELECT * FROM EventType_Table WHERE ID=" +
+                        result_2[0][0]['EventTypeID'] + "; ";
+                 
+                query += "SELECT * FROM TargetListItems_Table WHERE TargetListID=" +
+                        result_2[1][0]['ID'] + "; ";
+                 
+                query += "SELECT * FROM ROIType_Table; ";
+                query += "SELECT * FROM DeviceType_Table; ";
+                
+                connection.query(query, function(error, result_3) {
+                    if (error)
+                        throw error;
+
+                    console.log(all_subframe_information['events'].length);
+                    for(let idx=0; idx < all_subframe_information['events'].length; idx++){
+                        
+                    }
+                    
+                    
+                    
+                    //console.log(result_3);
+                    
+                    //for(let idx=0; idx <= )
+
+
+
+                    query = "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_3[0][0]['FiducialID1'] + "; ";
+
+                    query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_3[0][0]['FiducialID2'] + "; ";
+
+                    query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_3[0][0]['FiducialID3'] + "; ";
+
+                    //query += 
+
+
+
+                    //res.render('query_db/show_subframe_information', {
+                    //    all_subframe_information,
+                    //    subframe_id
+                    //});
+
+
+
+
+
+                });
             });
         });
     });

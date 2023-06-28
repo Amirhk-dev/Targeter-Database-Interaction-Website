@@ -1,0 +1,36 @@
+<%- include("../header") -%>
+
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+            Information for the Subframe <%= subframe_id %>
+        </h1>
+    </div>
+</div>
+
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <table class="table">
+            <tbody>
+                <% for(var idx=0; idx < Object.keys(all_subframe_information['subframe']).length; idx++) { %>
+                    <tr>
+                        <th width="50%">
+                            <%= Object.keys(all_subframe_information['subframe'])[idx] %>
+                        </th>
+                        <% if (Object.values(all_subframe_information['subframe'])[idx]) { %>
+                        <td width="50%">
+                            <%= Object.values(all_subframe_information['subframe'])[idx] %>
+                        </td>
+                        <% } else{ %>
+                        <td width="50%">
+                            -
+                        </td>
+                        <% } %>    
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include("../footer") -%>

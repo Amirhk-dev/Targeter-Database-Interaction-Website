@@ -2,18 +2,21 @@
 
 <!-- create filter -->
 <form id="submit_query" method="POST" action='/apply_query'>
-    <div class="row twopanel" style="margin-top: 5%;">
+    <div class="row twopanel">
         <div class="col-lg-12">
-            <label class="label-text">
-                    Apply Filters to Query the Database
-            </label>
+            <h1 class="site_msg" style="text-align: center;">
+                Apply Filters to Query the Database (for Subframes)
+            </h1>
         </div>
     </div>
     <div class="row twopanel">        
-        <div class="col-lg-3">
+        <div class="col-lg-4">
+            <label class="label-text">
+                Choose the Facility
+            </label>
             <select class="form-control" id="filters_facility"
                 name="filters_facility">
-                <option selected>Choose Facility</option>
+                <option selected>Not Specified</option>
                 <% for(var idx=0; idx < filters[0].length; idx++) { %>
                     <option>
                         <%= Object.values(filters[0][idx])[0] %>
@@ -21,31 +24,50 @@
                 <% } %>
             </select>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
+            <label class="label-text">
+                Choose the Group
+            </label>
             <select class="form-control" id="filters_group"
                 name="filters_group">
-                <option selected>Choose Group</option>
+                <option selected>Not Specified</option>
                 <% for(var idx=0; idx < filters[1].length; idx++) { %>
                     <option><%= Object.values(filters[1][idx])[0] %></option>
                 <% } %>
             </select>
         </div>
-        <div class="col-lg-3">
-            <select class="form-control" id="filters_type" name="filters_type">
-                <option selected>Choose Subframe Type</option>
+        <div class="col-lg-4">
+            <label class="label-text">
+                Choose Subframe Type
+            </label>
+            <select class="form-control" id="filters_subframe_type" name="filters_subframe_type">
+                <option selected>Not Specified</option>
                 <% for(var idx=0; idx < filters[2].length; idx++) { %>
                     <option><%= Object.values(filters[2][idx])[0] %></option>
                 <% } %>
             </select>
         </div>
-        <div class="col-lg-3">
+    </div>
+
+    <div class="row twopanel">        
+        <div class="col-lg-6">
+            <label class="label-text">Experiments From:</label>
             <div class="form-group">
-                <input class="form-control" type="date"
-                id="filters_date" name="filters_date"
-                min="2012-01-01" max="2040-12-31">
+            <input class="form-control" type="date"
+            id="filters_start_date" name="filters_start_date"
+            min="2012-01-01" max="2040-12-31">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <label class="label-text">Experiments Until:</label>
+            <div class="form-group">
+            <input class="form-control" type="date"
+            id="filters_end_date" name="filters_end_date"
+            min="2012-01-01" max="2040-12-31">
             </div>
         </div>
     </div>
+
     <div class="row" style="margin-top: 1%;">
         <button class="btn btn-secondary" type="submit" form="submit_query">
             Search
@@ -55,19 +77,40 @@
 
 <% if (typeof values !== 'undefined') { %>
     <% if (values['Subframe_IDs'].length != 0) { %>
-        <div class="row">
+        <div class="row twopanel">
             <% for(var idx=0; idx < values['Subframe_IDs'].length; idx++) { %>
-                <form method="POST" id="submit_subframe_query"
-                    action='/get_subframe_information'>
-                    <button class="btn btn-secondary" type="submit"
-                    form="submit_subframe_query"
-                    name="<%= values['Subframe_IDs'][idx] %>">
-                        <%= values['Subframe_IDs'][idx] %>
-                    </button>
-                </form>    
+                <div class="col-lg-3">
+                    <form method="POST" id="submit_subframe_query"
+                        action='/show_subframe_information'>
+                        <button class="btn btn-secondary" type="submit"
+                        form="submit_subframe_query"
+                        name="<%= values['Subframe_IDs'][idx] %>">
+                            <%= values['Subframe_IDs'][idx] %>
+                        </button>
+                    </form>
+                </div>
             <% } %>
         </div>
     <% } %>
+<% } %>
+
+<% if (typeof loaded_subframe_filters !== 'undefined') { %>
+    <script>
+        if ('<%= loaded_subframe_filters.filters_facility %>')
+            document.getElementById("filters_facility").value = '<%= loaded_subframe_filters.filters_facility %>';
+
+        if ('<%= loaded_subframe_filters.filters_group %>')
+            document.getElementById("filters_group").value = '<%= loaded_subframe_filters.filters_group %>';
+
+        if ('<%= loaded_subframe_filters.filters_subframe_type %>')
+            document.getElementById("filters_subframe_type").value = '<%= loaded_subframe_filters.filters_subframe_type %>';
+
+        if ('<%= loaded_subframe_filters.filters_start_date %>')
+            document.getElementById("filters_start_date").value = '<%= loaded_subframe_filters.filters_start_date %>';
+
+        if ('<%= loaded_subframe_filters.filters_end_date %>')
+            document.getElementById("filters_end_date").value = '<%= loaded_subframe_filters.filters_end_date %>';
+    </script>
 <% } %>
 
 <%- include("../footer") -%>
