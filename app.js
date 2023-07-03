@@ -342,7 +342,12 @@ app.post("/show_subframe_information", function(req, res){
             }
 
             all_subframe_information['subframe'] = subframe_information[0];
-            
+
+            if (all_subframe_information['subframe']['Validity'])
+                all_subframe_information['subframe']['Validity'] = 'is valid'
+            else
+                all_subframe_information['subframe']['Validity'] = 'is not valid!'
+        
             query = "SELECT * FROM SubframeEvent_Table WHERE SubframeID=" +
                     subframe_information[0]['ID'] + "; ";
 
@@ -389,18 +394,14 @@ app.post("/show_subframe_information", function(req, res){
                     if (error)
                         throw error;
 
-                    console.log(all_subframe_information['events'].length);
-                    for(let idx=0; idx < all_subframe_information['events'].length; idx++){
-                        
-                    }
-                    
-                    
-                    
+                    // console.log(all_subframe_information['events'].length);
+                    // console.log(all_subframe_information);
                     //console.log(result_3);
                     
+                    //for(let idx=0; idx < all_subframe_information['events'].length; idx++){
+                    //    //all_subframe_information['events'][idx]['DeviceID'] = result_3[]
+                    //}                    
                     //for(let idx=0; idx <= )
-
-
 
                     query = "SELECT * FROM Fiducial_Table WHERE ID=" +
                             result_3[0][0]['FiducialID1'] + "; ";
@@ -410,20 +411,55 @@ app.post("/show_subframe_information", function(req, res){
 
                     query += "SELECT * FROM Fiducial_Table WHERE ID=" +
                             result_3[0][0]['FiducialID3'] + "; ";
+                    
+                    query += "SELECT * FROM FiducialPosition_Table; ";
 
-                    //query += 
+                    connection.query(query, function(error, result_4){
+                        if (error)
+                            throw error;
+                                                
+                        all_subframe_information['fiducials'] = result_4;
+
+                        for(let idx=0; idx < result_4[3].length; idx++){
+                            if (all_subframe_information['fiducials'][0][0]['PositionID']==result_4[3][idx]['ID'])
+                                all_subframe_information['fiducials'][0][0]['PositionID'] = result_4[3][idx]['PositionName']
+
+                            if (all_subframe_information['fiducials'][1][0]['PositionID']==result_4[3][idx]['ID'])
+                                all_subframe_information['fiducials'][1][0]['PositionID'] = result_4[3][idx]['PositionName']
+
+                            if (all_subframe_information['fiducials'][2][0]['PositionID']==result_4[3][idx]['ID'])
+                                all_subframe_information['fiducials'][2][0]['PositionID'] = result_4[3][idx]['PositionName']
+                        }
 
 
+                        if (all_subframe_information['fiducials'][0][0]['Validity'])
+                            all_subframe_information['fiducials'][0][0]['Validity'] = 'is valid';
+                        else
+                            all_subframe_information['fiducials'][0][0]['Validity'] = 'is not valid';
+                        
+                        if (all_subframe_information['fiducials'][1][0]['Validity'])
+                            all_subframe_information['fiducials'][1][0]['Validity'] = 'is valid';
+                        else
+                            all_subframe_information['fiducials'][1][0]['Validity'] = 'is not valid';
 
-                    //res.render('query_db/show_subframe_information', {
-                    //    all_subframe_information,
-                    //    subframe_id
-                    //});
+                        if (all_subframe_information['fiducials'][2][0]['Validity'])
+                            all_subframe_information['fiducials'][2][0]['Validity'] = 'is valid';
+                        else
+                            all_subframe_information['fiducials'][2][0]['Validity'] = 'is not valid';
 
+                        // console.log(result_4[3].length);
+                        console.log(all_subframe_information['fiducials']);
+                        
+                        
+                        //console.log(Object.keys(all_subframe_information['fiducials'][0][0])[1]);
+                        // console.log(all_subframe_information['rois'].length);
+                        //console.log(Object.keys(all_subframe_information['events'][0]));
 
-
-
-
+                        res.render('query_db/show_subframe_information', {
+                            all_subframe_information,
+                            subframe_id
+                        });
+                    });
                 });
             });
         });
