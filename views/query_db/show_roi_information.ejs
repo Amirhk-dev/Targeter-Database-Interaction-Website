@@ -1,0 +1,180 @@
+<%- include("../header") -%>
+
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+            Information for the Subframe <%= subframe_id %> and ROI <%= roi_id %>
+        </h1>
+    </div>
+</div>
+
+<div class="row twopanel">
+    <div class="row">
+        <table class="table">
+            <tbody>
+                <% for(var idx=0; idx < Object.keys(selected_roi).length; idx++) { %>
+                    <tr>
+                        <th width="50%">
+                            <%= Object.keys(selected_roi)[idx] %>
+                        </th>
+                        <% if (Object.values(selected_roi)[idx]) { %>
+                        <td width="50%">
+                            <%= Object.values(selected_roi)[idx] %>
+                        </td>
+                        <% } else{ %>
+                        <td width="50%">
+                            -
+                        </td>
+                        <% } %>    
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<% if (typeof all_subframe_information['roi_fiducials'] !== 'undefined') { %>
+    <% if (all_subframe_information['roi_fiducials'].length > 0) { %>
+        <div class="row twopanel">
+            <div class="col-lg-12">
+                <h1 class="site_msg" style="text-align: center;">
+                    Fiducials
+                </h1>
+            </div>
+        </div>
+
+        <div class="row twopanel">
+            <% for(var idx=0; idx < 3; idx++) { %>
+                <div class="row">
+                    <button class="btn btn-secondary" data-bs-toggle="collapse"
+                    data-bs-target="#collapse_fiducial<%= idx %>" aria-expanded="false"
+                    aria-controls="collapseExample" style="margin-top: 20px;">
+                        Fiducial <%= idx+1 %>
+                    </button>
+                </div>
+
+                <div class="collapse" id="collapse_fiducial<%= idx %>">
+                    <div class="row">
+                        <table class="table">
+                            <tbody>
+                                <% for(var i=0; i < Object.keys(all_subframe_information['roi_fiducials'][idx][0]).length; i++) { %>
+                                    <tr>
+                                        <th width="50%">
+                                            <%= Object.keys(all_subframe_information['roi_fiducials'][idx][0])[i] %>
+                                        </th>
+                                        <% if (Object.keys(all_subframe_information['roi_fiducials'][idx][0])[i]) { %>
+                                        <td width="50%">
+                                            <%= Object.values(all_subframe_information['roi_fiducials'][idx][0])[i] %>
+                                        </td>
+                                        <% } else{ %>
+                                        <td width="50%">
+                                            -
+                                        </td>
+                                        <% } %>    
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
+<% } %>
+
+<% if (typeof all_subframe_information['roi_events'] !== 'undefined') { %>
+    <% if (all_subframe_information['roi_events'].length > 0) { %>
+        <div class="row twopanel">
+            <div class="col-lg-12">
+                <h1 class="site_msg" style="text-align: center;">
+                    Events
+                </h1>
+            </div>
+        </div>
+
+        <div class="row twopanel">
+            <% for(var idx=0; idx < all_subframe_information['roi_events'].length; idx++) { %>
+                <div class="row">
+                    <button class="btn btn-secondary" data-bs-toggle="collapse"
+                        data-bs-target="#collapse_event<%= idx %>" aria-expanded="false"
+                        aria-controls="collapseExample" style="margin-top: 20px;">
+                            Event <%= idx+1 %>
+                    </button>
+                </div>
+
+                <div class="collapse" id="collapse_event<%= idx %>">
+                    <div class="row">
+                        <table class="table">
+                            <tbody>
+                                <% for(var i=0; i < Object.keys(all_subframe_information['roi_events'][idx]).length; i++) { %>
+                                    <tr>
+                                        <th width="50%">
+                                            <%= Object.keys(all_subframe_information['roi_events'][idx])[i] %>
+                                        </th>
+                                        <% if (Object.keys(all_subframe_information['roi_events'][idx])[i]) { %>
+                                        <td width="50%">
+                                            <%= Object.values(all_subframe_information['roi_events'][idx])[i] %>
+                                        </td>
+                                        <% } else{ %>
+                                        <td width="50%">
+                                            -
+                                        </td>
+                                        <% } %>    
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
+<% } %>
+
+<% if (typeof all_subframe_information['samples'] !== 'undefined') { %>
+    <% if (all_subframe_information['samples'].length != 0) { %>
+        <div class="row twopanel">
+            <div class="col-lg-12">
+                <h1 class="site_msg" style="text-align: center;">
+                    Samples
+                </h1>
+            </div>
+        </div>
+
+        <% if (all_subframe_information['samples'].length < 5) { %>
+            <div class="row twopanel">
+                <% for(var idx=0; idx < all_subframe_information['samples'].length; idx++) { %>
+                    <div class="row twopanel">
+                        <form method="POST" id="submit_sample_query"
+                            action='/show_sample_information'>
+                            <div class="row">
+                                <button class="btn btn-secondary" type="submit"
+                                form="submit_sample_query"
+                                name="sample_<%=idx %>">
+                                    Sample <%=idx+1 %> %>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <div class="row twopanel">
+                <% for(var idx=0; idx < all_subframe_information['samples'].length; idx++) { %>
+                    <div class="col-lg-3">
+                        <form method="POST" id="submit_sample_query"
+                            action='/show_sample_information'>
+                            <button class="btn btn-secondary" type="submit"
+                            form="submit_sample_query"
+                            name="sample_<%=idx %>">
+                                Sample <%=idx+1 %> %>
+                            </button>
+                        </form>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+    <% } %>
+<% } %>
+
+<%- include("../footer") -%>

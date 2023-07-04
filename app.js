@@ -296,8 +296,9 @@ app.post("/apply_query", function(req, res){
 });
 
 // get subframe information
+var subframe_id = "";
 app.post("/show_subframe_information", function(req, res){
-    let subframe_id = Object.keys(req.body)[0];
+    subframe_id = Object.keys(req.body)[0];
         
     let facility_name = subframe_id.substring(0,5);
     let subframe_type = subframe_id.substring(5,8);
@@ -357,24 +358,23 @@ app.post("/show_subframe_information", function(req, res){
             query += "SELECT * FROM ROI_Table WHERE SubframeID=" +
                     subframe_information[0]['ID'] + "; ";
 
+            query += "SELECT * FROM ROIType_Table; ";
+
             connection.query(query, function(error, result_2) {
                 if (error)
                     throw error;
-                
-                //console.log(result_2[0][0]['FiducialSetID']);
-                // console.log(result_2);
-                
-                //let all_subframe_information = {
-                //    'subframe':'',
-                //    'fiducials':'',
-                //    'events':'',
-                //    'rois':'',
-                //    'targetplaylist':''};
 
                 all_subframe_information['events'] = result_2[0];
                 all_subframe_information['targetplaylist'] = result_2[1];
                 all_subframe_information['rois'] = result_2[2];
 
+                for(let iter=0; iter < all_subframe_information['rois'].length; iter++){
+                    for(let idx=0; idx < result_2[3].length; idx++){
+                        if (all_subframe_information['rois'][iter]['ROITypeID'] == result_2[3][idx]['ID'])
+                            all_subframe_information['rois'][iter]['ROITypeID'] = result_2[3][idx]['Name'];
+                    }
+                }
+                
                 query = "SELECT * FROM FiducialSet_Table WHERE ID=" +
                         result_2[0][0]['FiducialSetID'] + "; ";
                 
@@ -389,19 +389,13 @@ app.post("/show_subframe_information", function(req, res){
                  
                 query += "SELECT * FROM ROIType_Table; ";
                 query += "SELECT * FROM DeviceType_Table; ";
+
+                query += "SELECT * FROM TargetListItems_Table WHERE TargetListID=" +
+                        all_subframe_information['targetplaylist'][0]['ID'] + "; ";
                 
                 connection.query(query, function(error, result_3) {
                     if (error)
                         throw error;
-
-                    // console.log(all_subframe_information['events'].length);
-                    // console.log(all_subframe_information);
-                    //console.log(result_3);
-                    
-                    //for(let idx=0; idx < all_subframe_information['events'].length; idx++){
-                    //    //all_subframe_information['events'][idx]['DeviceID'] = result_3[]
-                    //}                    
-                    //for(let idx=0; idx <= )
 
                     query = "SELECT * FROM Fiducial_Table WHERE ID=" +
                             result_3[0][0]['FiducialID1'] + "; ";
@@ -414,10 +408,23 @@ app.post("/show_subframe_information", function(req, res){
                     
                     query += "SELECT * FROM FiducialPosition_Table; ";
 
+                    query += "SELECT * FROM DeviceList_Table; ";
+
+                    query += "SELECT * FROM EventType_Table; ";
+
+                    query += "SELECT * FROM Target_Table WHERE ";
+                    for(let idx=0; idx < result_3[6].length; idx++) {
+                        if (idx==0)
+                            query += "ID=" + result_3[6][idx]['TargetID'];
+                        else
+                            query += " OR ID=" + result_3[6][idx]['TargetID'];
+                    }
+                    query += "; ";
+                    
                     connection.query(query, function(error, result_4){
                         if (error)
                             throw error;
-                                                
+                        
                         all_subframe_information['fiducials'] = result_4;
 
                         for(let idx=0; idx < result_4[3].length; idx++){
@@ -430,7 +437,6 @@ app.post("/show_subframe_information", function(req, res){
                             if (all_subframe_information['fiducials'][2][0]['PositionID']==result_4[3][idx]['ID'])
                                 all_subframe_information['fiducials'][2][0]['PositionID'] = result_4[3][idx]['PositionName']
                         }
-
 
                         if (all_subframe_information['fiducials'][0][0]['Validity'])
                             all_subframe_information['fiducials'][0][0]['Validity'] = 'is valid';
@@ -446,20 +452,131 @@ app.post("/show_subframe_information", function(req, res){
                             all_subframe_information['fiducials'][2][0]['Validity'] = 'is valid';
                         else
                             all_subframe_information['fiducials'][2][0]['Validity'] = 'is not valid';
+                        
+                        for(let iter=0; iter < all_subframe_information['events'].length; iter++){
+                            for(let idx=0; idx < result_4[4].length; idx++){
+                                if (result_4[4][idx]['ID'] == all_subframe_information['events'][iter]['DeviceID']){
+                                    all_subframe_information['events'][iter]['DeviceID'] = result_4[4][idx]['VendorName'];
+                                }
+                            }
+                        }
 
-                        // console.log(result_4[3].length);
-                        console.log(all_subframe_information['fiducials']);
-                        
-                        
-                        //console.log(Object.keys(all_subframe_information['fiducials'][0][0])[1]);
-                        // console.log(all_subframe_information['rois'].length);
-                        //console.log(Object.keys(all_subframe_information['events'][0]));
+                        for(let iter=0; iter < all_subframe_information['events'].length; iter++){
+                            for(let idx=0; idx < result_4[5].length; idx++){
+                                if (result_4[5][idx]['ID'] == all_subframe_information['events'][iter]['EventTypeID']){
+                                    all_subframe_information['events'][iter]['EventTypeID'] = result_4[5][idx]['EventType'];
+                                }
+                            }
+                        }
+
+                        all_subframe_information['targetplaylist']['targets_in_playlist'] = result_4[6];
+
+                        // console.log(all_subframe_information['targetplaylist']['targets_in_playlist']);
 
                         res.render('query_db/show_subframe_information', {
                             all_subframe_information,
                             subframe_id
                         });
                     });
+                });
+            });
+        });
+    });
+});
+
+// get ROI information
+var roi_id = "";
+app.post("/show_roi_information", function(req, res){
+    roi_id = Number(Object.keys(req.body)[0].split('_')[1]);
+    let selected_roi = all_subframe_information['rois'][roi_id];
+    
+    roi_id += 1;
+
+    let query = "SELECT * FROM ROIEvent_Table WHERE ROIID=" +
+                selected_roi['ID'] + "; ";
+    query += "SELECT * FROM EventType_Table; ";
+    query += "SELECT * FROM DeviceList_Table; ";
+    query += "SELECT * FROM Sample_Table WHERE ROIID=" +
+             selected_roi['ID'] + "; ";
+    
+    connection.query(query, function(error, result_1){
+        if(error)
+            throw error;
+
+        for(let idx=0; idx < result_1[0].length; idx++){
+            for(let iter=0; iter < result_1[1].length; iter++){
+                if(result_1[0][idx]['EventTypeID'] == result_1[1][iter]['ID'])
+                    result_1[0][idx]['EventTypeID'] = result_1[1][iter]['EventType'];
+            }
+        }
+
+        for(let idx=0; idx < result_1[0].length; idx++){
+            for(let iter=0; iter < result_1[2].length; iter++){
+                if(result_1[0][idx]['DeviceID'] == result_1[2][iter]['ID'])
+                    result_1[0][idx]['DeviceID'] = result_1[2][iter]['VendorName'];
+            }
+        }
+
+        all_subframe_information['roi_events'] = result_1[0];
+        all_subframe_information['samples'] = result_1[3];
+
+        //TODO: there could be several events for the roi,
+        //      each containing their own fiducial set
+        query = "SELECT * FROM FiducialSet_Table WHERE ID=" +
+                all_subframe_information['roi_events'][0]['FiducialSetID'] + "; ";
+
+        connection.query(query, function(error, result_2){
+            if(error)
+                throw error;
+
+            query = "SELECT * FROM Fiducial_Table WHERE ID=" +
+                    result_2[0]['FiducialID1'] + "; ";
+            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                    result_2[0]['FiducialID2'] + "; ";
+            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                    result_2[0]['FiducialID3'] + "; ";
+            
+            query += "SELECT * FROM FiducialPosition_Table; ";
+
+            connection.query(query, function(error, result_3){
+                if (error)
+                    throw error;
+
+                //console.log(result_3);
+
+                all_subframe_information['roi_fiducials'] = result_3;
+
+                for(let idx=0; idx < result_3[3].length; idx++){
+                    if (all_subframe_information['roi_fiducials'][0][0]['PositionID']==result_3[3][idx]['ID'])
+                        all_subframe_information['roi_fiducials'][0][0]['PositionID'] = result_3[3][idx]['PositionName'];
+
+                    if (all_subframe_information['roi_fiducials'][1][0]['PositionID']==result_3[3][idx]['ID'])
+                        all_subframe_information['roi_fiducials'][1][0]['PositionID'] = result_3[3][idx]['PositionName'];
+
+                    if (all_subframe_information['roi_fiducials'][2][0]['PositionID']==result_3[3][idx]['ID'])
+                        all_subframe_information['roi_fiducials'][2][0]['PositionID'] = result_3[3][idx]['PositionName'];
+                }
+
+                if (all_subframe_information['roi_fiducials'][0][0]['Validity'])
+                    all_subframe_information['roi_fiducials'][0][0]['Validity'] = 'is valid';
+                else
+                    all_subframe_information['roi_fiducials'][0][0]['Validity'] = 'is not valid';
+                        
+                if (all_subframe_information['roi_fiducials'][1][0]['Validity'])
+                    all_subframe_information['roi_fiducials'][1][0]['Validity'] = 'is valid';
+                else
+                    all_subframe_information['roi_fiducials'][1][0]['Validity'] = 'is not valid';
+
+                if (all_subframe_information['roi_fiducials'][2][0]['Validity'])
+                    all_subframe_information['roi_fiducials'][2][0]['Validity'] = 'is valid';
+                else
+                    all_subframe_information['roi_fiducials'][2][0]['Validity'] = 'is not valid';
+
+                res.render('query_db/show_roi_information', {
+                    selected_roi,
+                    subframe_id,
+                    roi_id,
+                    all_subframe_information
                 });
             });
         });
