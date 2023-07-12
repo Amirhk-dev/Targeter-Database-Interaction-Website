@@ -147,7 +147,7 @@ app.post("/chatbot", function(req, res){
 // query the database
 let filters = "";
 let all_subframe_information = {'subframe':'', 'fiducials':'',
-                                'events':'', 'rois':'', 'targetplaylist':''};
+                                'events':'', 'rois':'', 'targetplaylists':''};
 app.post("/database_query", function(req, res){
     console.log('\nthe user attempts to query the database...');
     
@@ -243,9 +243,6 @@ app.post("/apply_query", function(req, res){
         q="";
 
         if (result.length == 0){
-            console.log(Object.keys(loaded_subframe_filters));
-            console.log(Object.values(loaded_subframe_filters));
-
             res.render("query_db/query_the_database", {
                 filters,
                 loaded_subframe_filters,
@@ -364,114 +361,140 @@ app.post("/show_subframe_information", function(req, res){
                 if (error)
                     throw error;
 
+                // console.log('Hi');
+                // console.log(result_2);
+
                 all_subframe_information['events'] = result_2[0];
-                all_subframe_information['targetplaylist'] = result_2[1];
+                all_subframe_information['targetplaylists'] = result_2[1];
                 all_subframe_information['rois'] = result_2[2];
 
-                for(let iter=0; iter < all_subframe_information['rois'].length; iter++){
-                    for(let idx=0; idx < result_2[3].length; idx++){
-                        if (all_subframe_information['rois'][iter]['ROITypeID'] == result_2[3][idx]['ID'])
-                            all_subframe_information['rois'][iter]['ROITypeID'] = result_2[3][idx]['Name'];
+                if (all_subframe_information['rois'].length > 0){
+                    for(let iter=0; iter < all_subframe_information['rois'].length; iter++){
+                        for(let idx=0; idx < result_2[3].length; idx++){
+                            if (all_subframe_information['rois'][iter]['ROITypeID'] == result_2[3][idx]['ID'])
+                                all_subframe_information['rois'][iter]['ROITypeID'] = result_2[3][idx]['Name'];
+                        }
+                    }
+                }
+
+                query = "";
+                if (all_subframe_information['events'].length > 0) {
+                    for(let idx = 0; idx < all_subframe_information['events'].length; idx++){
+                        query += "SELECT * FROM FiducialSet_Table WHERE ID=" +
+                                 all_subframe_information['events'][idx]['FiducialSetID'] + "; ";
+                        query += "SELECT * FROM DeviceList_Table WHERE ID=" +
+                                 all_subframe_information['events'][idx]['DeviceID'] + "; ";
+                        query += "SELECT * FROM EventType_Table WHERE ID=" +
+                                 all_subframe_information['events'][idx]['EventTypeID'] + "; ";
                     }
                 }
                 
-                query = "SELECT * FROM FiducialSet_Table WHERE ID=" +
-                        result_2[0][0]['FiducialSetID'] + "; ";
-                
-                query += "SELECT * FROM DeviceList_Table WHERE ID=" +
-                        result_2[0][0]['DeviceID'] + "; ";
-                 
-                query += "SELECT * FROM EventType_Table WHERE ID=" +
-                        result_2[0][0]['EventTypeID'] + "; ";
-                 
-                query += "SELECT * FROM TargetListItems_Table WHERE TargetListID=" +
-                        result_2[1][0]['ID'] + "; ";
+                if (all_subframe_information['targetplaylists'].length > 0){
+                    for(let idx = 0; idx < all_subframe_information['targetplaylists'].length; idx++){
+                        query += "SELECT * FROM TargetListItems_Table WHERE TargetListID=" +
+                                 all_subframe_information['targetplaylists'][idx]['ID'] + "; ";
+                    }
+                }
                  
                 query += "SELECT * FROM ROIType_Table; ";
                 query += "SELECT * FROM DeviceType_Table; ";
-
-                query += "SELECT * FROM TargetListItems_Table WHERE TargetListID=" +
-                        all_subframe_information['targetplaylist'][0]['ID'] + "; ";
                 
                 connection.query(query, function(error, result_3) {
                     if (error)
                         throw error;
 
-                    query = "SELECT * FROM Fiducial_Table WHERE ID=" +
-                            result_3[0][0]['FiducialID1'] + "; ";
+                    query = "";
+                    let counter = 0;
+                    if (all_subframe_information['events'].length > 0) {
+                        for(let idx = 0; idx < all_subframe_information['events'].length; idx++){
+                            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                                     result_3[idx*3][0]['FiducialID1'] + "; ";
+                            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                                     result_3[idx*3][0]['FiducialID2'] + "; ";
+                            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                                     result_3[idx*3][0]['FiducialID3'] + "; ";
+                            counter += 3;
+                        }
+                    }
 
-                    query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                            result_3[0][0]['FiducialID2'] + "; ";
-
-                    query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                            result_3[0][0]['FiducialID3'] + "; ";
-                    
                     query += "SELECT * FROM FiducialPosition_Table; ";
 
                     query += "SELECT * FROM DeviceList_Table; ";
 
                     query += "SELECT * FROM EventType_Table; ";
 
-                    query += "SELECT * FROM Target_Table WHERE ";
-                    for(let idx=0; idx < result_3[6].length; idx++) {
-                        if (idx==0)
-                            query += "ID=" + result_3[6][idx]['TargetID'];
-                        else
-                            query += " OR ID=" + result_3[6][idx]['TargetID'];
+                    if (all_subframe_information['targetplaylists'].length > 0){
+                        if (result_3[counter].length > 0){
+                            query += "SELECT * FROM Target_Table WHERE ";
+                            for(let idx=0; idx < result_3[counter].length; idx++) {
+                                if (idx==0)
+                                    query += "ID=" + result_3[counter][idx]['TargetID'];
+                                else
+                                    query += " OR ID=" + result_3[counter][idx]['TargetID'];
+                            }
+                            query += "; ";
+                        }
                     }
-                    query += "; ";
                     
                     connection.query(query, function(error, result_4){
                         if (error)
                             throw error;
-                        
-                        all_subframe_information['fiducials'] = result_4;
 
-                        for(let idx=0; idx < result_4[3].length; idx++){
-                            if (all_subframe_information['fiducials'][0][0]['PositionID']==result_4[3][idx]['ID'])
-                                all_subframe_information['fiducials'][0][0]['PositionID'] = result_4[3][idx]['PositionName'];
-
-                            if (all_subframe_information['fiducials'][1][0]['PositionID']==result_4[3][idx]['ID'])
-                                all_subframe_information['fiducials'][1][0]['PositionID'] = result_4[3][idx]['PositionName'];
-
-                            if (all_subframe_information['fiducials'][2][0]['PositionID']==result_4[3][idx]['ID'])
-                                all_subframe_information['fiducials'][2][0]['PositionID'] = result_4[3][idx]['PositionName'];
+                        if (all_subframe_information['events'].length > 0) {
+                            all_subframe_information['fiducials'] = result_4;
                         }
 
-                        if (all_subframe_information['fiducials'][0][0]['Validity'])
-                            all_subframe_information['fiducials'][0][0]['Validity'] = 'is valid';
-                        else
-                            all_subframe_information['fiducials'][0][0]['Validity'] = 'is not valid';
-                        
-                        if (all_subframe_information['fiducials'][1][0]['Validity'])
-                            all_subframe_information['fiducials'][1][0]['Validity'] = 'is valid';
-                        else
-                            all_subframe_information['fiducials'][1][0]['Validity'] = 'is not valid';
+                        for(let idx=0; idx < result_4[counter].length; idx++){
+                            for(let iter=0; iter < counter; iter+=3){
+                                if (all_subframe_information['fiducials'][iter][0]['PositionID']==result_4[counter][idx]['ID'])
+                                    all_subframe_information['fiducials'][iter][0]['PositionID'] = result_4[counter][idx]['PositionName'];
 
-                        if (all_subframe_information['fiducials'][2][0]['Validity'])
-                            all_subframe_information['fiducials'][2][0]['Validity'] = 'is valid';
-                        else
-                            all_subframe_information['fiducials'][2][0]['Validity'] = 'is not valid';
+                                if (all_subframe_information['fiducials'][iter+1][0]['PositionID']==result_4[counter][idx]['ID'])
+                                    all_subframe_information['fiducials'][iter+1][0]['PositionID'] = result_4[counter][idx]['PositionName'];
+
+                                if (all_subframe_information['fiducials'][iter+2][0]['PositionID']==result_4[counter][idx]['ID'])
+                                    all_subframe_information['fiducials'][iter+2][0]['PositionID'] = result_4[counter][idx]['PositionName'];
+
+                                if (all_subframe_information['fiducials'][iter][0]['Validity'])
+                                    all_subframe_information['fiducials'][iter][0]['Validity'] = 'is valid';
+                                else
+                                    all_subframe_information['fiducials'][iter][0]['Validity'] = 'is not valid!';
+                                
+                                if (all_subframe_information['fiducials'][iter+1][0]['Validity'])
+                                    all_subframe_information['fiducials'][iter+1][0]['Validity'] = 'is valid';
+                                else
+                                    all_subframe_information['fiducials'][iter+1][0]['Validity'] = 'is not valid!';
+        
+                                if (all_subframe_information['fiducials'][iter+2][0]['Validity'])
+                                    all_subframe_information['fiducials'][iter+2][0]['Validity'] = 'is valid';
+                                else
+                                    all_subframe_information['fiducials'][iter+2][0]['Validity'] = 'is not valid!';
+                            }                            
+                        }
                         
                         for(let iter=0; iter < all_subframe_information['events'].length; iter++){
-                            for(let idx=0; idx < result_4[4].length; idx++){
-                                if (result_4[4][idx]['ID'] == all_subframe_information['events'][iter]['DeviceID']){
-                                    all_subframe_information['events'][iter]['DeviceID'] = result_4[4][idx]['VendorName'];
+                            for(let idx=0; idx < result_4[counter+1].length; idx++){
+                                if (result_4[counter+1][idx]['ID'] == all_subframe_information['events'][iter]['DeviceID']){
+                                    all_subframe_information['events'][iter]['DeviceID'] = result_4[counter+1][idx]['VendorName'];
                                 }
                             }
                         }
 
                         for(let iter=0; iter < all_subframe_information['events'].length; iter++){
-                            for(let idx=0; idx < result_4[5].length; idx++){
-                                if (result_4[5][idx]['ID'] == all_subframe_information['events'][iter]['EventTypeID']){
-                                    all_subframe_information['events'][iter]['EventTypeID'] = result_4[5][idx]['EventType'];
+                            for(let idx=0; idx < result_4[counter+2].length; idx++){
+                                if (result_4[counter+2][idx]['ID'] == all_subframe_information['events'][iter]['EventTypeID']){
+                                    all_subframe_information['events'][iter]['EventTypeID'] = result_4[counter+2][idx]['EventType'];
                                 }
                             }
                         }
 
-                        all_subframe_information['targetplaylist']['targets_in_playlist'] = result_4[6];
+                        all_subframe_information['targetplaylists']['targets_in_playlist'] = result_4[counter+3];
 
-                        // console.log(all_subframe_information['targetplaylist']['targets_in_playlist']);
+
+                        console.log('hii');
+                        console.log(all_subframe_information);
+
+
 
                         res.render('query_db/show_subframe_information', {
                             all_subframe_information,

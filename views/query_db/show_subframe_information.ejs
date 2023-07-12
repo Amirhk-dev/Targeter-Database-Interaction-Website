@@ -33,55 +33,6 @@
     </div>
 </div>
 
-<% if (typeof all_subframe_information['fiducials'] !== 'undefined') { %>
-    <% if (all_subframe_information['fiducials'].length > 0) { %>
-        <div class="row twopanel">
-            <div class="col-lg-12">
-                <h1 class="site_msg" style="text-align: center;">
-                    Fiducials
-                </h1>
-            </div>
-        </div>
-
-        <div class="row twopanel">
-            <% for(var idx=0; idx < 3; idx++) { %>
-                <div class="row">
-                    <button class="btn btn-secondary" data-bs-toggle="collapse"
-                    data-bs-target="#collapse_fiducial<%= idx %>" aria-expanded="false"
-                    aria-controls="collapseExample" style="margin-top: 20px;">
-                        Fiducial <%= idx+1 %>
-                    </button>
-                </div>
-
-                <div class="collapse" id="collapse_fiducial<%= idx %>">
-                    <div class="row">
-                        <table class="table">
-                            <tbody>
-                                <% for(var i=0; i < Object.keys(all_subframe_information['fiducials'][idx][0]).length; i++) { %>
-                                    <tr>
-                                        <th width="50%">
-                                            <%= Object.keys(all_subframe_information['fiducials'][idx][0])[i] %>
-                                        </th>
-                                        <% if (Object.keys(all_subframe_information['fiducials'][idx][0])[i]) { %>
-                                        <td width="50%">
-                                            <%= Object.values(all_subframe_information['fiducials'][idx][0])[i] %>
-                                        </td>
-                                        <% } else{ %>
-                                        <td width="50%">
-                                            -
-                                        </td>
-                                        <% } %>    
-                                    </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            <% } %>
-        </div>
-    <% } %>
-<% } %>
-
 <% if (typeof all_subframe_information['events'] !== 'undefined') { %>
     <% if (all_subframe_information['events'].length > 0) { %>
         <div class="row twopanel">
@@ -125,6 +76,55 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <% if (typeof all_subframe_information['fiducials'] !== 'undefined') { %>
+                        <% if (all_subframe_information['fiducials'].length > 0) { %>
+                            <div class="row twopanel">
+                                <div class="col-lg-12">
+                                    <h1 class="site_msg" style="text-align: center;">
+                                        Fiducials
+                                    </h1>
+                                </div>
+                            </div>
+
+                            <div class="row twopanel">
+                                <% for(var iter=3*idx; iter < 3*idx+3; iter++) { %>
+                                    <div class="row">
+                                        <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse_fiducial<%= iter %>" aria-expanded="false"
+                                            aria-controls="collapseExample" style="margin-top: 20px;">
+                                            Fiducial <%= iter%3+1 %>
+                                        </button>
+                                    </div>
+
+                                    <div class="collapse" id="collapse_fiducial<%= iter %>">
+                                        <div class="row">
+                                            <table class="table">
+                                                <tbody>
+                                                    <% for(var i=0; i < Object.keys(all_subframe_information['fiducials'][iter][0]).length; i++) { %>
+                                                    <tr>
+                                                        <th width="50%">
+                                                            <%= Object.keys(all_subframe_information['fiducials'][iter][0])[i] %>
+                                                        </th>
+                                                        <% if (Object.keys(all_subframe_information['fiducials'][iter][0])[i]) { %>
+                                                            <td width="50%">
+                                                                <%= Object.values(all_subframe_information['fiducials'][iter][0])[i] %>
+                                                            </td>
+                                                        <% } else{ %>
+                                                            <td width="50%">
+                                                                -
+                                                            </td>
+                                                        <% } %>    
+                                                    </tr>
+                                                    <% } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    <% } %>
                 </div>
             <% } %>
         </div>
@@ -132,7 +132,7 @@
 <% } %>
 
 <% if (typeof all_subframe_information['rois'] !== 'undefined') { %>
-    <% if (all_subframe_information['rois'].length != 0) { %>
+    <% if (all_subframe_information['rois'].length > 0) { %>
         <div class="row twopanel">
             <div class="col-lg-12">
                 <h1 class="site_msg" style="text-align: center;">
@@ -177,8 +177,8 @@
     <% } %>
 <% } %>
 
-<% if (typeof all_subframe_information['targetplaylist'] !== 'undefined') { %>
-    <% if (all_subframe_information['targetplaylist'].length != 0) { %>
+<% if (typeof all_subframe_information['targetplaylists'] !== 'undefined') { %>
+    <% if (all_subframe_information['targetplaylists'].length > 0) { %>
         <div class="row twopanel">
             <div class="col-lg-12">
                 <h1 class="site_msg" style="text-align: center;">
@@ -188,7 +188,7 @@
         </div>
 
         <div class="row twopanel">
-            <% for(var idx=0; idx < all_subframe_information['targetplaylist'].length; idx++) { %>
+            <% for(var idx=0; idx < all_subframe_information['targetplaylists'].length; idx++) { %>
                 <div class="row">
                     <button class="btn btn-secondary" data-bs-toggle="collapse"
                         data-bs-target="#collapse_target_playlist<%= idx %>" aria-expanded="false"
@@ -201,14 +201,14 @@
                     <div class="row">
                         <table class="table">
                             <tbody>
-                                <% for(var i=0; i < Object.keys(all_subframe_information['targetplaylist'][idx]).length; i++) { %>
+                                <% for(var i=0; i < Object.keys(all_subframe_information['targetplaylists'][idx]).length; i++) { %>
                                     <tr>
                                         <th width="50%">
-                                            <%= Object.keys(all_subframe_information['targetplaylist'][idx])[i] %>
+                                            <%= Object.keys(all_subframe_information['targetplaylists'][idx])[i] %>
                                         </th>
-                                        <% if (Object.keys(all_subframe_information['targetplaylist'][idx])[i]) { %>
+                                        <% if (Object.keys(all_subframe_information['targetplaylists'][idx])[i]) { %>
                                         <td width="50%">
-                                            <%= Object.values(all_subframe_information['targetplaylist'][idx])[i] %>
+                                            <%= Object.values(all_subframe_information['targetplaylists'][idx])[i] %>
                                         </td>
                                         <% } else{ %>
                                         <td width="50%">
@@ -220,8 +220,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <% if (typeof all_subframe_information['targetplaylist']['targets_in_playlist'] !== 'undefined') { %>
-                        <% if (all_subframe_information['targetplaylist']['targets_in_playlist'].length > 0) { %>
+                    <% if (typeof all_subframe_information['targetplaylists']['targets_in_playlist'] !== 'undefined') { %>
+                        <% if (all_subframe_information['targetplaylists']['targets_in_playlist'].length > 0) { %>
                             <div class="row twopanel">
                                 <div class="col-lg-12">
                                     <h1 class="site_msg" style="text-align: center;">
@@ -231,7 +231,7 @@
                             </div>
                     
                             <div class="row twopanel">
-                                <% for(var idx=0; idx < all_subframe_information['targetplaylist']['targets_in_playlist'].length; idx++) { %>
+                                <% for(var idx=0; idx < all_subframe_information['targetplaylists']['targets_in_playlist'].length; idx++) { %>
                                     <div class="row">
                                         <button class="btn btn-secondary" data-bs-toggle="collapse"
                                             data-bs-target="#collapse_target<%= idx %>" aria-expanded="false"
@@ -244,14 +244,14 @@
                                         <div class="row">
                                             <table class="table">
                                                 <tbody>
-                                                    <% for(var i=0; i < Object.keys(all_subframe_information['targetplaylist']['targets_in_playlist'][idx]).length; i++) { %>
+                                                    <% for(var i=0; i < Object.keys(all_subframe_information['targetplaylists']['targets_in_playlist'][idx]).length; i++) { %>
                                                         <tr>
                                                             <th width="50%">
-                                                                <%= Object.keys(all_subframe_information['targetplaylist']['targets_in_playlist'][idx])[i] %>
+                                                                <%= Object.keys(all_subframe_information['targetplaylists']['targets_in_playlist'][idx])[i] %>
                                                             </th>
-                                                            <% if (Object.keys(all_subframe_information['targetplaylist']['targets_in_playlist'][idx])[i]) { %>
+                                                            <% if (Object.keys(all_subframe_information['targetplaylists']['targets_in_playlist'][idx])[i]) { %>
                                                             <td width="50%">
-                                                                <%= Object.values(all_subframe_information['targetplaylist']['targets_in_playlist'][idx])[i] %>
+                                                                <%= Object.values(all_subframe_information['targetplaylists']['targets_in_playlist'][idx])[i] %>
                                                             </td>
                                                             <% } else{ %>
                                                             <td width="50%">
