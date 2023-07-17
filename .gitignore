@@ -1,3 +1,6 @@
+# experiments
+experiment*.xml
+
 # Logs
 logs
 *.log
