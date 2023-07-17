@@ -41,7 +41,7 @@ app.post("/createSubframe", function(req, res){
     console.log('\nthe user attempts to create a subframe...')
     res.render("create_subframe/get_subframe_id");      
 });
-
+//#############################################################################
 // create subframe on the databae
 app.post("/createSubframeOnDatabase", function(req, res){
     console.log('\nprocessing the request (connecting to the database)...');
@@ -97,12 +97,11 @@ app.post("/createSubframeOnDatabase", function(req, res){
                         }); 
     });
 })});
-
+//#############################################################################
 app.post("/finishCreatingSubframeEntry", function(req, res){
     console.log('\nthe user created a subframe...')
     res.redirect("/");
 });
-
 //#############################################################################
 // view tables and their content in the database
 app.post("/viewDBTables", function(req, res){
@@ -166,7 +165,7 @@ app.post("/database_query", function(req, res){
         });    
     });
 });
-
+//#############################################################################
 // apply the filters to search the database
 app.post("/apply_query", function(req, res){
     console.log('\nthe user applied some filters to search the database...');
@@ -291,10 +290,12 @@ app.post("/apply_query", function(req, res){
         });       
     });
 });
-
+//#############################################################################
 // get subframe information
 var subframe_id = "";
 app.post("/show_subframe_information", function(req, res){
+    console.log('\nthe user attempts to get subframe information...')
+    
     subframe_id = Object.keys(req.body)[0];
         
     let facility_name = subframe_id.substring(0,5);
@@ -404,13 +405,13 @@ app.post("/show_subframe_information", function(req, res){
                     let counter = 0;
                     if (all_subframe_information['events'].length > 0) {
                         for(let idx = 0; idx < all_subframe_information['events'].length; idx++){
+                            query += "SELECT * FROM Fiducial_Table WHERE ID=" + 
+                                result_3[idx*3][0]['FiducialID1'] + "; ";
                             query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                                     result_3[idx*3][0]['FiducialID1'] + "; ";
+                                 result_3[idx*3][0]['FiducialID2'] + "; ";
                             query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                                     result_3[idx*3][0]['FiducialID2'] + "; ";
-                            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                                     result_3[idx*3][0]['FiducialID3'] + "; ";
-                            counter += 3;
+                                 result_3[idx*3][0]['FiducialID3'] + "; ";
+                            counter += 3;                            
                         }
                     }
 
@@ -497,10 +498,12 @@ app.post("/show_subframe_information", function(req, res){
         });
     });
 });
-
+//#############################################################################
 // get ROI information
 var roi_id = "";
 app.post("/show_roi_information", function(req, res){
+    console.log('\nthe user attempts to get Region of Interest (ROI) information...')
+    
     roi_id = Number(Object.keys(req.body)[0].split('_')[1]);
     let selected_roi = all_subframe_information['rois'][roi_id];
     
@@ -554,19 +557,27 @@ app.post("/show_roi_information", function(req, res){
                 query = "";
                 let counter = 0;
                 for(let idx=0; idx < all_subframe_information['roi_events'].length; idx++){
-                    query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                    if (all_subframe_information['roi_events'].length > 1){
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
                             result_2[idx][0]['FiducialID1'] + "; ";
-                    query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
                             result_2[idx][0]['FiducialID2'] + "; ";
-                    query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
                             result_2[idx][0]['FiducialID3'] + "; ";
-                    counter += 3;
+                        counter += 3;
+                    } else {
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID1'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID2'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID3'] + "; ";
+                        counter += 3;
+                    }
                 }
 
                 query += "SELECT * FROM FiducialPosition_Table; ";
     
-                console.log(query);
-
                 connection.query(query, function(error, result_3){
                     if (error)
                         throw error;
@@ -619,10 +630,12 @@ app.post("/show_roi_information", function(req, res){
         }
     });
 });
-
+//#############################################################################
 // get sample information
 var sample_id = "";
 app.post("/show_sample_information", function(req, res){
+    console.log('\nthe user attempts to get Sample information...')
+    
     sample_id = Number(Object.keys(req.body)[0].split('_')[1]);
     let selected_sample = all_subframe_information['samples'][sample_id];
     
@@ -639,89 +652,126 @@ app.post("/show_sample_information", function(req, res){
         if(error)
             throw error;
         
-        for(let idx=0; idx < result_1[0].length; idx++){
-            for(let iter=0; iter < result_1[1].length; iter++){
-                if(result_1[0][idx]['EventTypeID'] == result_1[1][iter]['ID'])
-                    result_1[0][idx]['EventTypeID'] = result_1[1][iter]['EventType'];
-            }
-        }
-        
-        for(let idx=0; idx < result_1[0].length; idx++){
-            for(let iter=0; iter < result_1[2].length; iter++){
-                if(result_1[0][idx]['DeviceID'] == result_1[2][iter]['ID'])
-                    result_1[0][idx]['DeviceID'] = result_1[2][iter]['VendorName'];
-            }
-        }
-        
-        all_subframe_information['sample_events'] = result_1[0];
-        all_subframe_information['targets'] = result_1[3];
-        
-        //TODO: there could be several events for the roi,
-        //      each containing their own fiducial set
-        query = "SELECT * FROM FiducialSet_Table WHERE ID=" +
-        all_subframe_information['sample_events'][0]['FiducialSetID'] + "; ";
-        
-        connection.query(query, function(error, result_2){
-            if(error)
-                throw error;
-        
-            query = "SELECT * FROM Fiducial_Table WHERE ID=" +
-                    result_2[0]['FiducialID1'] + "; ";
-            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                    result_2[0]['FiducialID2'] + "; ";
-            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                    result_2[0]['FiducialID3'] + "; ";
-                    
-            query += "SELECT * FROM FiducialPosition_Table; ";
-        
-            connection.query(query, function(error, result_3){
-                if (error)
-                    throw error;
-        
-                all_subframe_information['sample_fiducials'] = result_3;
-        
-                for(let idx=0; idx < result_3[3].length; idx++){
-                    if (all_subframe_information['sample_fiducials'][0][0]['PositionID']==result_3[3][idx]['ID'])
-                        all_subframe_information['sample_fiducials'][0][0]['PositionID'] = result_3[3][idx]['PositionName'];
-        
-                    if (all_subframe_information['sample_fiducials'][1][0]['PositionID']==result_3[3][idx]['ID'])
-                        all_subframe_information['sample_fiducials'][1][0]['PositionID'] = result_3[3][idx]['PositionName'];
-        
-                    if (all_subframe_information['sample_fiducials'][2][0]['PositionID']==result_3[3][idx]['ID'])
-                        all_subframe_information['sample_fiducials'][2][0]['PositionID'] = result_3[3][idx]['PositionName'];
+        if(result_1[0].length > 0){
+            for(let idx=0; idx < result_1[0].length; idx++){
+                for(let iter=0; iter < result_1[1].length; iter++){
+                    if(result_1[0][idx]['EventTypeID'] == result_1[1][iter]['ID'])
+                        result_1[0][idx]['EventTypeID'] = result_1[1][iter]['EventType'];
                 }
+            }
+
+            for(let idx=0; idx < result_1[0].length; idx++){
+                for(let iter=0; iter < result_1[2].length; iter++){
+                    if(result_1[0][idx]['DeviceID'] == result_1[2][iter]['ID'])
+                        result_1[0][idx]['DeviceID'] = result_1[2][iter]['VendorName'];
+                }
+            }
+
+            all_subframe_information['sample_events'] = result_1[0];
+        }
+
+        if (result_1[3].length > 0)
+            all_subframe_information['targets'] = result_1[3];
         
-                if (all_subframe_information['sample_fiducials'][0][0]['Validity'])
-                    all_subframe_information['sample_fiducials'][0][0]['Validity'] = 'is valid';
-                else
-                    all_subframe_information['sample_fiducials'][0][0]['Validity'] = 'is not valid';
-                                
-                if (all_subframe_information['sample_fiducials'][1][0]['Validity'])
-                    all_subframe_information['sample_fiducials'][1][0]['Validity'] = 'is valid';
-                else
-                    all_subframe_information['sample_fiducials'][1][0]['Validity'] = 'is not valid';
+        query = "";
+        if(result_1[0].length > 0){
+            for(let idx=0; idx < result_1[0].length; idx++){
+                query += "SELECT * FROM FiducialSet_Table WHERE ID=" +
+                all_subframe_information['sample_events'][idx]['FiducialSetID'] + "; ";
+            }
+        }
+    
+        if(query != ""){
+            connection.query(query, function(error, result_2){
+                if(error)
+                    throw error;
+
+                query = "";
+                let counter = 0;
+                for(let idx=0; idx < all_subframe_information['sample_events'].length; idx++){
+                    if (all_subframe_information['sample_events'].length > 1){
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx][0]['FiducialID1'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx][0]['FiducialID2'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx][0]['FiducialID3'] + "; ";
+                        counter += 3;
+                    } else {
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID1'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID2'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID3'] + "; ";
+                        counter += 3;
+                    }
+                }
+    
+                query += "SELECT * FROM FiducialPosition_Table; ";
         
-                if (all_subframe_information['sample_fiducials'][2][0]['Validity'])
-                    all_subframe_information['sample_fiducials'][2][0]['Validity'] = 'is valid';
-                else
-                    all_subframe_information['sample_fiducials'][2][0]['Validity'] = 'is not valid';
+                connection.query(query, function(error, result_3){
+                    if (error)
+                        throw error;
         
-                res.render('query_db/show_sample_information', {
-                    selected_sample,
-                    subframe_id,
-                    roi_id,
-                    sample_id,
-                    all_subframe_information
+                    all_subframe_information['sample_fiducials'] = result_3;
+    
+                    for(let idx=0; idx < result_3[counter].length; idx++){
+                        for(let iter=0; iter < counter; iter+=3){
+                            if (all_subframe_information['sample_fiducials'][iter][0]['PositionID']==result_3[counter][idx]['ID'])
+                                all_subframe_information['sample_fiducials'][iter][0]['PositionID'] = result_3[counter][idx]['PositionName'];
+        
+                            if (all_subframe_information['sample_fiducials'][iter+1][0]['PositionID']==result_3[counter][idx]['ID'])
+                                all_subframe_information['sample_fiducials'][iter+1][0]['PositionID'] = result_3[counter][idx]['PositionName'];
+        
+                            if (all_subframe_information['sample_fiducials'][iter+2][0]['PositionID']==result_3[counter][idx]['ID'])
+                                all_subframe_information['sample_fiducials'][iter+2][0]['PositionID'] = result_3[counter][idx]['PositionName'];
+    
+                            if (all_subframe_information['sample_fiducials'][iter][0]['Validity'])
+                                all_subframe_information['sample_fiducials'][iter][0]['Validity'] = 'is valid';
+                            else
+                                all_subframe_information['sample_fiducials'][iter][0]['Validity'] = 'is not valid!';
+                                        
+                            if (all_subframe_information['sample_fiducials'][iter+1][0]['Validity'])
+                                all_subframe_information['sample_fiducials'][iter+1][0]['Validity'] = 'is valid';
+                            else
+                                all_subframe_information['sample_fiducials'][iter+1][0]['Validity'] = 'is not valid!';
+                
+                            if (all_subframe_information['sample_fiducials'][iter+2][0]['Validity'])
+                                all_subframe_information['sample_fiducials'][iter+2][0]['Validity'] = 'is valid';
+                            else
+                                all_subframe_information['sample_fiducials'][iter+2][0]['Validity'] = 'is not valid!';
+                        }
+                    }
+        
+                    res.render('query_db/show_sample_information', {
+                        selected_sample,
+                        subframe_id,
+                        roi_id,
+                        sample_id,
+                        all_subframe_information
+                    });
                 });
             });
-        });
+        } else {
+            res.render('query_db/show_sample_information', {
+                selected_sample,
+                subframe_id,
+                roi_id,
+                sample_id,
+                all_subframe_information
+            });
+        }
     });
 });
-
+//#############################################################################
 // get target information
 var target_id = "";
 app.post("/show_target_information", function(req, res){
+    console.log('\nthe user attempts to get Target information...')
+    
     target_id = Number(Object.keys(req.body)[0].split('_')[1]);
+
     let selected_target = all_subframe_information['targets'][target_id];
     
     target_id += 1;
@@ -734,133 +784,119 @@ app.post("/show_target_information", function(req, res){
     connection.query(query, function(error, result_1){
         if(error)
             throw error;
-        
-        for(let idx=0; idx < result_1[0].length; idx++){
-            for(let iter=0; iter < result_1[1].length; iter++){
-                if(result_1[0][idx]['EventTypeID'] == result_1[1][iter]['ID'])
-                    result_1[0][idx]['EventTypeID'] = result_1[1][iter]['EventType'];
+
+        if(result_1[0].length > 0){
+            for(let idx=0; idx < result_1[0].length; idx++){
+                for(let iter=0; iter < result_1[1].length; iter++){
+                    if(result_1[0][idx]['EventTypeID'] == result_1[1][iter]['ID'])
+                        result_1[0][idx]['EventTypeID'] = result_1[1][iter]['EventType'];
+                }
             }
-        }
-        
-        for(let idx=0; idx < result_1[0].length; idx++){
-            for(let iter=0; iter < result_1[2].length; iter++){
-                if(result_1[0][idx]['DeviceID'] == result_1[2][iter]['ID'])
-                    result_1[0][idx]['DeviceID'] = result_1[2][iter]['VendorName'];
+            
+            for(let idx=0; idx < result_1[0].length; idx++){
+                for(let iter=0; iter < result_1[2].length; iter++){
+                    if(result_1[0][idx]['DeviceID'] == result_1[2][iter]['ID'])
+                        result_1[0][idx]['DeviceID'] = result_1[2][iter]['VendorName'];
+                }
             }
         }
         
         all_subframe_information['target_events'] = result_1[0];
-        
-        //TODO: there could be several events for the roi,
-        //      each containing their own fiducial set
-        query = "SELECT * FROM FiducialSet_Table WHERE ID=" +
-        all_subframe_information['target_events'][0]['FiducialSetID'] + "; ";
-        
-        connection.query(query, function(error, result_2){
-            if(error)
-                throw error;
-        
-            query = "SELECT * FROM Fiducial_Table WHERE ID=" +
-                    result_2[0]['FiducialID1'] + "; ";
-            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                    result_2[0]['FiducialID2'] + "; ";
-            query += "SELECT * FROM Fiducial_Table WHERE ID=" +
-                    result_2[0]['FiducialID3'] + "; ";
-                    
-            query += "SELECT * FROM FiducialPosition_Table; ";
-        
-            connection.query(query, function(error, result_3){
-                if (error)
+
+        query = "";
+        if(result_1[0].length > 0){
+            for(let idx=0; idx < result_1[0].length; idx++){
+                query += "SELECT * FROM FiducialSet_Table WHERE ID=" +
+                all_subframe_information['target_events'][idx]['FiducialSetID'] + "; ";
+            }
+        }
+    
+        if(query != ""){
+            connection.query(query, function(error, result_2){
+                if(error)
                     throw error;
-        
-                all_subframe_information['target_fiducials'] = result_3;
-        
-                for(let idx=0; idx < result_3[3].length; idx++){
-                    if (all_subframe_information['target_fiducials'][0][0]['PositionID']==result_3[3][idx]['ID'])
-                        all_subframe_information['target_fiducials'][0][0]['PositionID'] = result_3[3][idx]['PositionName'];
-        
-                    if (all_subframe_information['target_fiducials'][1][0]['PositionID']==result_3[3][idx]['ID'])
-                        all_subframe_information['target_fiducials'][1][0]['PositionID'] = result_3[3][idx]['PositionName'];
-        
-                    if (all_subframe_information['target_fiducials'][2][0]['PositionID']==result_3[3][idx]['ID'])
-                        all_subframe_information['target_fiducials'][2][0]['PositionID'] = result_3[3][idx]['PositionName'];
+                
+                query = "";
+                let counter = 0;
+                for(let idx=0; idx < all_subframe_information['target_events'].length; idx++){
+                    if (all_subframe_information['target_events'].length > 1){
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx][0]['FiducialID1'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx][0]['FiducialID2'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx][0]['FiducialID3'] + "; ";
+                        counter += 3;
+                    } else {
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID1'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID2'] + "; ";
+                        query += "SELECT * FROM Fiducial_Table WHERE ID=" +
+                            result_2[idx]['FiducialID3'] + "; ";
+                        counter += 3;
+                    }
                 }
+                    
+                query += "SELECT * FROM FiducialPosition_Table; ";
         
-                if (all_subframe_information['target_fiducials'][0][0]['Validity'])
-                    all_subframe_information['target_fiducials'][0][0]['Validity'] = 'is valid';
-                else
-                    all_subframe_information['target_fiducials'][0][0]['Validity'] = 'is not valid';
-                                
-                if (all_subframe_information['target_fiducials'][1][0]['Validity'])
-                    all_subframe_information['target_fiducials'][1][0]['Validity'] = 'is valid';
-                else
-                    all_subframe_information['target_fiducials'][1][0]['Validity'] = 'is not valid';
+                connection.query(query, function(error, result_3){
+                    if (error)
+                        throw error;
         
-                if (all_subframe_information['target_fiducials'][2][0]['Validity'])
-                    all_subframe_information['target_fiducials'][2][0]['Validity'] = 'is valid';
-                else
-                    all_subframe_information['target_fiducials'][2][0]['Validity'] = 'is not valid';
+                    all_subframe_information['target_fiducials'] = result_3;
         
-                res.render('query_db/show_target_information', {
-                    selected_target,
-                    subframe_id,
-                    roi_id,
-                    sample_id,
-                    target_id,
-                    all_subframe_information
+                    for(let idx=0; idx < result_3[counter].length; idx++){
+                        for(let iter=0; iter < counter; iter+=3){
+                            if (all_subframe_information['target_fiducials'][iter][0]['PositionID']==result_3[counter][idx]['ID'])
+                                all_subframe_information['target_fiducials'][iter][0]['PositionID'] = result_3[counter][idx]['PositionName'];
+        
+                            if (all_subframe_information['target_fiducials'][iter+1][0]['PositionID']==result_3[counter][idx]['ID'])
+                                all_subframe_information['target_fiducials'][iter+1][0]['PositionID'] = result_3[counter][idx]['PositionName'];
+        
+                            if (all_subframe_information['target_fiducials'][iter+2][0]['PositionID']==result_3[counter][idx]['ID'])
+                                all_subframe_information['target_fiducials'][iter+2][0]['PositionID'] = result_3[counter][idx]['PositionName'];
+    
+                            if (all_subframe_information['target_fiducials'][iter][0]['Validity'])
+                                all_subframe_information['target_fiducials'][iter][0]['Validity'] = 'is valid';
+                            else
+                                all_subframe_information['target_fiducials'][iter][0]['Validity'] = 'is not valid!';
+                                        
+                            if (all_subframe_information['target_fiducials'][iter+1][0]['Validity'])
+                                all_subframe_information['target_fiducials'][iter+1][0]['Validity'] = 'is valid';
+                            else
+                                all_subframe_information['target_fiducials'][iter+1][0]['Validity'] = 'is not valid!';
+                
+                            if (all_subframe_information['target_fiducials'][iter+2][0]['Validity'])
+                                all_subframe_information['target_fiducials'][iter+2][0]['Validity'] = 'is valid';
+                            else
+                                all_subframe_information['target_fiducials'][iter+2][0]['Validity'] = 'is not valid!';
+                        }
+                    }
+                         
+                    res.render('query_db/show_target_information', {
+                        selected_target,
+                        subframe_id,
+                        roi_id,
+                        sample_id,
+                        target_id,
+                        all_subframe_information
+                    });
                 });
             });
-        });
+        } else {
+            res.render('query_db/show_target_information', {
+                selected_target,
+                subframe_id,
+                roi_id,
+                sample_id,
+                target_id,
+                all_subframe_information
+            });
+        }
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//#############################################################################
 // get subframe ids
 app.post("/get_subframe_ids", function(req, res){
     console.log('\nthe user attempts to know the Subframe IDs...');
@@ -909,57 +945,11 @@ app.post("/get_subframe_ids", function(req, res){
         });
     });
 });
-
-
-
-
-
-
-
-// get Region of Interest (ROI) information
-
-
-
-// get sample information
-
-
-// get target information
-
-// get target playlist information
-
-
-// get subframe information given the target ID
-
-
 //#############################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.post("/submitDataManually", function(req, res){
-    res.render("home_manually_subframe_fiducials");
+    res.render("manual_insertion/home_manually_subframe_fiducials");
 });
-
+//#############################################################################
 app.post("/submitSubframeFiducialsInfoManually", function(req, res){
     variables.subframe_fiducials_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
     variables.subframe_fiducials_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
@@ -984,12 +974,12 @@ app.post("/submitSubframeFiducialsInfoManually", function(req, res){
     variables.subframe_fiducials_itemNamesData.subframe_fid3_time = req.body.subframe_fid3_time;
 
     if (functions.checkEmpty(variables.subframe_fiducials_itemNamesData, "subframe_fids")) {
-            res.render("home_manually_subframe_fiducials");
+            res.render("manual_insertion/home_manually_subframe_fiducials");
     } else { 
-        res.render("home_manually_subframe");
+        res.render("manual_insertion/home_manually_subframe");
     }  
 });
-
+//#############################################################################
 app.get("/editTables", function(req, res){
     let query0 = "SELECT * FROM GroupInformation_Table; ";
     let query1 = "SELECT * FROM Facility_Table; ";
@@ -1019,10 +1009,8 @@ app.get("/editTables", function(req, res){
     });
 
 });
-
+//#############################################################################
 app.post("/addToTable", function(req, res){
-    console.log(req.body);
-
     var table_name = req.body.list;
 
     if(table_name==="Group Information")
@@ -1059,13 +1047,10 @@ app.post("/addToTable", function(req, res){
         res.redirect("editTables");
     });
 });
-
+//#############################################################################
 app.post("/removeFromTable", function(req, res){
     var table_name = req.body.listName;
     var row_id = req.body.remove_row;
-
-    console.log(table_name);
-    console.log(row_id);
 
     var q = [];
     if(table_name==="Group Information")
@@ -1092,12 +1077,11 @@ app.post("/removeFromTable", function(req, res){
         res.redirect("editTables");
     });
 });
-
-
+//#############################################################################
 app.post("/viewDBTables", function(req, res){ 
     res.render("view_db_tables");      
 });
-
+//#############################################################################
 app.post("/submitSubframeInfoManually", function(req, res){
     
     variables.subframe_data_itemNamesData.subframe_validity = (req.body.subframe_validity ? true:false);
@@ -1126,12 +1110,12 @@ app.post("/submitSubframeInfoManually", function(req, res){
     }
 
     if (functions.checkEmpty(variables.subframe_data_itemNamesData, "subframe_data")) {
-            res.render("home_manually_subframe");
+            res.render("manual_insertion/home_manually_subframe");
     } else { 
-        res.render("manually_roi_fiducials");
+        res.render("manual_insertion/manually_roi_fiducials");
     }    
 });
-
+//#############################################################################
 app.post("/submitROIFiducialsManually", function(req, res){
     variables.roi_fiducials_itemNamesData.roi_event_fid1_validity = (req.body.roi_event_fid1_validity ? true:false);
     variables.roi_fiducials_itemNamesData.roi_event_fid1_position_name = req.body.roi_event_fid1_position_name;
@@ -1156,12 +1140,12 @@ app.post("/submitROIFiducialsManually", function(req, res){
     variables.roi_fiducials_itemNamesData.roi_event_fid3_experiment_time = req.body.roi_event_fid3_experiment_time;
 
     if (functions.checkEmpty(variables.roi_fiducials_itemNamesData, "roi_fids")) {
-            res.render("manually_roi_fiducials");
+            res.render("manual_insertion/manually_roi_fiducials");
     } else { 
-        res.render("manually_roi_image");
+        res.render("manual_insertion/manually_roi_image");
     }  
 });
-
+//#############################################################################
 app.post("/submitROIImageManually", function(req, res){
     variables.roi_data_itemNamesData.roi_type = req.body.roi_type;
     variables.roi_data_itemNamesData.roi_detection_method = req.body.roi_detection_method;
@@ -1182,12 +1166,12 @@ app.post("/submitROIImageManually", function(req, res){
     variables.roi_data_itemNamesData.roi_event_comments = req.body.roi_event_comments;
     
     if (functions.checkEmpty(variables.roi_data_itemNamesData, "roi_data")) {
-        res.render("manually_roi_image");
+        res.render("manual_insertion/manually_roi_image");
     } else { 
-        res.render("manually_sample_fiducials");
+        res.render("manual_insertion/manually_sample_fiducials");
     }
 });
-
+//#############################################################################
 app.post("/submitSampleFiducialsManually", function(req, res){
     variables.sample_fiducials_itemNamesData.sample_event_fid1_validity = (req.body.sample_event_fid1_validity ? true:false);
     variables.sample_fiducials_itemNamesData.sample_event_fid1_position_name = req.body.sample_event_fid1_position_name;
@@ -1212,12 +1196,12 @@ app.post("/submitSampleFiducialsManually", function(req, res){
     variables.sample_fiducials_itemNamesData.sample_event_fid3_experiment_time = req.body.sample_event_fid3_experiment_time;
 
     if (functions.checkEmpty(variables.sample_fiducials_itemNamesData, "sampleimage_fids")) {
-        res.render("manually_sample_fiducials");
+        res.render("manual_insertion/manually_sample_fiducials");
     } else {
-        res.render("manually_sample_image");
+        res.render("manual_insertion/manually_sample_image");
     }
 });
-
+//#############################################################################
 app.post("/submitSampleImageManually", function(req, res){
     variables.sample_data_itemNamesData.sample_experiment_x_position = req.body.sample_experiment_x_position;
     variables.sample_data_itemNamesData.sample_experiment_y_position = req.body.sample_experiment_y_position;
@@ -1240,12 +1224,12 @@ app.post("/submitSampleImageManually", function(req, res){
     variables.sample_data_itemNamesData.sample_event_comments = req.body.sample_event_comments;
     
     if (functions.checkEmpty(variables.sample_data_itemNamesData, "sampleimage_data")) {
-            res.render("manually_sample_image");
+            res.render("manual_insertion/manually_sample_image");
     } else {
-        res.render("manually_target_fiducials");
+        res.render("manual_insertion/manually_target_fiducials");
     }
 });
-
+//#############################################################################
 app.post("/submitTargetFiducialsManually", function(req, res){
     variables.target_fiducials_itemNamesData.target_event_fid1_validity = (req.body.target_event_fid1_validity ? true:false);
     variables.target_fiducials_itemNamesData.target_event_fid1_position_name = req.body.target_event_fid1_position_name;
@@ -1270,12 +1254,12 @@ app.post("/submitTargetFiducialsManually", function(req, res){
     variables.target_fiducials_itemNamesData.target_event_fid3_experiment_time = req.body.target_event_fid3_experiment_time;
 
     if (functions.checkEmpty(variables.target_fiducials_itemNamesData, "target_fids")) {
-        res.render("manually_target_fiducials");
+        res.render("manual_insertion/manually_target_fiducials");
     } else {
-        res.render("manually_target_data");
+        res.render("manual_insertion/manually_target_data");
     }    
 });
-
+//#############################################################################
 app.post("/submitAllData", function(req, res){
     
     variables.target_data_itemNamesData.target_x_position = req.body.target_x_position;
@@ -1293,7 +1277,7 @@ app.post("/submitAllData", function(req, res){
     variables.target_data_itemNamesData.target_event_comments = req.body.target_event_comments;
     
     if (functions.checkEmpty(variables.target_data_itemNamesData, "target_data")) {
-        res.render("manually_target_data");
+        res.render("manual_insertion/manually_target_data");
     } else {
 
         var db_query = [];
@@ -1306,7 +1290,6 @@ app.post("/submitAllData", function(req, res){
             
             connection.query(db_query, function (error, result) {
                 if (error) throw error;
-                console.log(result);
                 res.redirect("/");
             }); 
         } else {
@@ -1320,7 +1303,6 @@ app.post("/submitAllData", function(req, res){
 
             connection.query(subframe_query, function (error, result) {
                 if (error) throw error;
-                //console.log(result);
             });
 
             console.log("inserting the subframe related fiducial information to the database");
@@ -1347,7 +1329,6 @@ app.post("/submitAllData", function(req, res){
             connection.query(subframe_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -1395,7 +1376,6 @@ app.post("/submitAllData", function(req, res){
 
             connection.query(roi_query, function (error, result) {
                 if (error) throw error;
-                //console.log(result);
             });
             
             console.log("inserting the ROI related fiducial information to the database");
@@ -1422,7 +1402,6 @@ app.post("/submitAllData", function(req, res){
             connection.query(roi_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -1464,7 +1443,6 @@ app.post("/submitAllData", function(req, res){
 
             connection.query(sample_query, function (error, result) {
                 if (error) throw error;
-                //console.log(result);
             });
 
             console.log("inserting the sample related fiducial information to the database");
@@ -1491,7 +1469,6 @@ app.post("/submitAllData", function(req, res){
             connection.query(sample_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -1531,7 +1508,6 @@ app.post("/submitAllData", function(req, res){
 
             connection.query(target_query, function (error, result) {
                 if (error) throw error;
-                //console.log(result);
             });
 
             console.log("inserting the target related fiducial information to the database");
@@ -1558,7 +1534,6 @@ app.post("/submitAllData", function(req, res){
             connection.query(target_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -1584,8 +1559,6 @@ app.post("/submitAllData", function(req, res){
             variables.target_data_itemNamesData.target_link_to_meta_data + "', '" + variables.target_data_itemNamesData.target_event_comments + 
             "', '" + variables.target_data_itemNamesData.target_event_date + " " + variables.target_data_itemNamesData.target_event_time + ":00'); ";
             
-            console.log(target_event_query);
-
             connection.query(target_event_query, function (error, result) {
                 if (error) throw error;
                 console.log("Finished");            
@@ -1594,9 +1567,8 @@ app.post("/submitAllData", function(req, res){
         }
     }
 });
-
+//#############################################################################
 app.post("/submitXMLData", function(req, res){
-    
     variables.subframe_fiducials_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
     variables.subframe_fiducials_itemNamesData.subframe_fid1_position_name = req.body.subframe_fid1_position_name;
     variables.subframe_fiducials_itemNamesData.subframe_fid1_x_position = req.body.subframe_fid1_x_position;
@@ -1746,9 +1718,6 @@ app.post("/submitXMLData", function(req, res){
     variables.target_data_itemNamesData.target_event_time = req.body.target_event_experiment_time;
     variables.target_data_itemNamesData.target_event_comments = req.body.target_event_comments;
 
-    //console.log(req.body.target_event_experiment_date);
-    //console.log(req.body.target_event_experiment_time);
-    
     var db_query = [];
         
         if (!variables.subframe_data_itemNamesData.subframe_validity) {
@@ -1759,7 +1728,6 @@ app.post("/submitXMLData", function(req, res){
             
             connection.query(db_query, function (error, result) {
                 if (error) throw error;
-                console.log(result);
                 res.redirect("/");
             }); 
         } else {
@@ -1773,7 +1741,6 @@ app.post("/submitXMLData", function(req, res){
 
             connection.query(subframe_query, function (error, result) {
                 if (error) throw error;
-                //console.log(result);
             });
 
             console.log("inserting the subframe related fiducial information to the database");
@@ -1800,7 +1767,6 @@ app.post("/submitXMLData", function(req, res){
             connection.query(subframe_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -1847,8 +1813,8 @@ app.post("/submitXMLData", function(req, res){
              variables.roi_data_itemNamesData.roi_experiment_date + " " + variables.roi_data_itemNamesData.roi_experiment_time + ":00'" + ");";
 
             connection.query(roi_query, function (error, result) {
-                if (error) throw error;
-                //console.log(result);
+                if (error)
+                    throw error;
             });
 
             console.log("inserting the ROI related fiducial information to the database");
@@ -1875,7 +1841,6 @@ app.post("/submitXMLData", function(req, res){
             connection.query(roi_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -1916,8 +1881,8 @@ app.post("/submitXMLData", function(req, res){
             variables.sample_data_itemNamesData.sample_experiment_time + ":00'" + ");";
 
             connection.query(sample_query, function (error, result) {
-                if (error) throw error;
-                //console.log(result);
+                if (error)
+                    throw error;
             });
 
             console.log("inserting the sample related fiducial information to the database");
@@ -1944,7 +1909,6 @@ app.post("/submitXMLData", function(req, res){
             connection.query(sample_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -1972,7 +1936,8 @@ app.post("/submitXMLData", function(req, res){
             " " + variables.sample_data_itemNamesData.sample_event_time + ":00'); ";
 
             connection.query(sample_event_query, function (error, result) {
-                if (error) throw error;
+                if (error)
+                    throw error;
             });
 
             console.log("inserting the target related information to the database");
@@ -1983,8 +1948,8 @@ app.post("/submitXMLData", function(req, res){
             variables.target_data_itemNamesData.targetinfo_experiment_date + " " + variables.target_data_itemNamesData.targetinfo_experiment_time + ":00'" + ");";
 
             connection.query(target_query, function (error, result) {
-                if (error) throw error;
-                //console.log(result);
+                if (error)
+                    throw error;
             });
 
             console.log("inserting the target related fiducial information to the database");
@@ -2011,7 +1976,6 @@ app.post("/submitXMLData", function(req, res){
             connection.query(target_fiducials_query, function (error, result) {
                             if (error) throw error;
                             three_fids_correctly_added = true;
-                            //console.log(result);
             });
 
             if (three_fids_correctly_added) {
@@ -2037,8 +2001,6 @@ app.post("/submitXMLData", function(req, res){
             variables.target_data_itemNamesData.target_link_to_meta_data + "', '" + variables.target_data_itemNamesData.target_event_comments + 
             "', '" + variables.target_data_itemNamesData.target_event_date + " " + variables.target_data_itemNamesData.target_event_time + ":00'); ";
             
-            console.log(target_event_query);
-
             connection.query(target_event_query, function (error, result) {
                 if (error) throw error;
                 console.log("Finished");            
@@ -2046,178 +2008,18 @@ app.post("/submitXMLData", function(req, res){
             });
         }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ******************************************************************************************************************************************************************
-
-
+//#############################################################################
 app.post("/submitXMLFile", function(req, res){
-    // Find count of Subframes in DB and Respond with that count
-    //var q = "SELECT COUNT(*) as count FROM Subframe; SELECT MAX(SerialNumber)+1 as max_sr FROM Subframe;";
-    //connection.query(q, function(err, results){
-    //    if(err) throw err;
-    //    var count = results[0][0].count;
-    //    serial_number = count+1;
-    //    var max_sr = results[1][0].max_sr; // maximum serial number + 1
-        fs.readFile(req.body.xmlFile, function(err, data){
-            //xml_data = data;
-            xmlParser.parseString(data, function(xml_err, result){
-                if(xml_err)
-                    console.log(xml_err);
-                // console.log(result['experiment']['subframe'][0]['roi']);
-                res.render("home_xml_data", {xml_data: result['experiment']['subframe'][0]});
-                
-                //console.dir(result.experiment.subframe[0].Comments);
-                //console.dir(result.experiment.overviewimage[0].MicroscopeType);
-                //assignTheValues(result);
-                //console.dir(result.experiment.subframe[0].GroupName);
-                //console.dir(result.experiment.fiducials[0].fiducial1[0].Validity);
-                //console.dir(result.experiment.fiducials[0].fiducial1);
-                //console.log('Read finished!');
-                // Looks for "home.ejs", and by default it is looking in "view"
-                
-                
-                /*
-                res.render("home_xml_data", {
-                    data: count,
-                    serialnumber: max_sr, 
-                    subframe_validity: result.experiment.subframe[0].Validity,
-                    subframe_facilityname: result.experiment.subframe[0].FacilityName,
-                    subframe_typename: result.experiment.subframe[0].TypeName,
-                    subframe_groupname: result.experiment.subframe[0].GroupName,
-                    subframe_sizex: result.experiment.subframe[0].SizeX,
-                    subframe_sizey: result.experiment.subframe[0].SizeY,
-                    subframe_comments: result.experiment.subframe[0].Comments,
-                    subframe_experimentdate: result.experiment.subframe[0].ExperimentDate,
-                    subframe_experimenttime: result.experiment.subframe[0].ExperimentTime,
-                    subframe_eventtype: result.experiment.subframe[0].EventType,
-                    fid1_validity: result.experiment.fiducials[0].fiducial1[0].Validity,
-                    fid1_positionname: result.experiment.fiducials[0].fiducial1[0].PositionName,
-                    fid1_xposition: result.experiment.fiducials[0].fiducial1[0].X_position,
-                    fid1_yposition: result.experiment.fiducials[0].fiducial1[0].Y_position,
-                    fid1_zposition: result.experiment.fiducials[0].fiducial1[0].Z_position,
-                    fid2_validity: result.experiment.fiducials[0].fiducial2[0].Validity,
-                    fid2_positionname: result.experiment.fiducials[0].fiducial2[0].PositionName,
-                    fid2_xposition: result.experiment.fiducials[0].fiducial2[0].X_position,
-                    fid2_yposition: result.experiment.fiducials[0].fiducial2[0].Y_position,
-                    fid2_zposition: result.experiment.fiducials[0].fiducial2[0].Z_position,
-                    fid3_validity: result.experiment.fiducials[0].fiducial3[0].Validity,
-                    fid3_positionname: result.experiment.fiducials[0].fiducial3[0].PositionName,
-                    fid3_xposition: result.experiment.fiducials[0].fiducial3[0].X_position,
-                    fid3_yposition: result.experiment.fiducials[0].fiducial3[0].Y_position,
-                    fid3_zposition: result.experiment.fiducials[0].fiducial3[0].Z_position,
-                    fid4_validity: result.experiment.fiducials[0].fiducial4[0].Validity,
-                    fid4_positionname: result.experiment.fiducials[0].fiducial4[0].PositionName,
-                    fid4_xposition: result.experiment.fiducials[0].fiducial4[0].X_position,
-                    fid4_yposition: result.experiment.fiducials[0].fiducial4[0].Y_position,
-                    fid4_zposition: result.experiment.fiducials[0].fiducial4[0].Z_position,
-                    overviewimage_validity: result.experiment.overviewimage[0].Validity,
-                    overviewimage_microscopetype: result.experiment.overviewimage[0].MicroscopeType,
-                    overviewimage_detectionmethod: result.experiment.overviewimage[0].DetectionMethod,
-                    overviewimage_imageload: result.experiment.overviewimage[0].ImageLoad,
-                    overviewimage_experimentdate: result.experiment.overviewimage[0].ExperimentDate,
-                    overviewimage_experimenttime: result.experiment.overviewimage[0].ExperimentTime, 
-                    overviewimage_comments: result.experiment.overviewimage[0].Comments,
-                    roi1_validity: result.experiment.roiimages[0].roi1[0].Validity,
-                    roi1_microscopetype: result.experiment.roiimages[0].roi1[0].MicroscopeType,
-                    roi1_detectionmethod: result.experiment.roiimages[0].roi1[0].DetectionMethod,
-                    roi1_bbxposition: result.experiment.roiimages[0].roi1[0].BBXPosition,
-                    roi1_bbyposition: result.experiment.roiimages[0].roi1[0].BBYPosition,
-                    roi1_bbwidth: result.experiment.roiimages[0].roi1[0].BBWidth,
-                    roi1_bbheight: result.experiment.roiimages[0].roi1[0].BBHeight,
-                    roi1_imageload: result.experiment.roiimages[0].roi1[0].ImageLoad,
-                    roi1_experimentdate: result.experiment.roiimages[0].roi1[0].ExperimentDate,
-                    roi1_experimenttime: result.experiment.roiimages[0].roi1[0].ExperimentTime,
-                    roi1_comments: result.experiment.roiimages[0].roi1[0].Comments,
-                    sample1_validity: result.experiment.sampleimages[0].sample1[0].Validity,
-                    sample1_pixelsizex: result.experiment.sampleimages[0].sample1[0].PixelSizeX,
-                    sample1_pixelsizey: result.experiment.sampleimages[0].sample1[0].PixelSizeY,
-                    sample1_bbxposition: result.experiment.sampleimages[0].sample1[0].BBXPosition,
-                    sample1_bbyposition: result.experiment.sampleimages[0].sample1[0].BBYPosition,
-                    sample1_bbwidth: result.experiment.sampleimages[0].sample1[0].BBWidth,
-                    sample1_bbheight: result.experiment.sampleimages[0].sample1[0].BBHeight,
-                    sample1_maskimageload: result.experiment.sampleimages[0].sample1[0].MaskImageLoad,
-                    sample1_sampleexperimentdate: result.experiment.sampleimages[0].sample1[0].SampleExperimentDate,
-                    sample1_sampleexperimenttime: result.experiment.sampleimages[0].sample1[0].SampleExperimentTime,
-                    sample1_samplecomments: result.experiment.sampleimages[0].sample1[0].SampleComments,
-                    sample1_sampleimagevalidity: result.experiment.sampleimages[0].sample1[0].SampleImageValidity,
-                    sample1_microscopetype: result.experiment.sampleimages[0].sample1[0].MicroscopeType,
-                    sample1_detectionmethod: result.experiment.sampleimages[0].sample1[0].DetectionMethod,
-                    sample1_imagetype: result.experiment.sampleimages[0].sample1[0].ImageType,
-                    sample1_imagewidth: result.experiment.sampleimages[0].sample1[0].ImageWidth,
-                    sample1_imageheight: result.experiment.sampleimages[0].sample1[0].ImageHeight,
-                    sample1_imagesize: result.experiment.sampleimages[0].sample1[0].ImageSize,
-                    sample1_imagecomments: result.experiment.sampleimages[0].sample1[0].ImageComments,
-                    sample1_imageload: result.experiment.sampleimages[0].sample1[0].ImageLoad,
-                    sample1_experimentdate: result.experiment.sampleimages[0].sample1[0].ExperimentDate,
-                    sample1_experimenttime: result.experiment.sampleimages[0].sample1[0].ExperimentTime,
-                    target1_validity: result.experiment.targets[0].target1[0].Validity,
-                    target1_status: result.experiment.targets[0].target1[0].Status,
-                    target1_thetaangle: result.experiment.targets[0].target1[0].ThetaAngle,
-                    target1_phiangle: result.experiment.targets[0].target1[0].PhiAngle,
-                    target1_rhoangle: result.experiment.targets[0].target1[0].RhoAngle,
-                    target1_experimentdate: result.experiment.targets[0].target1[0].ExperimentDate,
-                    target1_experimenttime: result.experiment.targets[0].target1[0].ExperimentTime,
-                    target1_comments: result.experiment.targets[0].target1[0].Comments,
-                    target1_positionvalidity: result.experiment.targets[0].target1[0].PositionValidity,
-                    target1_xposition: result.experiment.targets[0].target1[0].XPosition,
-                    target1_yposition: result.experiment.targets[0].target1[0].YPosition,
-                    target1_zposition: result.experiment.targets[0].target1[0].ZPosition,
-                    target1_inplaneaccuracy: result.experiment.targets[0].target1[0].InplaneAccuracy,
-                    target1_outofplaneaccuracy: result.experiment.targets[0].target1[0].OutofplaneAccuracy,
-                    target1_positionexperimentdate: result.experiment.targets[0].target1[0].PositionExperimentDate,
-                    target1_positionexperimenttime: result.experiment.targets[0].target1[0].PositionExperimentTime,
-                    target1_instrument: result.experiment.targets[0].target1[0].Instrument,
-                    target1_xfelexperimentdate: result.experiment.targets[0].target1[0].XFELExperimentDate,
-                    target1_xfelexperimenttime: result.experiment.targets[0].target1[0].XFELExperimentTime,
-                    target1_xfelexperimentcomments: result.experiment.targets[0].target1[0].XFELExperimentComments
-                });   */    
-            });
+    fs.readFile(req.body.xmlFile, function(err, data){
+        xmlParser.parseString(data, function(xml_err, result){
+            if(xml_err)
+                console.log(xml_err);
+            res.render("home_xml_data", {xml_data: result['experiment']['subframe'][0]});  
         });
-    //});
+    });
 });
-
+//#############################################################################
 app.post("/submitExperimentXML", function(req, res){
-    //console.log(xml_data);
-    //console.log(serial_number);
-    console.log(req.body);
-
     // ***** Subframe Table ***** //
     var subframe_validity = (req.body.subframe_validity=="on" ? 1:0); 
     var facility_name_select = req.body.facility_name_select; 
@@ -2326,10 +2128,6 @@ app.post("/submitExperimentXML", function(req, res){
     var xfeldata_experiment_time = req.body.xfeldata_experiment_time;
     var target_instrument_comments = req.body.target_instrument_comments;
     
-    //if (checkEmpty(req.body, "xmldata")){
-    //    res.redirect("/submitXMLFile");
-    //    //res.render("/submitExperimentXML");
-    //} else {
     var subframe_query = "INSERT INTO Subframe (GroupID, SubframeTypeID, FacilityID, SerialNumber, SizeX, SizeY, Comments, CreateTimeStamp, Validity)" + 
     " VALUES ((SELECT ID FROM Group_Information WHERE GroupName='" + group_name + 
     "'), (SELECT ID FROM Subframe_Type WHERE Type='" + subframe_type_select +
@@ -2398,29 +2196,26 @@ app.post("/submitExperimentXML", function(req, res){
 
     connection.query(q, function (error, result) {
         if (error) throw error;
-        console.log(result);
         res.redirect("/");
-    }); 
-    //}
+    });
 });
-
+//#############################################################################
 app.get("/login", function(req, res){
     res.render('login', { message: req.flash('loginMessage') });
 });
-
+//#############################################################################
 app.get('/register', function(req, res) {
     res.render('register', { message: req.flash('registerMessage') });
 });
-
+//#############################################################################
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
-  
+//#############################################################################
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
-
-
+//#############################################################################
 passport.use(
     'local-login',
     new LocalStrategy({
@@ -2438,12 +2233,7 @@ passport.use(
                 return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
             }
 
-            // if the user is found but the password is wrong
-            console.log(password);
-            console.log(rows[0]);
-            
             if (!bcrypt.compare(password, rows[0].Password)){
-                console.log("Hello");
                 return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
             }
             // all is well, return successful user
@@ -2452,7 +2242,7 @@ passport.use(
         //connection.end();
     })
 );
-
+//#############################################################################
 passport.use(
     'local-signup',
     new LocalStrategy({
@@ -2485,21 +2275,19 @@ passport.use(
         //connection.end();
     })
 );
-
+//#############################################################################
 app.post('/register', passport.authenticate('local-signup', {
         successRedirect : '/login', // redirect to the secure profile section
         failureRedirect : '/register', // redirect back to the signup page if there is an error
         failureFlash : false // allow flash messages
-    }));
-
+}));
+//#############################################################################
 app.post('/login', passport.authenticate('local-login', {
         successRedirect : '/editTables', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }),
     function(req, res) {
-        console.log("hello");
-
         if (req.body.remember) {
           req.session.cookie.maxAge = 1000 * 60 * 3;
         } else {
@@ -2507,19 +2295,8 @@ app.post('/login', passport.authenticate('local-login', {
         }
     res.redirect('/');
 });
-
-//app.get("/joke", function(req, res){
-//    var joke = "Knock Knock ...";
-//    //console.log("REQUESTED THE JOKE ROUTE!");
-//    res.send(joke);
-//});
-// 
-//app.get("/random_num", function(req, res){
-//    var num = Math.floor(Math.random() * 10) + 1;
-//    res.send("Your lucky number is: " + num);
-//});
-
+//#############################################################################
 app.listen(8080, function () {
  console.log('App listening on port 8080!');
 });
-
+//#############################################################################
