@@ -37,3 +37,8 @@ The GIF file below shows briefly the capability of the project for database inte
 
 ## Notice:
 It is not possible to access the database as the credentials are not provided!
+
+The creation of the subframe, viewing the structure and entries of the tables, querying the
+information from the database is implemented and tested.
+
+The manual and XML insertion of the data as well as login and registration is under development.
