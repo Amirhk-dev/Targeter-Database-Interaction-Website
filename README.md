@@ -19,7 +19,7 @@ one or many ROIs on a Subframe). **Sample** is any area inside the ROI, for exam
 
 The image below shows the structure of the information:
 
-<img src="./imgs/subframe.jpg" alt="levels-of-information-image" style="display: inline-block; margin: 0 auto; width: 50%">
+<img src="./imgs/subframe.jpg" alt="levels-of-information-image" style="display: inline-block; margin: auto auto; width: 50% ">
 
 There is a possibility to
 1. insert (manually or via XML file)
