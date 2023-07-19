@@ -14,6 +14,7 @@ The information is grouped into different levels as shown below:
     * Region(s) of Interest (ROI)
         * Sample
             * Target
+
 where **Subframe** is the object which holds the material for imaging,
 **Region of Interest** is any region that we are interested to focus on (there could be
 one or many ROIs on a Subframe). **Sample** is any area inside ROI, for example, a cell region
