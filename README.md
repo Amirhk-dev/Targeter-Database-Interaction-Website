@@ -18,7 +18,7 @@ one or many ROIs on a Subframe). **Sample** is any area inside ROI, for example,
 **Target**(s) are the points that we want to shoot at with a laser.
 
 The image below shows the structure of the information:
-[levels-of-information](./imgs/subframe.jpg)
+![levels-of-information](./imgs/subframe.jpg)
 
 There is a possibility to
 1. insert (manually or via XML file)
