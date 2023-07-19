@@ -29,5 +29,11 @@ the information on the database.
 
 The project is implemented with Node.js and EJS.
 
+## Demo
+
+The GIF file below shows briefly the capability of the project for database interaction.
+
+<img src="./imgs/targeter-db.gif" alt="demo-gif-file" style="display: inline-block; margin: auto auto; width: 50% ">
+
 ## Notice:
 It is not possible to access the database as the credentials are not provided!
