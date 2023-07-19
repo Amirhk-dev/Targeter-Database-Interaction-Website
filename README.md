@@ -17,6 +17,9 @@ where **Subframe** is the object which holds the imaging material. **Region of I
 one or many ROIs on a Subframe). **Sample** is any area inside ROI, for example, a cell region (there could be one or many samples on an ROI). **Target** is any point inside a sample (there could be one or many targets on a sample).
 **Target**(s) are the points that we want to shoot at with a laser.
 
+The image below shows the structure of the information:
+[levels-of-information](./imgs/subframe.jpg)
+
 There is a possibility to
 1. insert (manually or via XML file)
 2. edit
