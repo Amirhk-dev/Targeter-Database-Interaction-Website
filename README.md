@@ -14,7 +14,7 @@ The information is grouped into different levels as shown below:
             * Target,
 
 where **Subframe** is the object which holds the imaging material. **Region of Interest** is any region that we are interested to focus on (there could be
-one or many ROIs on a Subframe). **Sample** is any area inside ROI, for example, a cell region (there could be one or many samples on an ROI). **Target** is any point inside a sample (there could be one or many targets on a sample).
+one or many ROIs on a Subframe). **Sample** is any area inside the ROI, for example, a cell region (there could be one or many samples on an ROI). **Target** is any point inside a sample (there could be one or many targets on a sample).
 **Target**(s) are the points that we want to shoot at with a laser.
 
 The image below shows the structure of the information:
