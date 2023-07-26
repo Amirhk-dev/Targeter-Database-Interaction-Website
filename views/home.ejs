@@ -77,11 +77,11 @@
                     Insert the Data Manually
                 </button>
             </form>
-                        
+
             <form method="POST" action='/submitXMLFile'>
                 <div class="form-group">
                     <label class="label-text" id="xml_insert" for="xmlFileLoad">
-                        Submit the Experiment (XML file): 
+                        Do you want to insert the data via XML file? 
                     </label>
                     <input type="file" class="form-control" id="xmlFileLoad"
                     name="xmlFile">
@@ -90,7 +90,18 @@
                     Load the Data from XML File
                 </button>
             </form>
-            
+
+            <form method="POST" action='/submitDataManually'>
+                <div class="form-group">
+                    <label class="label-text" id="manual_insert">
+                        Do you want to insert the data manually?
+                    </label>
+                </div>
+                <button class="btn btn-secondary">
+                    Insert the Data Manually
+                </button>
+            </form>
+                                    
             <form>
                 <div class="form-group">
                     <label class="label-text">

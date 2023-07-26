@@ -1,148 +1,160 @@
-<%- include("header") -%>
-    <div class="row">
-        <div class="col-lg-12">
-            <form method="POST" action='/submitSubframeInfoManually'>
-                <p class="lead_text">Enter the Subframe Information</p>
-                <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the SubframeID</label>
-                            <input type="text" name="subframe_id" class="form-control" placeholder="14 Characters"
-                                minlength="14" maxlength="14">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text" for="group_select">Select the Group</label>
-                            <select class="form-control" id="group_select" name="group_name">
-                                <option selected>Choose...</option>
-                                <option>SEC</option>
-                                <option>HED</option>
-                                <option>MID</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Date of the Experiment</label>
-                            <input class="form-control" type="date" id="subframe_experiment_date"
-                                name="subframe_experiment_date" min="2012-01-01" max="2040-12-31">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Time of the Experiment</label>
-                            <input class="form-control" type="time" id="subframe_experiment_time"
-                                name="subframe_experiment_time">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="subframe_comments" class="label-text">Enter Comments Related to the Subframe</label>
-                    <textarea class="form-control" id="subframe_comments" name="subframe_comments" rows="2"
-                        minlength="0" maxlength="100" placeholder="Maximum 100 characters are accepted"></textarea>
-                </div>
-                <div class="form-check">
-                    <label class="form-check-label" for="subframe_validity">Validity</label>
-                    <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#validityCollapse"
-                        aria-expanded="false" id="subframe_validity" name="subframe_validity" checked>
-                </div>
-                <div class="collapse" id="validityCollapse">
-                    <div class="row twopanel">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="label-text">Enter the Subframe Invalidity Date</label>
-                                <input class="form-control" type="date" id="subframe_invalid_date"
-                                    name="subframe_invalid_date" min="2012-01-01" max="2040-12-31">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="label-text">Enter the Subframe Invalidity Time</label>
-                                <input class="form-control" type="time" id="subframe_invalid_time"
-                                    name="subframe_invalid_time">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text" for="subframeDeviceSelect">Select the Device</label>
-                            <select class="form-control" id="subframeDeviceSelect" name="subframe_device_select">
-                                <option selected>Choose...</option>
-                                <option>Keyence</option>
-                                <option>Nanofocus</option>
-                                <option>Quanta</option>
-                                <option>Zeiss</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text" for="subframeEventSelect">Select the Subframe Event Type</label>
-                            <select class="form-control" id="subframeEventSelect" name="subframe_event_select">
-                                <option selected>Choose...</option>
-                                <option>XRay Measurement</option>
-                                <option>XFEL Instrument Measurement</option>
-                                <option>Imaging</option>
-                                <option>High Resolution Imaging</option>
-                                <option>Overview Imaging</option>
-                                <option>Mounted</option>
-                                <option>Unmounted</option>
-                                <option>Mounted Somewhere Else</option>
-                                <option>Shot</option>
-                                <option>Broken</option>
-                                <option>Archived</option>
-                                <option>Destroyed</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Load the Data (e.g. Images)</label>
-                            <input class="form-control" type="file" id="subframe_link_to_data"
-                                name="subframe_link_to_data">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Load the Meta Data (e.g. Text File)</label>
-                            <input class="form-control" type="file" id="subframe_link_to_meta_data"
-                                name="subframe_link_to_meta_data">
-                        </div>
-                    </div>
-                </div>
-                <div class="row twopanel">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Date of the Subframe Event</strong></label>
-                            <input class="form-control" type="date" id="subframe_event_experiment_date"
-                                name="subframe_event_experiment_date" min="2012-01-01" max="2040-12-31">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="label-text">Enter the Time of the Subframe Event</strong></label>
-                            <input class="form-control" type="time" id="subframe_event_experiment_time"
-                                name="subframe_event_experiment_time">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="subframe_events_comments" class="label-text">Enter Comments Related to the Subframe
-                        Event</label>
-                    <textarea class="form-control" id="subframe_events_comments" name="subframe_events_comments"
-                        rows="2" minlength="0" maxlength="100"
-                        placeholder="Maximum 100 characters are accepted"></textarea>
-                </div>
-                <button class="btn btn-secondary">Enter the Fiducial Points Infromation to be used by Regions of Interest (ROI)</button>
-            </form>
+<%- include("../header") -%>
+    
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+        <em>Subframe holds all the information in the hierarchy.</em>
+        <br>
+        <br>
+        <div class="row">
+            <img class="center" src='subframe.jpg' alt="Subframe Photo">
+        </div>
+        <br>
+        <br>
+            Information for the Subframe <%= subframe_id %>
+        </h1>
+    </div>
+</div>
+
+<form action="/DEFAULT_URL" method="post">
+<div class="row">
+    <div class="col-lg-4">
+        <div class="form-group">
+            <label class="label-text">Facility</label>
+            <input type="text" name="facility_name" class="form-control"
+            value="<%= subframe_information[0]['FacilityID'] %>" disabled>
         </div>
     </div>
-<%- include("footer") -%>
+    <div class="col-lg-4">
+        <div class="form-group">
+            <label class="label-text">Subframe Type</label>
+            <input type="text" name="fsubframe_type_name" class="form-control"
+            value="<%= subframe_information[0]['SubframeTypeID'] %>" disabled>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="form-group">
+            <label class="label-text">Serial Number</label>
+            <input type="text" name="facility_name" class="form-control"
+            value="<%= subframe_information[0]['SerialNumber'] %>" disabled>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="form-group">
+            <label class="label-text">Created Time</label>
+            <input type="text" name="facility_name" class="form-control"
+            value="<%= subframe_information[0]['CreateTimeStamp'] %>" disabled>
+        </div>
+    </div>
+</div>
+
+<br>
+            
+<div class="row">
+    <hr>
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label class="label-text" for="group_select">Select the Group</label>
+            <select class="form-control" id="group_select" name="group_name">
+                <% var selected = 0 %>
+                <% for(let idx=0; idx < group_information.length; idx++){ %>
+                    <% if(subframe_information[0]['GroupID']==group_information[idx]['GroupName']) { %>
+                        <option selected><%= group_information[idx]['GroupName'] %></option>
+                        <% selected = 1 %>
+                    <% } else { %>
+                        <option><%= group_information[idx]['GroupName'] %></option>
+                    <% } %>
+                <% } %>
+                <% if (selected == 0) { %>
+                    <option selected>Choose...</option>
+                <% } %>                
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="subframe_comments" class="label-text">Enter Comments Related to the Subframe</label>
+            <textarea class="form-control" id="subframe_comments" name="subframe_comments" rows="2"
+                minlength="0" maxlength="100" placeholder="Maximum 100 characters are accepted"></textarea>
+        </div>        
+    </div>
+</div>
+
+<br>
+
+<div class="row twopanel">
+    <div class="form-check">
+        <label class="form-check-label" for="subframe_validity">Valid</label>
+        <input type="checkbox" class="form-check-input" data-bs-toggle="collapse" href="#validityCollapse"
+            aria-expanded="false" id="subframe_validity" name="subframe_validity" checked>
+    </div>
+    <div class="collapse" id="validityCollapse">
+        <div class="row twopanel">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="label-text">Enter the Subframe Invalidity Date</label>
+                    <input class="form-control" type="date" id="subframe_invalid_date"
+                        name="subframe_invalid_date" min="2012-01-01" max="2040-12-31">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="label-text">Enter the Subframe Invalidity Time</label>
+                    <input class="form-control" type="time" id="subframe_invalid_time"
+                        name="subframe_invalid_time">
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+    <hr>
+</div>
+
+<br>
+
+<div class="row twopanel">
+    <div class="row">
+        <button class="btn btn-outline-secondary" type="submit"
+            formaction="/createSubframeEvent"
+            name="create_event_for_subframe">
+                Create Event for the Subframe
+        </button>
+    </div>    
+</div>
+
+<div class="row twopanel">
+    <div class="row">
+        <button class="btn btn-outline-secondary" type="submit"
+            formaction="/createSubframeROI"
+            name="create_roi_for_subframe">
+                Create Region of Interest (ROI) in the Subframe
+        </button>
+    </div>
+</div>
+
+<div class="row twopanel">
+    <div class="col-lg-6">
+        <div class="row">
+            <button class="btn btn-secondary" type="submit"
+                formaction="/submitAndGoToMain"
+                name="submit_and_go_to_main_page">
+                    Submit the Data and Go to Home Page
+            </button>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="row">
+            <button class="btn btn-secondary" type="submit"
+                formaction="/cancelAndGoToMain"
+                name="cancel_and_go_to_main_page">
+                    Cancel and Go to Home Page
+            </button>
+        </div>
+    </div>
+</div>
+</form>
+
+<%- include("../footer") -%>

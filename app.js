@@ -922,7 +922,7 @@ app.post("/get_subframe_ids", function(req, res){
             if (error)
                 throw error;
             
-            Subframe_IDs = [];
+            let Subframe_IDs = [];
             for(i=0; i < result.length; i+=2) {
                 subframe_id = "";
                 subframe_id += result[i][0]['CodeName'];
@@ -947,8 +947,114 @@ app.post("/get_subframe_ids", function(req, res){
 });
 //#############################################################################
 app.post("/submitDataManually", function(req, res){
-    res.render("manual_insertion/home_manually_subframe_fiducials");
+    let query = "SELECT ID, SubframeTypeID, FacilityID, SerialNumber" +
+                " FROM Subframe_Table; ";
+    query += "SELECT * FROM SubframeType_Table; ";
+    query += "SELECT * FROM Facility_Table; ";
+
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
+
+        let Subframe_IDs = [];
+        let subframe_id = "";
+        for(let idx=0; idx < result[0].length; idx++){
+            subframe_id = "";
+
+            for(let iter=0; iter < result[2].length; iter++){
+                if(result[0][idx]['FacilityID']==result[2][iter]['ID']){
+                    subframe_id += result[2][iter]['CodeName'];
+                    break;
+                }
+            }
+
+            for(let iter=0; iter < result[1].length; iter++){
+                if(result[0][idx]['SubframeTypeID']==result[1][iter]['ID']){
+                    subframe_id += result[1][iter]['TypeName'];
+                    break;
+                }
+            }
+
+            let padd_length = 6-result[0][idx]['SerialNumber'].toString().length;
+            serial_number_str = result[0][idx]['SerialNumber'].toString();
+            for (let j=0; j < padd_length; j++){
+                serial_number_str = "0" + serial_number_str;
+            }
+
+            subframe_id += serial_number_str;
+            Subframe_IDs.push([result[0][idx]['ID'], subframe_id]);
+        }
+
+        res.render("manual_insertion/home_manual_data_insertion", {
+            Subframe_IDs
+        });
+    });
 });
+
+app.post("/insertSubframeInformationManually", function(req, res){
+    
+    let subframe_id = req.body['filters_subframe'];
+    let facility_name = subframe_id.substring(0,5);
+    let subframe_type = subframe_id.substring(5,8);
+    let serial_number = Number(subframe_id.substring(8,));
+    
+    let query = "SELECT * FROM Subframe_Table WHERE " +
+                "(SubframeTypeID=(SELECT ID FROM " + 
+                "SubframeType_Table WHERE TypeName='" + subframe_type +
+                "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE " + 
+                "CodeName='" + facility_name + "') AND " +
+                "SerialNumber=" + serial_number.toString() + "); ";
+    query += "SELECT * From GroupInformation_Table; ";
+    query += "SELECT * FROM SubframeType_Table; ";
+    query += "SELECT * FROM Facility_Table; ";
+
+    connection.query(query, function(error, result) {
+        if (error)
+            throw error;
+
+        if (result[0][0]['GroupID'] != null){
+            for(let idx=0; idx < result[1].length; idx++){
+                if(result[1][idx]['ID'] == result[0][0]['GroupID']){
+                    result[0][0]['GroupID'] = result[1][idx]['GroupName'];
+                    break;
+                }
+            }
+        }
+
+        for(let idx=0; idx < result[2].length; idx++){
+            if(result[2][idx]['ID'] == result[0][0]['SubframeTypeID']){
+                result[0][0]['SubframeTypeID'] = result[2][idx]['TypeName'];
+                break;
+            }
+        }
+
+        for(let idx=0; idx < result[3].length; idx++){
+            if(result[3][idx]['ID'] == result[0][0]['FacilityID']){
+                result[0][0]['FacilityID'] = result[3][idx]['CodeName'];
+                break;
+            }
+        }
+
+        let subframe_information = result[0];
+        let group_information = result[1];
+
+        res.render("manual_insertion/home_manually_subframe", {
+            subframe_id,
+            subframe_information,
+            group_information
+        });
+    });
+});
+
+app.post("/create_event_for_subframe", function(req, res){
+
+    console.log(req.body);
+
+});
+
+// app.post("/submitDataManually", function(req, res){
+//    res.render("manual_insertion/home_manually_subframe_fiducials");
+// });
 //#############################################################################
 app.post("/submitSubframeFiducialsInfoManually", function(req, res){
     variables.subframe_fiducials_itemNamesData.subframe_fid1_validity = (req.body.subframe_fid1_validity ? true:false);
