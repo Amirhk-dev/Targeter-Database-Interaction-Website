@@ -9,6 +9,7 @@ const variables = require('./public/app_variables');
 const functions = require('./public/app_functions');
 
 var LocalStrategy   = require('passport-local').Strategy;
+
 let mysql = require('mysql'); 
 let connection = mysql.createConnection({
     host	            : process.env.HOST_NAME, 
@@ -21,7 +22,7 @@ let connection = mysql.createConnection({
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
-app.use(express.static(__dirname + "/imgs"));    
+app.use(express.static(__dirname + "/imgs"));
 //#############################################################################
 // load home page
 app.get("/", function(req, res){
@@ -991,6 +992,8 @@ app.post("/submitDataManually", function(req, res){
     });
 });
 
+var insert_subframe_information = {};
+
 app.post("/insertSubframeInformationManually", function(req, res){
     
     let subframe_id = req.body['filters_subframe'];
@@ -1038,6 +1041,8 @@ app.post("/insertSubframeInformationManually", function(req, res){
         let subframe_information = result[0];
         let group_information = result[1];
 
+        insert_subframe_information['subframe_id'] = subframe_id;
+        
         res.render("manual_insertion/home_manually_subframe", {
             subframe_id,
             subframe_information,
@@ -1046,11 +1051,75 @@ app.post("/insertSubframeInformationManually", function(req, res){
     });
 });
 
-app.post("/create_event_for_subframe", function(req, res){
+var fiducial_positions = {};
+var device_lists = {};
+var event_types = {};
+app.post("/createSubframeEvent", function(req, res){
 
-    console.log(req.body);
+    if (req.body['create_event_for_subframe'] == 0)
+        insert_subframe_information['subframe_info'] = req.body;
 
+    let query = "SELECT * FROM SubframeEvent_Table ORDER BY id DESC LIMIT 1; ";
+    query += "SELECT * FROM Fiducial_Table ORDER BY id DESC LIMIT 1; ";
+
+    if (req.body['create_event_for_subframe'] == 0){
+        query += "SELECT * FROM DeviceList_Table; ";
+        query += "SELECT * FROM EventType_Table; ";
+        query += "SELECT * FROM FiducialPosition_Table; ";
+    }
+
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
+
+        if (req.body['create_event_for_subframe'] == 0){
+            device_lists = result[2];
+            event_types = result[3];
+            fiducial_positions = result[4];
+        }
+
+        let subframe_event = result[0];
+        let fiducials = result[1]; 
+
+        console.log(Object.keys(subframe_event[0]));
+
+        res.render("manual_insertion/manual_subframe_event", {
+            insert_subframe_information,
+            subframe_event,
+            fiducials,
+            device_lists,
+            event_types,
+            fiducial_positions
+        });
+    });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // app.post("/submitDataManually", function(req, res){
 //    res.render("manual_insertion/home_manually_subframe_fiducials");
