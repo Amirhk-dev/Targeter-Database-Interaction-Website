@@ -18,12 +18,194 @@
 
 <form action="/DEFAULT_URL" method="post">
     
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label class="label-text" for="device_select">Select the Device</label>
+                <select class="form-control" id="device_select" name="device_name">
+                    <% for(let idx=0; idx < device_lists.length; idx++){ %>
+                            <option><%= device_lists[idx]['VendorName'] %></option>
+                    <% } %>
+                        <option selected>Choose...</option>                
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label class="label-text" for="event_select">Select the Event Type</label>
+                <select class="form-control" id="event_select" name="event_name">
+                    <% for(let idx=0; idx < event_types.length; idx++){ %>
+                            <option><%= event_types[idx]['EventType'] %></option>
+                    <% } %>
+                        <option selected>Choose...</option>                
+                </select>
+            </div>        
+        </div>
+    </div>    
 
+    <div class="row">
+        <div class="col-lg-6">
+            <label for="EventLinkToData" class="form-label label-text">
+                Insert the Link to the Data
+            </label>
+            <input class="form-control" type="file" id="EventLinkToData"
+                name="event_link_to_data">
+        </div>
+        <div class="col-lg-6">
+            <label for="EventLinkToMetaData" class="form-label label-text">
+                Insert the Link to the Meta Data
+            </label>
+            <input class="form-control" type="file" id="EventLinkToMetaData"
+                name="event_link_to_meta_data">
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Date of the Event
+                </label>
+                <input class="form-control" type="date"
+                id="event_date" name="event_date" min="2012-01-01"
+                max="2040-12-31">
+            </div>
+        </div>
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Time of the Event
+                </label>
+                <input class="form-control" type="time"
+                id="event_time" name="event_time">
+            </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="form-group">
+            <label for="EventComments">Comments Related to the Event</label>
+            <textarea class="form-control" id="EventComments" name="EventComments"
+                placeholder="Comments (at most 200 of characters are accepted)"
+                rows="2" minlength="0" maxlength="200">
+            </textarea>
+            <br>
+        </div>
+        <hr>
+    </div>
 
+    <div class="row">
+        <div class="col-lg-12">
+            <p class="lead_text">Enter Fiducial Points Information</p> 
+            
+            <% for(var idx=0; idx < 4; idx++) { %>
+                <div class="row">
+                    <button class="btn btn-secondary" data-bs-toggle="collapse"
+                        data-bs-target="#collapse_event<%= idx %>"
+                        aria-expanded="false" type="button"
+                        aria-controls="collapseExample" style="margin-top: 20px;">
+                            Enter the Information for Fiducial <%= idx+1 %>
+                    </button>
+                </div>
 
+                <div class="collapse" id="collapse_event<%= idx %>">
+                    <p class="label-text" style="text-align: center;">
+                        <em>Information for Fiducial <%= idx+1 %> </em>
+                    </p>
+                    <div class="form-check">
+                        <label class="form-check-label" for="fid<%= idx+1 %>_validity">
+                            Validity
+                        </label>
+                        <input type="checkbox" class="form-check-input"
+                        id="fid<%= idx+1 %>_validity" name="fid<%= idx+1 %>_validity"
+                        checked>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text"
+                        for="fid<%= idx+1 %>_FiducialPoistionSelect">
+                            Position of the Fiducial Point
+                        </label>
+                        <select class="form-control"
+                        id="fid<%= idx+1 %>_FiducialPoistionSelect"
+                        name="fid<%= idx+1 %>_position_name">
+                            <option selected>Choose...</option>
+                            <% for(let idx=0; idx < fiducial_positions.length; idx++){ %>
+                                <option>
+                                    <%= fiducial_positions[idx]['PositionName'] %>
+                                </option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">
+                            Enter the X Position of the Fiducial Point (in mm)
+                            <strong>(Double Values Accepted)</strong>
+                        </label>
+                        <input type="number" name="fid<%= idx+1 %>_x_position"
+                            class="form-control"
+                            placeholder="X Position of the Fiducial Point
+                            (values between 0 and 800 are accepted)" min="0"
+                            max="800">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">
+                            Enter the Y Position of the Fiducial Point (in mm)
+                            <strong>(Double Values Accepted)</strong>
+                        </label>
+                        <input type="number" name="fid<%= idx+1 %>_y_position"
+                            class="form-control"
+                            placeholder="Y Position of the Fiducial Point
+                            (values between 0 and 800 are accepted)" min="0"
+                            max="800">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">
+                            Enter the Z Position of the Fiducial Point (in mm)
+                            <strong>(Double Values Accepted)</strong>
+                        </label>
+                        <input type="number" name="fid<%= idx+1 %>_z_position"
+                            class="form-control"
+                            placeholder="Z Position of the Fiducial Point
+                            (values between 0 and 800 are accepted)" min="0"
+                            max="800">
+                    </div>
+                </div>
+                <br>
+            <% } %>
+        </div>
+    </div>
+    
+    <br>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/createSubframeEvent"
+                name="create_event_for_subframe" value="1">
+                    Create Event for the Subframe
+            </button>
+        </div>    
+    </div>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/createSubframeROI"
+                name="create_roi_for_subframe" value="1">
+                    Create Region of Interest (ROI) in the Subframe
+            </button>
+        </div>
+    </div>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/createSubframeTarget"
+                name="create_target_for_subframe">
+                    Create Target in the Subframe
+            </button>
+        </div>
+    </div>
 </form>
-
 
 <%- include("../footer") -%>

@@ -992,7 +992,7 @@ app.post("/submitDataManually", function(req, res){
     });
 });
 
-var insert_subframe_information = {};
+var insert_subframe_information = [];
 
 app.post("/insertSubframeInformationManually", function(req, res){
     
@@ -1041,7 +1041,10 @@ app.post("/insertSubframeInformationManually", function(req, res){
         let subframe_information = result[0];
         let group_information = result[1];
 
-        insert_subframe_information['subframe_id'] = subframe_id;
+        insert_subframe_information.push({
+            key: 'subframe_id',
+            value: subframe_id
+        });
         
         res.render("manual_insertion/home_manually_subframe", {
             subframe_id,
@@ -1055,9 +1058,19 @@ var fiducial_positions = {};
 var device_lists = {};
 var event_types = {};
 app.post("/createSubframeEvent", function(req, res){
-
-    if (req.body['create_event_for_subframe'] == 0)
-        insert_subframe_information['subframe_info'] = req.body;
+    
+    if (req.body['create_event_for_subframe'] == 0){
+        insert_subframe_information.push({
+            key: 'subframe_info',
+            value: req.body
+        });
+    }
+    else if (req.body['create_event_for_subframe'] == 1){
+        insert_subframe_information.push({
+            key: 'subframe_event',
+            value: req.body
+        });
+    }
 
     let query = "SELECT * FROM SubframeEvent_Table ORDER BY id DESC LIMIT 1; ";
     query += "SELECT * FROM Fiducial_Table ORDER BY id DESC LIMIT 1; ";
@@ -1081,8 +1094,6 @@ app.post("/createSubframeEvent", function(req, res){
         let subframe_event = result[0];
         let fiducials = result[1]; 
 
-        console.log(Object.keys(subframe_event[0]));
-
         res.render("manual_insertion/manual_subframe_event", {
             insert_subframe_information,
             subframe_event,
@@ -1094,6 +1105,33 @@ app.post("/createSubframeEvent", function(req, res){
     });
 });
 
+var roi_types = {};
+app.post("/createSubframeROI", function(req, res){
+
+    if (req.body['create_roi_for_subframe'] == 0){
+        insert_subframe_information.push({
+            key: 'subframe_info',
+            value: req.body
+        });
+    }
+
+
+
+    
+    let query = "SELECT * FROM ROIType_Table; ";
+
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
+
+        roi_types = result;
+
+        res.render("manual_insertion/home_manually_roi", {
+            insert_subframe_information,
+            roi_types
+        });
+    });
+});
 
 
 
