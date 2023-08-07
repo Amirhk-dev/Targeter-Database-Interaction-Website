@@ -947,6 +947,7 @@ app.post("/get_subframe_ids", function(req, res){
     });
 });
 //#############################################################################
+// generate the list of subframes available in the database
 app.post("/submitDataManually", function(req, res){
     let query = "SELECT ID, SubframeTypeID, FacilityID, SerialNumber" +
                 " FROM Subframe_Table; ";
@@ -992,8 +993,9 @@ app.post("/submitDataManually", function(req, res){
     });
 });
 
+//#############################################################################
+// submit the subframe information
 var insert_subframe_information = [];
-
 app.post("/insertSubframeInformationManually", function(req, res){
     
     let subframe_id = req.body['filters_subframe'];
@@ -1054,6 +1056,8 @@ app.post("/insertSubframeInformationManually", function(req, res){
     });
 });
 
+//#############################################################################
+// submit event information related to the subframe
 var fiducial_positions = {};
 var device_lists = {};
 var event_types = {};
@@ -1105,6 +1109,8 @@ app.post("/createSubframeEvent", function(req, res){
     });
 });
 
+//#############################################################################
+// submit ROI information
 var roi_types = {};
 app.post("/createSubframeROI", function(req, res){
 
@@ -1113,11 +1119,18 @@ app.post("/createSubframeROI", function(req, res){
             key: 'subframe_info',
             value: req.body
         });
+    } else if (req.body['create_roi_for_subframe'] == 1){
+        insert_subframe_information.push({
+            key: 'subframe_event',
+            value: req.body
+        });
+    } else if (req.body['create_roi_for_subframe'] == 2){
+        insert_subframe_information.push({
+            key: 'roi_info',
+            value: req.body
+        });
     }
 
-
-
-    
     let query = "SELECT * FROM ROIType_Table; ";
 
     connection.query(query, function(error, result){
@@ -1133,10 +1146,205 @@ app.post("/createSubframeROI", function(req, res){
     });
 });
 
+//#############################################################################
+// submit event related to the ROI
+app.post("/createROIEvent", function(req, res){
+    
+    if (req.body['create_event_for_roi'] == 0){
+        insert_subframe_information.push({
+            key: 'roi_info',
+            value: req.body
+        });
+    }
+    else if (req.body['create_event_for_roi'] == 1){
+        insert_subframe_information.push({
+            key: 'roi_event',
+            value: req.body
+        });
+    }
 
+    let query = "SELECT * FROM ROIEvent_Table ORDER BY id DESC LIMIT 1; ";
+    query += "SELECT * FROM Fiducial_Table ORDER BY id DESC LIMIT 1; ";
 
+    if (req.body['create_event_for_roi'] == 0){
+        query += "SELECT * FROM DeviceList_Table; ";
+        query += "SELECT * FROM EventType_Table; ";
+        query += "SELECT * FROM FiducialPosition_Table; ";
+    }
 
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
 
+        if (req.body['create_event_for_roi'] == 0){
+            device_lists = result[2];
+            event_types = result[3];
+            fiducial_positions = result[4];
+        }
+
+        let roi_event = result[0];
+        let fiducials = result[1]; 
+
+        res.render("manual_insertion/manual_roi_event", {
+            insert_subframe_information,
+            roi_event,
+            fiducials,
+            device_lists,
+            event_types,
+            fiducial_positions
+        });
+    });
+});
+
+//#############################################################################
+// submit sample information
+app.post("/createSubframeSample", function(req, res){
+    
+    if (req.body['create_sample_for_subframe'] == 0){
+        insert_subframe_information.push({
+            key: 'roi_info',
+            value: req.body
+        });
+    } else if (req.body['create_sample_for_subframe'] == 1){
+        insert_subframe_information.push({
+            key: 'roi_event',
+            value: req.body
+        });
+    } else if (req.body['create_sample_for_subframe'] == 2){
+        insert_subframe_information.push({
+            key: 'sample_info',
+            value: req.body
+        });
+    }
+    
+    res.render("manual_insertion/home_manually_sample", {
+        insert_subframe_information
+    });
+});
+
+//#############################################################################
+// submit event related to the sample
+app.post("/createSampleEvent", function(req, res){
+    if (req.body['create_event_for_sample'] == 0){
+        insert_subframe_information.push({
+            key: 'sample_info',
+            value: req.body
+        });
+    }
+    else if (req.body['create_event_for_sample'] == 1){
+        insert_subframe_information.push({
+            key: 'sample_event',
+            value: req.body
+        });
+    }
+
+    let query = "SELECT * FROM SampleEvent_Table ORDER BY id DESC LIMIT 1; ";
+    query += "SELECT * FROM Fiducial_Table ORDER BY id DESC LIMIT 1; ";
+
+    if (req.body['create_event_for_sample'] == 0){
+        query += "SELECT * FROM DeviceList_Table; ";
+        query += "SELECT * FROM EventType_Table; ";
+        query += "SELECT * FROM FiducialPosition_Table; ";
+    }
+
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
+
+        if (req.body['create_event_for_sample'] == 0){
+            device_lists = result[2];
+            event_types = result[3];
+            fiducial_positions = result[4];
+        }
+
+        let sample_event = result[0];
+        let fiducials = result[1]; 
+
+        res.render("manual_insertion/manual_sample_event", {
+            insert_subframe_information,
+            sample_event,
+            fiducials,
+            device_lists,
+            event_types,
+            fiducial_positions
+        });
+    });
+});
+
+//#############################################################################
+// submit target information
+app.post("/createSubframeTarget", function(req, res){
+    if (req.body['create_sample_for_subframe'] == 0){
+        insert_subframe_information.push({
+            key: 'sample_info',
+            value: req.body
+        });
+    } else if (req.body['create_sample_for_subframe'] == 1){
+        insert_subframe_information.push({
+            key: 'sample_event',
+            value: req.body
+        });
+    } else if (req.body['create_sample_for_subframe'] == 2){
+        insert_subframe_information.push({
+            key: 'target_info',
+            value: req.body
+        });
+    }
+    
+    res.render("manual_insertion/home_manually_target", {
+        insert_subframe_information
+    });
+});
+
+//#############################################################################
+// submit event related to the target
+app.post("/createTargetEvent", function(req, res){
+    if (req.body['create_event_for_target'] == 0){
+        insert_subframe_information.push({
+            key: 'target_info',
+            value: req.body
+        });
+    }
+    else if (req.body['create_event_for_target'] == 1){
+        insert_subframe_information.push({
+            key: 'target_event',
+            value: req.body
+        });
+    }
+
+    let query = "SELECT * FROM TargetEvent_Table ORDER BY id DESC LIMIT 1; ";
+    query += "SELECT * FROM Fiducial_Table ORDER BY id DESC LIMIT 1; ";
+
+    if (req.body['create_event_for_target'] == 0){
+        query += "SELECT * FROM DeviceList_Table; ";
+        query += "SELECT * FROM EventType_Table; ";
+        query += "SELECT * FROM FiducialPosition_Table; ";
+    }
+
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
+
+        if (req.body['create_event_for_target'] == 0){
+            device_lists = result[2];
+            event_types = result[3];
+            fiducial_positions = result[4];
+        }
+
+        let target_event = result[0];
+        let fiducials = result[1]; 
+
+        res.render("manual_insertion/manual_target_event", {
+            insert_subframe_information,
+            target_event,
+            fiducials,
+            device_lists,
+            event_types,
+            fiducial_positions
+        });
+    });
+});
+//#############################################################################
 
 
 

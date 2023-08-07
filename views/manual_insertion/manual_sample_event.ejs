@@ -1,17 +1,17 @@
-<%- include("../header") -%>
 
+<%- include("../header") -%>
 <div class="row twopanel">
     <div class="col-lg-12">
         <h1 class="site_msg" style="text-align: center;">
-        <em>Subframe holds all the information in the hierarchy.</em>
+            <em>Sample belongs to ROI and holds all the information for Target(s).</em>
         <br>
         <br>
         <div class="row">
-            <img class="center" src='subframe.jpg' alt="Subframe Photo">
+            <img class="center" src='sample.jpg' alt="Sample Photo">
         </div>
         <br>
         <br>
-            Information for the Subframe <%= insert_subframe_information['subframe_id'] %>
+            Sample for the Subframe <%= insert_subframe_information[0]['value'] %>
         </h1>
     </div>
 </div>
@@ -19,27 +19,35 @@
 <form action="/DEFAULT_URL" method="post">
     
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="form-group">
                 <label class="label-text" for="device_select">Select the Device</label>
                 <select class="form-control" id="device_select" name="device_name">
+                    <option selected>Choose...</option>
                     <% for(let idx=0; idx < device_lists.length; idx++){ %>
                             <option><%= device_lists[idx]['VendorName'] %></option>
-                    <% } %>
-                        <option selected>Choose...</option>                
+                    <% } %>                
                 </select>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="form-group">
                 <label class="label-text" for="event_select">Select the Event Type</label>
                 <select class="form-control" id="event_select" name="event_name">
+                    <option selected>Choose...</option>
                     <% for(let idx=0; idx < event_types.length; idx++){ %>
                             <option><%= event_types[idx]['EventType'] %></option>
-                    <% } %>
-                        <option selected>Choose...</option>                
+                    <% } %>                
                 </select>
             </div>        
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter the Quality of Sample</label>
+                <input type="number" name="sample_quality" class="form-control"
+                    placeholder="values between 0 and 100 are accepted"
+                    min="0" max="100">
+            </div>
         </div>
     </div>    
 
@@ -180,9 +188,9 @@
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createSubframeEvent"
-                name="create_event_for_subframe" value="1">
-                    Create Event for the Subframe
+                formaction="/createSampleEvent"
+                name="create_event_for_sample" value="1">
+                    Create Event for the Sample
             </button>
         </div>    
     </div>
@@ -190,19 +198,9 @@
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createSubframeROI"
-                name="create_roi_for_subframe" value="1">
-                    Create Region of Interest (ROI) in the Subframe
-            </button>
-        </div>
-    </div>
-
-    <div class="row twopanel">
-        <div class="row">
-            <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeTarget"
-                name="create_target_for_subframe">
-                    Create Target in the Subframe
+                name="create_target_for_subframe" value="1">
+                    Create Target in the Sample
             </button>
         </div>
     </div>

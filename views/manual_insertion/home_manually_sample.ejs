@@ -3,16 +3,16 @@
 <div class="row twopanel">
     <div class="col-lg-12">
         <h1 class="site_msg" style="text-align: center;">
-        <em>ROI belongs to Subframe and holds all the information for Sample(s)
-            and Target(s) in the hierarchy.</em>
+        <em>Sample belongs to ROI and holds all the information for
+            Target(s).</em>
         <br>
         <br>
         <div class="row">
-            <img class="center" src='roi.jpg' alt="ROI Photo">
+            <img class="center" src='sample.jpg' alt="Sample Photo">
         </div>
         <br>
         <br>
-            Region of Interest (ROI) for the Subframe <%= insert_subframe_information[0]['value'] %>
+            Sample for the Subframe <%= insert_subframe_information[0]['value'] %>
         </h1>
     </div>
 </div>
@@ -22,31 +22,8 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="label-text" for="roitype_select">
-                    Select the ROI Type
-                </label>
-                <select class="form-control" id="device_select" name="device_name">
-                    <option selected>Choose...</option>
-                    <% for(let idx=0; idx < roi_types.length; idx++){ %>
-                            <option><%= roi_types[idx]['Name'] %></option>
-                    <% } %>                
-                </select>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <label for="MaskDirectory" class="form-label label-text">
-                Insert the Link to the Mask Image Directory
-            </label>
-            <input class="form-control" type="file" id="MaskDirectory"
-                name="mask_directory">
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="form-group">
                 <label class="label-text">Enter the Bounding Box X Position</label>
-                <input type="number" name="roi_x_position" class="form-control"
+                <input type="number" name="sample_x_position" class="form-control"
                     placeholder="values between 0 and 800 are accepted"
                     min="0" max="800">
             </div>
@@ -54,7 +31,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="label-text">Enter the Bounding Box Y Position</label>
-                <input type="number" name="roi_y_position" class="form-control"
+                <input type="number" name="sample_y_position" class="form-control"
                     placeholder="values between 0 and 800 are accepted"
                     min="0" max="800">
             </div>
@@ -65,7 +42,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="label-text">Enter the Bounding Box Width</label>
-                <input type="number" name="roi_width" class="form-control"
+                <input type="number" name="sample_width" class="form-control"
                     placeholder="values between 0 and 800 are accepted"
                     min="0" max="800">
             </div>
@@ -73,7 +50,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="label-text">Enter the Bounding Box Height</label>
-                <input type="number" name="roi_height" class="form-control"
+                <input type="number" name="sample_height" class="form-control"
                     placeholder="values between 0 and 800 are accepted"
                     min="0" max="800">
             </div>
@@ -81,31 +58,65 @@
     </div>
 
     <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter the Theta Angle (in degree)</label>
+                <input type="number" name="sample_experiment_theta" class="form-control"
+                    placeholder="angle w.r.t. XY plane" min="0" max="360">
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter the Phi Angle (in degree)</label>
+                <input type="number" name="sample_experiment_phi" class="form-control"
+                    placeholder="angle w.r.t. XZ plane" min="0" max="360">
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter the Rho Angle (in degree)</label>
+                <input type="number" name="sample_experiment_rho" class="form-control"
+                    placeholder="angle w.r.t. YZ plane" min="0" max="360">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Date of the ROI Creation
+                    Enter the Date of the Sample Creation
                 </label>
                 <input class="form-control" type="date"
-                id="roi_date" name="roi_date" min="2012-01-01"
+                id="sample_date" name="sample_date" min="2012-01-01"
                 max="2040-12-31">
             </div>
         </div>
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Time of ROI Creation
+                    Enter the Time of Sample Creation
                 </label>
                 <input class="form-control" type="time"
-                id="roi_time" name="roi_time">
+                id="sample_time" name="sample_time">
             </div>
         </div>
     </div>
 
     <div class="row">
+        <div class="col-lg-12">
+            <label for="MaskDirectory" class="form-label label-text">
+                Insert the Link to the Mask Image Directory
+            </label>
+            <input class="form-control" type="file" id="MaskDirectory"
+                name="mask_directory">
+        </div>
+    </div>
+
+    <div class="row">
         <div class="form-group">
-            <label for="ROIComments">Comments Related to the ROI Creation</label>
-            <textarea class="form-control" id="ROIComments" name="ROIComments"
+            <label for="SampleComments">Comments Related to the Sample Creation</label>
+            <textarea class="form-control" id="SampleComments" name="SampleComments"
                 placeholder="Comments (at most 200 of characters are accepted)"
                 rows="2" minlength="0" maxlength="200">
             </textarea>
@@ -117,9 +128,9 @@
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createSubframeROI"
-                name="create_roi_for_subframe" value="2">
-                    Create <em>(another)</em> Region of Interest (ROI) in the Subframe
+                formaction="/createSubframeSample"
+                name="create_sample_for_subframe" value="2">
+                    Create <em>(another)</em> Sample in the ROI
             </button>
         </div>
     </div>
@@ -127,9 +138,9 @@
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createROIEvent"
-                name="create_event_for_roi" value="0">
-                    Create Event for the ROI
+                formaction="/createSampleEvent"
+                name="create_event_for_sample" value="0">
+                    Create Event for the Sample
             </button>
         </div>    
     </div>
@@ -137,9 +148,9 @@
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createSubframeSample"
-                name="create_sample_for_subframe" value="0">
-                    Create Sample in the ROI
+                formaction="/createSubframeTarget"
+                name="create_target_for_subframe" value="0">
+                    Create Target in the Sample
             </button>
         </div>
     </div>
