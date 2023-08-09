@@ -899,6 +899,7 @@ app.post("/show_target_information", function(req, res){
 });
 //#############################################################################
 // get subframe ids
+var Subframe_IDs = [];
 app.post("/get_subframe_ids", function(req, res){
     console.log('\nthe user attempts to know the Subframe IDs...');
     let q = "SELECT * FROM Subframe_Table";
@@ -923,7 +924,7 @@ app.post("/get_subframe_ids", function(req, res){
             if (error)
                 throw error;
             
-            let Subframe_IDs = [];
+            Subframe_IDs = [];
             for(i=0; i < result.length; i+=2) {
                 subframe_id = "";
                 subframe_id += result[i][0]['CodeName'];
@@ -958,7 +959,6 @@ app.post("/submitDataManually", function(req, res){
         if (error)
             throw error;
 
-        let Subframe_IDs = [];
         let subframe_id = "";
         for(let idx=0; idx < result[0].length; idx++){
             subframe_id = "";
@@ -997,63 +997,69 @@ app.post("/submitDataManually", function(req, res){
 // submit the subframe information
 var insert_subframe_information = [];
 app.post("/insertSubframeInformationManually", function(req, res){
-    
-    let subframe_id = req.body['filters_subframe'];
-    let facility_name = subframe_id.substring(0,5);
-    let subframe_type = subframe_id.substring(5,8);
-    let serial_number = Number(subframe_id.substring(8,));
-    
-    let query = "SELECT * FROM Subframe_Table WHERE " +
-                "(SubframeTypeID=(SELECT ID FROM " + 
-                "SubframeType_Table WHERE TypeName='" + subframe_type +
-                "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE " + 
-                "CodeName='" + facility_name + "') AND " +
-                "SerialNumber=" + serial_number.toString() + "); ";
-    query += "SELECT * From GroupInformation_Table; ";
-    query += "SELECT * FROM SubframeType_Table; ";
-    query += "SELECT * FROM Facility_Table; ";
 
-    connection.query(query, function(error, result) {
-        if (error)
-            throw error;
-
-        if (result[0][0]['GroupID'] != null){
-            for(let idx=0; idx < result[1].length; idx++){
-                if(result[1][idx]['ID'] == result[0][0]['GroupID']){
-                    result[0][0]['GroupID'] = result[1][idx]['GroupName'];
+    if (req.body['filters_subframe'] == 'Not Specified'){
+        res.render("manual_insertion/home_manual_data_insertion", {
+            Subframe_IDs
+        });
+    } else {
+        let subframe_id = req.body['filters_subframe'];
+        let facility_name = subframe_id.substring(0,5);
+        let subframe_type = subframe_id.substring(5,8);
+        let serial_number = Number(subframe_id.substring(8,));
+        
+        let query = "SELECT * FROM Subframe_Table WHERE " +
+                    "(SubframeTypeID=(SELECT ID FROM " + 
+                    "SubframeType_Table WHERE TypeName='" + subframe_type +
+                    "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE " + 
+                    "CodeName='" + facility_name + "') AND " +
+                    "SerialNumber=" + serial_number.toString() + "); ";
+        query += "SELECT * From GroupInformation_Table; ";
+        query += "SELECT * FROM SubframeType_Table; ";
+        query += "SELECT * FROM Facility_Table; ";
+    
+        connection.query(query, function(error, result) {
+            if (error)
+                throw error;
+    
+            if (result[0][0]['GroupID'] != null){
+                for(let idx=0; idx < result[1].length; idx++){
+                    if(result[1][idx]['ID'] == result[0][0]['GroupID']){
+                        result[0][0]['GroupID'] = result[1][idx]['GroupName'];
+                        break;
+                    }
+                }
+            }
+    
+            for(let idx=0; idx < result[2].length; idx++){
+                if(result[2][idx]['ID'] == result[0][0]['SubframeTypeID']){
+                    result[0][0]['SubframeTypeID'] = result[2][idx]['TypeName'];
                     break;
                 }
             }
-        }
-
-        for(let idx=0; idx < result[2].length; idx++){
-            if(result[2][idx]['ID'] == result[0][0]['SubframeTypeID']){
-                result[0][0]['SubframeTypeID'] = result[2][idx]['TypeName'];
-                break;
+    
+            for(let idx=0; idx < result[3].length; idx++){
+                if(result[3][idx]['ID'] == result[0][0]['FacilityID']){
+                    result[0][0]['FacilityID'] = result[3][idx]['CodeName'];
+                    break;
+                }
             }
-        }
-
-        for(let idx=0; idx < result[3].length; idx++){
-            if(result[3][idx]['ID'] == result[0][0]['FacilityID']){
-                result[0][0]['FacilityID'] = result[3][idx]['CodeName'];
-                break;
-            }
-        }
-
-        let subframe_information = result[0];
-        let group_information = result[1];
-
-        insert_subframe_information.push({
-            key: 'subframe_id',
-            value: subframe_id
+    
+            let subframe_information = result[0];
+            let group_information = result[1];
+    
+            insert_subframe_information.push({
+                key: 'subframe_id',
+                value: subframe_id
+            });
+            
+            res.render("manual_insertion/home_manually_subframe", {
+                subframe_id,
+                subframe_information,
+                group_information
+            });
         });
-        
-        res.render("manual_insertion/home_manually_subframe", {
-            subframe_id,
-            subframe_information,
-            group_information
-        });
-    });
+    }
 });
 
 //#############################################################################
@@ -1096,7 +1102,9 @@ app.post("/createSubframeEvent", function(req, res){
         }
 
         let subframe_event = result[0];
-        let fiducials = result[1]; 
+        let fiducials = result[1];
+
+        console.log(insert_subframe_information);
 
         res.render("manual_insertion/manual_subframe_event", {
             insert_subframe_information,

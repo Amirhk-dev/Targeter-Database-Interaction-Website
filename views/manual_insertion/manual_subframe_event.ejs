@@ -11,7 +11,7 @@
         </div>
         <br>
         <br>
-            Information for the Subframe <%= insert_subframe_information['subframe_id'] %>
+            Information for the Subframe <%= insert_subframe_information[0]['value'] %>
         </h1>
     </div>
 </div>
@@ -182,7 +182,7 @@
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeEvent"
                 name="create_event_for_subframe" value="1">
-                    Create Event for the Subframe
+                    Create <em>(another)</em> Event for the Subframe
             </button>
         </div>    
     </div>
