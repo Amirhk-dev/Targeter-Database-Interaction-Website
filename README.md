@@ -29,6 +29,10 @@ the information on the database.
 
 The project is implemented with Node.js and EJS.
 
+## Installation
+
+npm install .
+
 ## Demo
 
 The GIF file below shows briefly the capability of the project for database interaction.
