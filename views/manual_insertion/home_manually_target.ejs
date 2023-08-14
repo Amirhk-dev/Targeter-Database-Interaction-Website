@@ -21,26 +21,32 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="form-group">
-                <label class="label-text">X Position</label>
-                <input type="number" name="target_x_position" class="form-control"
-                    placeholder="values between 0 and 800 are accepted"
-                    min="0" max="800">
+                <label class="label-text">X Position (*)</label>
+                <input type="number" name="target_x_position"
+                    id="target_x_position"
+                    class="form-control"
+                    placeholder="Insert the X Position"
+                    min="0">
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label class="label-text">Y Position</label>
-                <input type="number" name="target_y_position" class="form-control"
-                    placeholder="values between 0 and 800 are accepted"
-                    min="0" max="800">
+                <label class="label-text">Y Position (*)</label>
+                <input type="number" name="target_y_position"
+                    id="target_y_position"
+                    class="form-control"
+                    placeholder="Insert the Y Position"
+                    min="0">
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label class="label-text">Z Position</label>
-                <input type="number" name="target_z_position" class="form-control"
-                    placeholder="values between 0 and 800 are accepted"
-                    min="0" max="800">
+                <label class="label-text">Z Position (*)</label>
+                <input type="number" name="target_z_position"
+                    id="target_z_position"
+                    class="form-control"
+                    placeholder="Insert the Z Position"
+                    min="0">
             </div>
         </div>
     </div>
@@ -49,7 +55,7 @@
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Date of the Target Creation
+                    Enter the Date of the Target Creation (*)
                 </label>
                 <input class="form-control" type="date"
                 id="target_date" name="target_date" min="2012-01-01"
@@ -59,7 +65,7 @@
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Time of Target Creation
+                    Enter the Time of Target Creation (*)
                 </label>
                 <input class="form-control" type="time"
                 id="target_time" name="target_time">
@@ -83,6 +89,7 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeTarget"
+                onclick="checkValues(event)"
                 name="create_target_for_subframe" value="2">
                     Create <em>(another)</em> Target in the Sample
             </button>
@@ -93,6 +100,7 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createTargetEvent"
+                onclick="checkValues(event)"
                 name="create_event_for_target" value="0">
                     Create Event for the Target
             </button>
@@ -103,6 +111,7 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/submitAndReturnToMain"
+                onclick="checkValues(event)"
                 name="submit_the_data_to_db" value="0">
                     Submit the Data to Database <em>and Return to the Main Page</em>
             </button>
@@ -121,6 +130,44 @@
     </div>
 </form>
 
-</form>
+<script>
+    function checkValues() {
+        let target_x_position = document.getElementById("target_x_position").value;
+        let target_y_position = document.getElementById("target_y_position").value;
+        let target_z_position = document.getElementById("target_z_position").value;        
+        let data_value = document.getElementById("target_date").value;
+        let time_value = document.getElementById("target_time").value;
+        
+        if (target_x_position == ""){
+            alert("X position of the target is not inserted!");
+            event.preventDefault();
+            return;
+        }
+
+        if (target_y_position == ""){
+            alert("Y position of the target is not inserted!");
+            event.preventDefault();
+            return;
+        }
+
+        if (target_z_position == ""){
+            alert("Z position of the target is not inserted!");
+            event.preventDefault();
+            return;
+        }
+
+        if (data_value == ""){
+            alert("Target creation Date is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+            
+        if (time_value == ""){
+            alert("Target creation Time is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+    }
+</script>
 
 <%- include("../footer") -%>

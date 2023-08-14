@@ -27,11 +27,23 @@ action='/insertSubframeInformationManually'>
 
     <div class="row twopanel">
         <button class="btn btn-secondary" type="submit"
-            form="insert_subframe_information">
+            form="insert_subframe_information"
+            onclick="checkValue(event)">
                 Enter the Subframe Information
         </button>
     </div>
 
 </form>
+
+<script>
+    function checkValue() {
+        let x = document.getElementById("filters_subframe").value;
+
+        if (x == 'Not Specified'){
+                alert("Please select one Subframe!");
+                event.preventDefault();
+        }
+    }
+</script>
 
 <%- include("../footer") -%>

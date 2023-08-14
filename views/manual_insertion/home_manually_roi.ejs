@@ -23,9 +23,9 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="label-text" for="roitype_select">
-                    Select the ROI Type
+                    Select the ROI Type (*)
                 </label>
-                <select class="form-control" id="device_select" name="device_name">
+                <select class="form-control" id="roi_type" name="roi_type">
                     <option selected>Choose...</option>
                     <% for(let idx=0; idx < roi_types.length; idx++){ %>
                             <option><%= roi_types[idx]['Name'] %></option>
@@ -84,7 +84,7 @@
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Date of the ROI Creation
+                    Enter the Date of the ROI Creation (*)
                 </label>
                 <input class="form-control" type="date"
                 id="roi_date" name="roi_date" min="2012-01-01"
@@ -94,7 +94,7 @@
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Time of ROI Creation
+                    Enter the Time of ROI Creation (*)
                 </label>
                 <input class="form-control" type="time"
                 id="roi_time" name="roi_time">
@@ -118,7 +118,9 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeROI"
-                name="create_roi_for_subframe" value="2">
+                name="create_roi_for_subframe"
+                onclick="checkValues(event)"
+                value="2">
                     Create <em>(another)</em> Region of Interest (ROI) in the Subframe
             </button>
         </div>
@@ -128,7 +130,9 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createROIEvent"
-                name="create_event_for_roi" value="0">
+                name="create_event_for_roi"
+                onclick="checkValues(event)"
+                value="0">
                     Create Event for the ROI
             </button>
         </div>    
@@ -138,7 +142,9 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeSample"
-                name="create_sample_for_subframe" value="0">
+                name="create_sample_for_subframe"
+                onclick="checkValues(event)"
+                value="0">
                     Create Sample in the ROI
             </button>
         </div>
@@ -148,7 +154,9 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/submitAndReturnToMain"
-                name="submit_the_data_to_db" value="0">
+                name="submit_the_data_to_db"
+                onclick="checkValues(event)"
+                value="0">
                     Submit the Data to Database <em>and Return to the Main Page</em>
             </button>
         </div>
@@ -165,5 +173,31 @@
         </div>
     </div>
 </form>
+
+<script>
+    function checkValues() {
+        let roi_type = document.getElementById("roi_type").value;
+        let data_value = document.getElementById("roi_date").value;
+        let time_value = document.getElementById("roi_time").value;
+
+        if (roi_type=="Choose..."){
+            alert("Please select the ROI type!");
+            event.preventDefault();
+            return;
+        }
+        
+        if (data_value == ""){
+            alert("ROI creation Date is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+            
+        if (time_value == ""){
+            alert("ROI creation Time is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+    }
+</script>
 
 <%- include("../footer") -%>

@@ -85,7 +85,7 @@
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Date of the Sample Creation
+                    Enter the Date of the Sample Creation (*)
                 </label>
                 <input class="form-control" type="date"
                 id="sample_date" name="sample_date" min="2012-01-01"
@@ -95,7 +95,7 @@
         <div class="col-lg-6">    
             <div class="form-group">
                 <label class="label-text">
-                    Enter the Time of Sample Creation
+                    Enter the Time of Sample Creation (*)
                 </label>
                 <input class="form-control" type="time"
                 id="sample_time" name="sample_time">
@@ -129,6 +129,7 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeSample"
+                onclick="checkValues(event)"
                 name="create_sample_for_subframe" value="2">
                     Create <em>(another)</em> Sample in the ROI
             </button>
@@ -139,6 +140,7 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSampleEvent"
+                onclick="checkValues(event)"
                 name="create_event_for_sample" value="0">
                     Create Event for the Sample
             </button>
@@ -149,6 +151,7 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeTarget"
+                onclick="checkValues(event)"
                 name="create_target_for_subframe" value="0">
                     Create Target in the Sample
             </button>
@@ -159,6 +162,7 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/submitAndReturnToMain"
+                onclick="checkValues(event)"
                 name="submit_the_data_to_db" value="0">
                     Submit the Data to Database <em>and Return to the Main Page</em>
             </button>
@@ -176,5 +180,24 @@
         </div>
     </div>
 </form>
+
+<script>
+    function checkValues() {
+        let data_value = document.getElementById("sample_date").value;
+        let time_value = document.getElementById("sample_time").value;
+        
+        if (data_value == ""){
+            alert("Sample creation Date is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+            
+        if (time_value == ""){
+            alert("Sample creation Time is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+    }
+</script>
 
 <%- include("../footer") -%>
