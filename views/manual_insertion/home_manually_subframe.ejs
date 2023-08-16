@@ -1,33 +1,25 @@
 <%- include("../header") -%>
    
-<form action="/DEFAULT_URL" method="post">
-    <div class="row twopanel">
-        <div class="col-lg-12">
-            <h1 class="site_msg" style="text-align: center;">
-            <em>Subframe holds all the information in the hierarchy.</em>
-            <br>
-            <br>
-            <div class="row">
-                <img class="center" src='subframe.jpg' alt="Subframe Photo" usemap="#pipeline">
-                <map name="pipeline">
-                    
-                    <area shape="rect" coords="2,2,70,10" alt="Subframe"
-                    href="/submitDataManually" style="z-index: 0;">
-                    <area shape="rectangle" coords="120,110,1030,660" alt="ROI"
-                    href="/createSubframeROI" style="z-index: 1;">
-                    <area shape="rectangle" coords="205,190,950,580" alt="Sample"
-                    href="/createSubframeSample" style="z-index: 2;">
-                    <area shape="rectangle" coords="340,275,815,500" alt="Target"
-                    href="/createSubframeTarget" style="z-index: 3;">
-                </map>
-            </div>
-            <br>
-            <br>
-                Information for the Subframe <%= subframe_id %>
-            </h1>
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+        <em>Subframe holds all the information in the hierarchy.</em>
+        <br>
+        <br>
+        <div class="row">
+            <img class="center" src='subframe.jpg' alt="Subframe Photo">
         </div>
+        <br>
+        <br>
+            Information for the Subframe <%= subframe_id %>
+        </h1>
+        <h2 class="site_msg" style="text-align: center;">
+            Insert Subframe Information
+        </h2>
     </div>
-    
+</div>
+
+<form action="/DEFAULT_URL" method="post">
     <div class="row">
         <div class="col-lg-4">
             <div class="form-group">
@@ -57,7 +49,7 @@
             <div class="form-group">
                 <label class="label-text">Created Time</label>
                 <input type="text" name="facility_name" class="form-control"
-                value="<%= subframe_information[0]['CreateTimeStamp'] %>" disabled>
+                value="<%= subframe_information[0]['CreateTimeStamp'].toUTCString() %>" disabled>
             </div>
         </div>
     </div>
@@ -96,19 +88,44 @@
     <div class="row twopanel">
         <div class="form-check">
             <label class="form-check-label" for="subframe_validity">Valid</label>
-            <input type="checkbox" class="form-check-input" data-bs-toggle="collapse"
-            href="#validityCollapse" aria-expanded="false"
-            id="subframe_validity" name="subframe_validity"
-            onchange="toggleButtonsFunction()"
-            checked>
+            <% if(subframe_information[0]['Validity']==0){ %>
+                <input type="checkbox" class="form-check-input"
+                data-bs-toggle="collapse"
+                href="#validityCollapse"
+                aria-expanded="true"
+                id="subframe_validity" name="subframe_validity"
+                onchange="toggleButtonsFunction()">
+            <% } else { %>
+                <input type="checkbox" class="form-check-input"
+                data-bs-toggle="collapse"
+                href="#validityCollapse"
+                aria-expanded="false"
+                id="subframe_validity" name="subframe_validity"
+                onchange="toggleButtonsFunction()"
+                checked>
+            <% } %>
         </div>
-        <div class="collapse" id="validityCollapse">
+        <% if(subframe_information[0]['Validity']==0){ %>
+            <div class="collapse show" id="validityCollapse">
+        <% } else { %>
+            <div class="collapse" id="validityCollapse">
+        <% } %>
             <div class="row twopanel">
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="label-text">Enter the Subframe Invalidity Date (*)</label>
-                        <input class="form-control" type="date" id="subframe_invalid_date"
-                            name="subframe_invalid_date" min="2012-01-01" max="2040-12-31">
+                        <% if(subframe_information[0]['Validity']==0){ %>
+                            <input class="form-control" type="date" id="subframe_invalid_date"
+                            name="subframe_invalid_date"
+                            min="2012-01-01"
+                            max="2040-12-31"
+                            value="2023-08-16">
+                        <% } else { %>
+                            <input class="form-control" type="date" id="subframe_invalid_date"
+                            name="subframe_invalid_date"
+                            min="2012-01-01"
+                            max="2040-12-31">
+                        <% } %>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -126,38 +143,77 @@
 
     <br>
 
-    <div class="row twopanel">
-        <div class="row">
-            <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createSubframeEvent"
-                id="create_event_for_subframe"
-                name="create_event_for_subframe" value="0">
-                    Create Event for the Subframe
-            </button>
-        </div>    
-    </div>
-
-    <div class="row twopanel">
-        <div class="row">
-            <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createSubframeROI"
-                id="create_roi_for_subframe"
-                name="create_roi_for_subframe" value="0">
-                    Create Region of Interest (ROI) in the Subframe
-            </button>
+    <% if(subframe_information[0]['Validity']==0){ %>
+        <div class="row twopanel">
+            <div class="row">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeEvent"
+                    id="create_event_for_subframe"
+                    name="create_event_for_subframe" value="0" disabled>
+                        Create Event for the Subframe
+                </button>
+            </div>    
         </div>
-    </div>
-
-    <div class="row twopanel">
-        <div class="row">
-            <button class="btn btn-outline-secondary" type="submit"
-                formaction="/createSubframeTarget"
-                id="create_target_for_subframe"
-                name="create_target_for_subframe">
-                    Create Target in the Subframe
-            </button>
+    <% } else { %>
+        <div class="row twopanel">
+            <div class="row">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeEvent"
+                    id="create_event_for_subframe"
+                    name="create_event_for_subframe" value="0">
+                        Create Event for the Subframe
+                </button>
+            </div>    
         </div>
-    </div>
+    <% } %>
+
+    <% if(subframe_information[0]['Validity']==0){ %>
+        <div class="row twopanel">
+            <div class="row">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeROI"
+                    id="create_roi_for_subframe"
+                    name="create_roi_for_subframe" value="0" disabled>
+                        Create Region of Interest (ROI) in the Subframe
+                </button>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="row twopanel">
+            <div class="row">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeROI"
+                    id="create_roi_for_subframe"
+                    name="create_roi_for_subframe" value="0">
+                        Create Region of Interest (ROI) in the Subframe
+                </button>
+            </div>
+        </div>
+    <% } %>
+
+    <% if(subframe_information[0]['Validity']==0){ %>
+        <div class="row twopanel">
+            <div class="row">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeTarget"
+                    id="create_target_for_subframe"
+                    name="create_target_for_subframe" disabled>
+                        Create Target in the Subframe
+                </button>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="row twopanel">
+            <div class="row">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeTarget"
+                    id="create_target_for_subframe"
+                    name="create_target_for_subframe">
+                        Create Target in the Subframe
+                </button>
+            </div>
+        </div>
+    <% } %>
 
     <div class="row twopanel">
         <div class="row">

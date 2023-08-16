@@ -949,6 +949,7 @@ app.post("/get_subframe_ids", function(req, res){
 });
 //#############################################################################
 // generate the list of subframes available in the database
+// POST call
 app.post("/submitDataManually", function(req, res){
     console.log('\nthe user attempts to submit the data manually...');
 
@@ -997,6 +998,7 @@ app.post("/submitDataManually", function(req, res){
     });
 });
 
+// GET call
 app.get("/submitDataManually", function(req, res){
     console.log('\nthe user attempts to submit the data manually...');
 
@@ -1048,6 +1050,9 @@ app.get("/submitDataManually", function(req, res){
 //#############################################################################
 // submit the subframe information
 var insert_subframe_information = [];
+var group_information = {};
+var subframe_types = {};
+var facilities = {};
 app.post("/insertSubframeInformationManually", function(req, res){
     console.log('\nthe user attempts to insert the subframe data...');
 
@@ -1094,13 +1099,22 @@ app.post("/insertSubframeInformationManually", function(req, res){
         }
 
         let subframe_information = result[0];
-        let group_information = result[1];
+        group_information = result[1];
+        subframe_types = result[2];
+        facilities = result[3];
 
         insert_subframe_information.push({
             key: 'subframe_id',
             value: subframe_id
         });
-        
+
+        insert_subframe_information.push({
+            key: 'internal_id',
+            value: result[0][0]['ID'],
+        });
+
+        //console.log(subframe_information[0]['InvalidSinceTimeStamp'].toString().split('GMT')[0].substr(4,11));
+
         res.render("manual_insertion/home_manually_subframe", {
             subframe_id,
             subframe_information,
@@ -1182,6 +1196,11 @@ app.post("/createSubframeROI", function(req, res){
     } else if (req.body['create_roi_for_subframe'] == 2){
         insert_subframe_information.push({
             key: 'roi_info',
+            value: req.body
+        });
+    } else if (req.body['create_roi_for_subframe'] == 3){
+        insert_subframe_information.push({
+            key: 'roi_event',
             value: req.body
         });
     }
@@ -1272,6 +1291,11 @@ app.post("/createSubframeSample", function(req, res){
             key: 'sample_info',
             value: req.body
         });
+    } else if (req.body['create_sample_for_subframe'] == 3){
+        insert_subframe_information.push({
+            key: 'sample_event',
+            value: req.body
+        });
     }
     
     res.render("manual_insertion/home_manually_sample", {
@@ -1350,6 +1374,11 @@ app.post("/createSubframeTarget", function(req, res){
             key: 'target_info',
             value: req.body
         });
+    } else if (req.body['create_target_for_subframe'] == 3){
+        insert_subframe_information.push({
+            key: 'target_event',
+            value: req.body
+        });
     }
     
     res.render("manual_insertion/home_manually_target", {
@@ -1408,6 +1437,60 @@ app.post("/createTargetEvent", function(req, res){
     });
 });
 //#############################################################################
+// submit the data to the database and return to the main page
+app.post("/submitAndReturnToMain", function(req, res){
+    console.log('\nthe user attempts to submit all the data to the database...');
+
+    let query = '';
+    if (req.body['submit_the_data_to_db']==0){
+        console.log('only the subframe information is inserted...');
+
+        query = functions.createSubframeQuery(req.body,
+                                              insert_subframe_information[1]['value'],
+                                              group_information,
+                                              subframe_types,
+                                              facilities); 
+    }
+
+                              
+                              
+
+                              
+    
+
+    
+
+
+});
+
+
+//#############################################################################
+// create target(s) playlist
+app.post("/createTargetPlaylist", function(req, res){
+    console.log('\nthe user attempts to create target(s) playlist');
+
+    
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

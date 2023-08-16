@@ -214,6 +214,45 @@ function checkEmpty(term, page_name) {
     return result;
 }
 
+function createSubframeQuery(form_data, id, group, subframe, facility){
+
+    console.log(form_data);
+
+    let query = '';
+    
+    if (form_data['subframe_validity'] == 'on'){
+        query += "UPDATE Subframe_Table SET ";
+    
+        if (form_data['group_name'] != 'Choose...'){
+            console.log(group.length);
+            for(let i=0; i < group.length; i++){
+                if (group[i]['GroupName'] == form_data['group_name']){
+                    if (form_data['subframe_comments'] != '')
+                        query += "GroupID=" + group[i]['ID'] + ", ";
+                    else
+                        query += "GroupID=" + group[i]['ID'] + " ";
+                    break;
+                }
+            }
+        }
+    
+        if (form_data['subframe_comments'] != ''){
+            query += "Comments=" + form_data['subframe_comments'] + "; ";
+        }
+    
+        query += "WHERE ID=" + id + "; ";
+    } else {
+        query += "UPDATE Subframe_Table SET ";
+        query += "Validity=0, InvalidSinceTimeStamp=" +
+                 form_data['subframe_invalid_date'] + " " +
+                 form_data['subframe_invalid_time']; 
+    }
+
+    
+
+}
+
 module.exports = {
-    checkEmpty
+    checkEmpty,
+    createSubframeQuery,
 }

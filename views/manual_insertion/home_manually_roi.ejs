@@ -14,6 +14,9 @@
         <br>
             Region of Interest (ROI) for the Subframe <%= insert_subframe_information[0]['value'] %>
         </h1>
+        <h2 class="site_msg" style="text-align: center;">
+            Insert ROI Information
+        </h2>
     </div>
 </div>
 
@@ -121,7 +124,7 @@
                 name="create_roi_for_subframe"
                 onclick="checkValues(event)"
                 value="2">
-                    Create <em>(another)</em> Region of Interest (ROI) in the Subframe
+                    Create <em>(Another)</em> Region of Interest (ROI) in the Subframe
             </button>
         </div>
     </div>
@@ -156,7 +159,7 @@
                 formaction="/submitAndReturnToMain"
                 name="submit_the_data_to_db"
                 onclick="checkValues(event)"
-                value="0">
+                value="2">
                     Submit the Data to Database <em>and Return to the Main Page</em>
             </button>
         </div>

@@ -13,6 +13,9 @@
         <br>
             Sample for the Subframe <%= insert_subframe_information[0]['value'] %>
         </h1>
+        <h2 class="site_msg" style="text-align: center;">
+            Insert the Event Information for the Sample
+        </h2>
     </div>
 </div>
 
@@ -200,6 +203,17 @@
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
+                formaction="/createSubframeSample"
+                onclick="checkValues(event)"
+                name="create_sample_for_subframe" value="3">
+                    Create <em>(Another)</em> Sample in the ROI
+            </button>
+        </div>
+    </div>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
                 formaction="/createSubframeTarget"
                 onclick="checkValues(event)"
                 name="create_target_for_subframe" value="1">
@@ -213,7 +227,7 @@
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/submitAndReturnToMain"
                 onclick="checkValues(event)"
-                name="submit_the_data_to_db" value="0">
+                name="submit_the_data_to_db" value="5">
                     Submit the Data to Database <em>and Return to the Main Page</em>
             </button>
         </div>
