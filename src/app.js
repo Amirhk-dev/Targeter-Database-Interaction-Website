@@ -3,8 +3,6 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const app = express();
-const variables = require('./public/app_variables');
-const functions = require('./public/app_functions');
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/imgs"));
@@ -26,7 +24,7 @@ let connection = mysql.createConnection({
 });
 //#############################################################################
 // load home page
-app.get("/", function(req, res){
+app.get("/", function(_req, res){
     res.render("home");
 });
 //#############################################################################
