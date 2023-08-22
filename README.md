@@ -19,7 +19,7 @@ one or many ROIs on a Subframe). **Sample** is any area inside the ROI, for exam
 
 The image below shows the structure of the information:
 
-<img src="./imgs/subframe.jpg" alt="levels-of-information-image" style="display: inline-block; margin: auto auto; width: 30%;">
+<img src="./src/imgs/subframe.jpg" alt="levels-of-information-image" style="display: inline-block; margin: auto auto; width: 30%;">
 
 There is a possibility to
 1. insert (manually or via XML file)
@@ -37,12 +37,9 @@ npm install .
 
 The GIF file below shows briefly the capability of the project for database interaction.
 
-<img src="./imgs/targeter-db.gif" alt="demo-gif-file" style="display: inline-block; margin: auto auto; width: 50%; height: 50%;">
+<img src="./src/imgs/targeter-db.gif" alt="demo-gif-file" style="display: inline-block; margin: auto auto; width: 50%; height: 50%;">
 
 ## Notice:
 It is not possible to access the database as the credentials are not provided!
 
-The creation of the subframe, viewing the structure and entries of the tables, querying the
-information from the database is implemented and tested.
-
-The manual and XML insertion of the data as well as login and registration is under development.
+The website is under developement...
