@@ -1,0 +1,443 @@
+
+<%- include("../header") -%>
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+            <em>Sample belongs to ROI and holds all the information for Target(s).</em>
+        <br>
+        <br>
+        <div class="row">
+            <img class="center" src='sample.jpg' alt="Sample Photo">
+        </div>
+        <br>
+        <br>
+            Sample for the Subframe <%= insert_subframe_information[0]['value'] %>
+        </h1>
+        <h2 class="site_msg" style="text-align: center;">
+            Insert the Event Information for the Sample
+        </h2>
+    </div>
+</div>
+
+<form action="/DEFAULT_URL" method="post">
+    
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text" for="device_select">Select the Device</label>
+                <select class="form-control" id="device_select" name="device_name">
+                    <option selected>Choose...</option>
+                    <% for(let idx=0; idx < device_lists.length; idx++){ %>
+                            <option><%= device_lists[idx]['VendorName'] %></option>
+                    <% } %>                
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text" for="event_select">Select the Event Type (*)</label>
+                <select class="form-control" id="event_select" name="event_name">
+                    <option selected>Choose...</option>
+                    <% for(let idx=0; idx < event_types.length; idx++){ %>
+                            <option><%= event_types[idx]['EventType'] %></option>
+                    <% } %>                
+                </select>
+            </div>        
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter the Quality of Sample</label>
+                <input type="number" name="sample_quality" class="form-control"
+                    placeholder="values between 0 and 100 are accepted"
+                    min="0" max="100">
+            </div>
+        </div>
+    </div>    
+
+    <div class="row">
+        <div class="col-lg-6">
+            <label for="EventLinkToData" class="form-label label-text">
+                Insert the Link to the Data
+            </label>
+            <input class="form-control" type="file" id="EventLinkToData"
+                name="event_link_to_data">
+        </div>
+        <div class="col-lg-6">
+            <label for="EventLinkToMetaData" class="form-label label-text">
+                Insert the Link to the Meta Data
+            </label>
+            <input class="form-control" type="file" id="EventLinkToMetaData"
+                name="event_link_to_meta_data">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Date of the Event (*)
+                </label>
+                <input class="form-control" type="date"
+                id="event_date" name="event_date" min="2012-01-01"
+                max="2040-12-31">
+            </div>
+        </div>
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Time of the Event (*)
+                </label>
+                <input class="form-control" type="time"
+                id="event_time" name="event_time">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label for="EventComments">Comments Related to the Event</label>
+            <textarea class="form-control" id="EventComments" name="EventComments"
+                placeholder="Comments (at most 200 of characters are accepted)"
+                rows="2" minlength="0" maxlength="200">
+            </textarea>
+            <br>
+        </div>
+        <hr>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p class="lead_text">Enter Fiducial Points Information (at least 3 valid Fiducials is required (*))</p> 
+            
+            <% for(var idx=0; idx < 4; idx++) { %>
+                <div class="row">
+                    <button class="btn btn-secondary" data-bs-toggle="collapse"
+                        data-bs-target="#collapse_event<%= idx %>"
+                        aria-expanded="false" type="button"
+                        aria-controls="collapseExample" style="margin-top: 20px;">
+                            Enter the Information for Fiducial <%= idx+1 %>
+                    </button>
+                </div>
+
+                <div class="collapse" id="collapse_event<%= idx %>">
+                    <p class="label-text" style="text-align: center;">
+                        <em>Information for Fiducial <%= idx+1 %> </em>
+                    </p>
+                    <div class="form-check">
+                        <label class="form-check-label" for="fid<%= idx+1 %>_validity">
+                            Validity
+                        </label>
+                        <input type="checkbox" class="form-check-input"
+                        id="fid<%= idx+1 %>_validity" name="fid<%= idx+1 %>_validity"
+                        onchange="toggleFunction(this.id)"
+                        checked>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text"
+                        for="fid<%= idx+1 %>_FiducialPoistionSelect">
+                            Position of the Fiducial Point
+                        </label>
+                        <select class="form-control"
+                        id="fid<%= idx+1 %>_position_name"
+                        name="fid<%= idx+1 %>_position_name">
+                            <option selected>Choose...</option>
+                            <% for(let idx=0; idx < fiducial_positions.length; idx++){ %>
+                                <option>
+                                    <%= fiducial_positions[idx]['PositionName'] %>
+                                </option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">
+                            Enter the X Position of the Fiducial Point (in mm)
+                            <strong>(Double Values Accepted)</strong>
+                        </label>
+                        <input type="number" name="fid<%= idx+1 %>_x_position"
+                            id="fid<%= idx+1 %>_x_position"
+                            class="form-control"
+                            placeholder="X Position of the Fiducial Point"
+                            min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">
+                            Enter the Y Position of the Fiducial Point (in mm)
+                            <strong>(Double Values Accepted)</strong>
+                        </label>
+                        <input type="number" name="fid<%= idx+1 %>_y_position"
+                            id="fid<%= idx+1 %>_y_position"
+                            class="form-control"
+                            placeholder="Y Position of the Fiducial Point"
+                            min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-text">
+                            Enter the Z Position of the Fiducial Point (in mm)
+                            <strong>(Double Values Accepted)</strong>
+                        </label>
+                        <input type="number" name="fid<%= idx+1 %>_z_position"
+                            id="fid<%= idx+1 %>_z_position"
+                            class="form-control"
+                            placeholder="Z Position of the Fiducial Point"
+                            min="0">
+                    </div>
+                </div>
+                <br>
+            <% } %>
+        </div>
+    </div>
+    
+    <br>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/createSampleEvent"
+                onclick="checkValues(event)"
+                name="create_event_for_sample" value="1">
+                    Create <em>(Another)</em> Event for the Sample
+            </button>
+        </div>    
+    </div>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/createSubframeSample"
+                onclick="checkValues(event)"
+                name="create_sample_for_subframe" value="3">
+                    Create <em>(Another)</em> Sample in the ROI
+            </button>
+        </div>
+    </div>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/createSubframeTarget"
+                onclick="checkValues(event)"
+                name="create_target_for_subframe" value="1">
+                    Create Target in the Sample
+            </button>
+        </div>
+    </div>
+
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/submitAndReturnToMain"
+                onclick="checkValues(event)"
+                name="submit_the_data_to_db" value="5">
+                    Submit the Data to Database <em>and Return to the Main Page</em>
+            </button>
+        </div>
+    </div>
+</form>
+
+<form action="/" method="get">
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                name="cancel_and_return_to_main" value="0">
+                    Cancel <em>and Return to the Main Page</em>
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function toggleFunction(id) {
+      let x = document.getElementById(id);
+      let id_number = id.split("_");
+      let position = id_number[0] + "_position_name";
+      let x_position = id_number[0] + "_x_position";
+      let y_position = id_number[0] + "_y_position";
+      let z_position = id_number[0] + "_z_position";
+      
+      if (x.checked){
+        document.getElementById(position).disabled = false;
+        document.getElementById(x_position).disabled = false;
+        document.getElementById(y_position).disabled = false;
+        document.getElementById(z_position).disabled = false;
+      } else {
+        document.getElementById(position).disabled = true;
+        document.getElementById(x_position).disabled = true;
+        document.getElementById(y_position).disabled = true;
+        document.getElementById(z_position).disabled = true;
+      }
+    }
+
+    function checkValues() {
+        let event_type = document.getElementById("event_select").value;
+        let data_value = document.getElementById("event_date").value;
+        let time_value = document.getElementById("event_time").value;
+
+        if (event_type=="Choose..."){
+            alert("Please select the event type!");
+            event.preventDefault();
+            return;
+        }
+        
+        if (data_value == ""){
+            alert("Event Date is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+            
+        if (time_value == ""){
+            alert("Event Time is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+
+        let x1 = document.getElementById("fid1_validity");
+        let x2 = document.getElementById("fid2_validity");
+        let x3 = document.getElementById("fid3_validity");
+        let x4 = document.getElementById("fid4_validity");
+
+        let counter = 0;
+        if (x1.checked)
+            counter += 1
+        
+        if (x2.checked)
+            counter += 1
+        
+        if (x3.checked)
+            counter += 1
+        
+        if (x4.checked)
+            counter += 1
+
+        if (counter < 3){
+            alert('At least 3 Fiducial points must be valid!');
+            event.preventDefault();
+            return;
+        }
+
+        if (x1.checked){
+            let position = document.getElementById("fid1_position_name").value;
+            let x = document.getElementById("fid1_x_position").value;
+            let y = document.getElementById("fid1_y_position").value;
+            let z = document.getElementById("fid1_z_position").value;
+
+            if (position=="Choose..."){
+                alert("Please select the position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+            
+            if (x==''){
+                alert("Please insert the X position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (y==''){
+                alert("Please insert the Y position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (z==''){
+                alert("Please insert the Z position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+        }
+
+        if (x2.checked){
+            let position = document.getElementById("fid2_position_name").value;
+            let x = document.getElementById("fid2_x_position").value;
+            let y = document.getElementById("fid2_y_position").value;
+            let z = document.getElementById("fid2_z_position").value;
+
+            if (position=="Choose..."){
+                alert("Please select the position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+            
+            if (x==''){
+                alert("Please insert the X position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (y==''){
+                alert("Please insert the Y position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (z==''){
+                alert("Please insert the Z position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+        }
+
+        if (x3.checked){
+            let position = document.getElementById("fid3_position_name").value;
+            let x = document.getElementById("fid3_x_position").value;
+            let y = document.getElementById("fid3_y_position").value;
+            let z = document.getElementById("fid3_z_position").value;
+
+            if (position=="Choose..."){
+                alert("Please select the position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+            
+            if (x==''){
+                alert("Please insert the X position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (y==''){
+                alert("Please insert the Y position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (z==''){
+                alert("Please insert the Z position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+        }
+
+        if (x4.checked){
+            let position = document.getElementById("fid4_position_name").value;
+            let x = document.getElementById("fid4_x_position").value;
+            let y = document.getElementById("fid4_y_position").value;
+            let z = document.getElementById("fid4_z_position").value;
+
+            if (position=="Choose..."){
+                alert("Please select the position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+            
+            if (x==''){
+                alert("Please insert the X position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (y==''){
+                alert("Please insert the Y position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+
+            if (z==''){
+                alert("Please insert the Z position of the fiducial points!");
+                event.preventDefault();
+                return;
+            }
+        }
+    }
+</script>
+
+<%- include("../footer") -%>

@@ -1,0 +1,253 @@
+<%- include("../header") -%>
+   
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+        <em>Subframe holds all the information in the hierarchy.</em>
+        <br>
+        <br>
+        <div class="row">
+            <img class="center" src='subframe.jpg' alt="Subframe Photo">
+        </div>
+        <br>
+        <br>
+            Header Information for the Subframe <%= external_id %>
+        </h1>
+    </div>
+</div>
+
+<form action="/DEFAULT_URL" method="post">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Facility</label>
+                <input type="text" name="facility_name" class="form-control"
+                value="<%= subframe_header[0]['FacilityID'] %>" disabled>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Subframe Type</label>
+                <input type="text" name="fsubframe_type_name" class="form-control"
+                value="<%= subframe_header[0]['SubframeTypeID'] %>" disabled>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Serial Number</label>
+                <input type="text" name="serial_number" class="form-control"
+                value="<%= subframe_header[0]['SerialNumber'] %>" disabled>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Created Time</label>
+                <input type="text" name="created_time" class="form-control"
+                value="<%= subframe_header[0]['CreateTimeStamp'].toUTCString() %>" disabled>
+            </div>
+        </div>
+        <% if(subframe_header[0]['Validity']==0){ %>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label class="label-text">Invalid Since!</label>
+                    <input type="text" name="invalid_since" class="form-control"
+                    value="<%= subframe_header[0]['InvalidSinceTimeStamp'].toUTCString() %>"
+                    style="color: #ff0000;" disabled>
+                </div>
+            </div>
+        <% } %>
+        <% if(subframe_header[0]['Comments']!=null && subframe_header[0]['Comments'] != ''){ %>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label class="label-text">Comments</label>
+                    <textarea type="text" name="comments" class="form-control"
+                    placeholder="<%= subframe_header[0]['Comments'] %>" disabled></textarea>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <br>
+
+    <% if(subframe_header[0]['Validity']==0){ %>
+        <div class="row">
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/addSubframeInformation"
+                    id="add_information_for_subframe"
+                    name="add_information_for_subframe" value="0">
+                        Add/Edit Information
+                </button>
+            </div>
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeEvent"
+                    id="create_event_for_subframe"
+                    name="create_event_for_subframe" value="0" disabled>
+                        Create Event
+                </button>
+            </div>   
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeROI"
+                    id="create_roi_for_subframe"
+                    name="create_roi_for_subframe" value="0" disabled>
+                        Create Region of Interest (ROI)
+                </button>
+            </div>
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeTarget"
+                    id="create_target_for_subframe"
+                    name="create_target_for_subframe" disabled>
+                        Create Target
+                </button>
+            </div> 
+        </div>    
+    
+        <% if(subframe_rois.length > 0){ %>
+            <div class="row twopanel">        
+                <div class="col-lg-12">
+                    <label class="label-text">
+                        Choose the ROI
+                    </label>
+                    <select class="form-control" id="filters_roi"
+                        name="filters_roi" disabled>
+                        <option selected>Not Specified</option>
+                        <% let counter = 0 %>
+                        <% for(var idx=0; idx < subframe_rois.length; idx++) { %>
+                            <option value="<%= subframe_rois[idx]['ID'] %>">
+                                <% counter++; %>
+                                <%= counter %>
+                            </option>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row twopanel">
+                <button class="btn btn-secondary" type="submit"
+                    form="insert_roi_information">
+                        Select the ROI
+                </button>
+            </div>
+        <% } %>
+    <% } else { %>
+        <div class="row">
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/addSubframeInformation"
+                    id="add_information_for_subframe"
+                    name="add_information_for_subframe" value="0">
+                        Add/Edit Information
+                </button>
+            </div>
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeEvent"
+                    id="create_event_for_subframe"
+                    name="create_event_for_subframe" value="0">
+                        Create Event
+                </button>
+            </div>   
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeROI"
+                    id="create_roi_for_subframe"
+                    name="create_roi_for_subframe" value="0">
+                        Create Region of Interest (ROI)
+                </button>
+            </div> 
+            <div class="col-lg-3">
+                <button class="btn btn-outline-secondary" type="submit"
+                    formaction="/createSubframeTarget"
+                    id="create_target_for_subframe"
+                    name="create_target_for_subframe">
+                        Create Target
+                </button>
+            </div>
+        </div>    
+        
+        <% if(subframe_rois.length > 0){ %>
+            <div class="row twopanel">        
+                <div class="col-lg-12">
+                    <label class="label-text">
+                        Choose the ROI
+                    </label>
+                    <select class="form-control" id="filters_roi"
+                        name="filters_roi">
+                        <option selected>Not Specified</option>
+                        <% let counter = 0 %>
+                        <% for(var idx=0; idx < subframe_rois.length; idx++) { %>
+                            <option value="<%= subframe_rois[idx]['ID'] %>">
+                                <% counter++; %>
+                                <%= counter %>
+                            </option>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row twopanel">
+                <button class="btn btn-secondary" type="submit"
+                    form="insert_roi_information">
+                        Select the ROI
+                </button>
+            </div>
+        <% } %>
+    <% } %>
+</form>
+
+<form action="/" method="get">
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                name="cancel_and_return_to_main" value="0">
+                    Cancel <em>and Return to the Main Page</em>
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function toggleButtonsFunction() {
+      let x = document.getElementById("subframe_validity");
+      const button_1 = document.getElementById("create_event_for_subframe");
+      const button_2 = document.getElementById("create_roi_for_subframe");
+      const button_3 = document.getElementById("create_target_for_subframe");
+
+      if (x.checked){
+        button_1.disabled = false;
+        button_2.disabled = false;
+        button_3.disabled = false;
+      } else {
+        button_1.disabled = true;
+        button_2.disabled = true;
+        button_3.disabled = true;
+      }
+    }
+
+    function checkValues() {
+        let x = document.getElementById("subframe_validity");
+
+        if (!x.checked){
+            let data_value = document.getElementById("subframe_invalid_date").value;
+            let time_value = document.getElementById("subframe_invalid_time").value;
+        
+            if (data_value == ""){
+                alert("Invalidity Date is not Inserted!");
+                event.preventDefault();
+            }
+            
+            if (time_value == ""){
+                alert("Invalidity Time is not Inserted!");
+                event.preventDefault();
+            }
+        }
+    }
+</script>
+
+<%- include("../footer") -%>

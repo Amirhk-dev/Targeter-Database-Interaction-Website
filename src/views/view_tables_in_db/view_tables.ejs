@@ -1,0 +1,45 @@
+<%- include("../header") -%>
+
+<% for(var idx=0; idx < result[0].length; idx++) { %>
+    <div class="row">
+            <button class="btn btn-secondary" data-bs-toggle="collapse"
+                data-bs-target="#collapse_table<%= idx %>" aria-expanded="false"
+                aria-controls="collapseExample" style="margin-top: 20px;">
+                    <%= result[0][idx]['Tables_in_euxfeltargets_dev'] %>
+            </button>
+    </div>
+
+    <% for(var row=0; row < result[idx+1].length; row++) { %>
+        <div class="collapse" id="collapse_table<%= idx %>">
+            <div class="row">
+                <h1 class="label-text" style="text-align: center;">
+                    Record <%=row+1 %>
+                </h1>
+                <table class="table">
+                    <tbody>
+                        <% for(var col=0;
+                        col < (Object.keys(result[idx+1][row])).length;
+                        col++) { %>
+                            <tr>
+                                <th width="50%">
+                                    <%= Object.keys(result[idx+1][row])[col] %>
+                                </th>
+                                <% if (Object.values(result[idx+1][row])[col]) { %>
+                                    <td width="50%">
+                                        <%= Object.values(result[idx+1][row])[col] %>
+                                    </td>
+                                <% } else{ %>
+                                    <td width="50%">
+                                        -
+                                    </td>
+                                <% } %>    
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <% } %>
+<% } %>
+
+<%- include("../footer") -%>

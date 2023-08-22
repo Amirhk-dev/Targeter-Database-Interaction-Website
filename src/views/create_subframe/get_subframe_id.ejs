@@ -1,0 +1,33 @@
+<%- include("../header") -%>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="POST" action='/createSubframeOnDatabase'>
+                <p class="lead_text">Get the Subframe ID</p>
+                <div class="form-group">
+                    <label class="label-text" for="facility_name_select">
+                        Select the Facility Name
+                    </label>
+                    <select class="form-control" id="facility_name_select"
+                    name="facility_name_select">
+                        <option>EXFEL</option>
+                        <option>ELIBL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="label-text" for="subframe_type_select">
+                        Select the Subframe Type
+                    </label>
+                    <select class="form-control" id="subframe_type_select"
+                    name="subframe_type_select">
+                        <option>4IN</option>
+                        <option>9X9</option>
+                        <option>FOI</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary">Get the SubframeID</button>
+            </form>
+        </div>
+    </div>
+
+<%- include("../footer") -%>
