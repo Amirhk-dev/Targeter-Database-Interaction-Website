@@ -11,6 +11,8 @@ class BaseClass {
             "EventType_Table":{},
             "FiducialPosition_Table":{},
         };
+
+        this.list_of_tables = [];
     }
 
     getEnumTablesQuery(){
@@ -76,6 +78,15 @@ class BaseClass {
             }
         }
         return facility_code_name;
+    }
+
+    getRecordOfTablesQuery(){
+        let query = "";
+        for(let idx=0; idx < this.list_of_tables.length; idx++){
+            query += "SELECT * FROM " + this.list_of_tables[idx]['Tables_in_euxfeltargets_dev'] + "; ";
+        }
+
+        return query;
     }
 }
 

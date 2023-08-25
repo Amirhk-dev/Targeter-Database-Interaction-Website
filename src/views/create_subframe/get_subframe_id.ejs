@@ -1,34 +1,48 @@
 <%- include("../header") -%>
     
-    <div class="row">
-        <div class="col-lg-12">
-            <form method="POST" action='/createSubframeOnDatabase'>
-                <p class="lead_text">Get the Subframe ID</p>
-                <div class="form-group">
-                    <label class="label-text" for="facility_name_select">
-                        Select the Facility Name
-                    </label>
-                    <select class="form-control" id="facility_name_select"
-                    name="facility_name_select">
-                        <% for(let idx=0; idx < facility_table.length; idx++) { %>
-                            <option><%= facility_table[idx]['Name'] %></option>
-                        <% } %>
-                    </select>
+<div class="row">
+    <div class="col-lg-12">
+        <form method="POST" action='/createSubframeOnDatabase'>
+            <p class="lead_text">Get the Subframe ID</p>
+            <div class="form-group">
+                <label class="label-text" for="facility_name_select">
+                    Select the Facility Name
+                </label>
+                <select class="form-control" id="facility_name_select"
+                name="facility_name_select">
+                    <% for(let idx=0; idx < facility_table.length; idx++) { %>
+                        <option><%= facility_table[idx]['Name'] %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label-text" for="subframe_type_select">
+                    Select the Subframe Type
+                </label>
+                <select class="form-control" id="subframe_type_select"
+                name="subframe_type_select">
+                    <% for(let idx=0; idx < subframe_table.length; idx++) { %>
+                        <option><%= subframe_table[idx]['TypeName'] %></option>
+                    <% } %>
+                </select>
+            </div>
+            <button class="btn btn-secondary">
+                <b>
+                    Generate the SubframeID in the Database
+                </b>
+            </button>
+        </form>
+        <form action="/" method="get">
+            <div class="row twopanel">
+                <div class="row">
+                    <button class="btn btn-outline-secondary" type="submit"
+                        name="cancel_and_return_to_main" value="0">
+                            <b>Cancel and Return to the Main Page</b>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label class="label-text" for="subframe_type_select">
-                        Select the Subframe Type
-                    </label>
-                    <select class="form-control" id="subframe_type_select"
-                    name="subframe_type_select">
-                        <% for(let idx=0; idx < subframe_table.length; idx++) { %>
-                            <option><%= subframe_table[idx]['TypeName'] %></option>
-                        <% } %>
-                    </select>
-                </div>
-                <button class="btn btn-secondary">Generate the SubframeID in the Database</button>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
+</div>
 
 <%- include("../footer") -%>

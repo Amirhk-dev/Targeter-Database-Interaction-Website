@@ -1,45 +1,76 @@
 <%- include("../header") -%>
+<br>
+<br>
+<form action="/" method="get">
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                name="cancel_and_return_to_main" value="0">
+                    <b>Return to the Main Page</b>
+            </button>
+        </div>
+    </div>
+</form>
 
-<% for(var idx=0; idx < result[0].length; idx++) { %>
+<% for(var idx=0; idx < list_of_tables.length; idx++) { %>
     <div class="row">
             <button class="btn btn-secondary" data-bs-toggle="collapse"
                 data-bs-target="#collapse_table<%= idx %>" aria-expanded="false"
                 aria-controls="collapseExample" style="margin-top: 20px;">
-                    <%= result[0][idx]['Tables_in_euxfeltargets_dev'] %>
+                    <%= list_of_tables[idx]['Tables_in_euxfeltargets_dev'] %>
             </button>
     </div>
 
-    <% for(var row=0; row < result[idx+1].length; row++) { %>
+    <% for(var row=0; row < result[idx].length; row++) { %>
         <div class="collapse" id="collapse_table<%= idx %>">
-            <div class="row">
-                <h1 class="label-text" style="text-align: center;">
-                    Record <%=row+1 %>
-                </h1>
-                <table class="table">
-                    <tbody>
-                        <% for(var col=0;
-                        col < (Object.keys(result[idx+1][row])).length;
-                        col++) { %>
-                            <tr>
-                                <th width="50%">
-                                    <%= Object.keys(result[idx+1][row])[col] %>
-                                </th>
-                                <% if (Object.values(result[idx+1][row])[col]) { %>
-                                    <td width="50%">
-                                        <%= Object.values(result[idx+1][row])[col] %>
-                                    </td>
-                                <% } else{ %>
-                                    <td width="50%">
-                                        -
-                                    </td>
-                                <% } %>    
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <h1 class="label-text" style="text-align: center; color:crimson">
+                            <b>
+                                Record <%=row+1 %>
+                            </b> 
+                        </h1>
+                        <table class="table">
+                            <tbody>
+                                <% for(var col=0;
+                                    col < (Object.keys(result[idx][row])).length;
+                                    col++) { %>
+                                <tr>
+                                    <th width="50%">
+                                        <%= Object.keys(result[idx][row])[col] %>
+                                    </th>
+                                    <% if (Object.values(result[idx][row])[col]) { %>
+                                        <td width="50%">
+                                            <%= Object.values(result[idx][row])[col] %>
+                                        </td>
+                                    <% } else{ %>
+                                        <td width="50%">
+                                            -
+                                        </td>
+                                    <% } %>    
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     <% } %>
 <% } %>
+
+<br>
+<br>
+<form action="/" method="get">
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                name="cancel_and_return_to_main" value="0">
+                    <b>Return to the Main Page</b>
+            </button>
+        </div>
+    </div>
+</form>
 
 <%- include("../footer") -%>

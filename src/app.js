@@ -172,7 +172,32 @@ app.get("/finishCreatingSubframeEntry", function(req, res){
     res.redirect("/");
 });
 //#############################################################################
+// view tables and their content in the database
+app.get("/viewDataBaseTables", function(req, res){
+    console.log('\nthe user attempts to view the tables and their entries...');
+    
+    let query = "SHOW TABLES";
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
 
+        baseclass.list_of_tables = result;
+        
+        query = baseclass.getRecordOfTablesQuery();
+
+        connection.query(query, function(error, result){
+            if (error)
+                throw error;
+                
+            let list_of_tables = baseclass.list_of_tables;
+
+            res.render("view_tables_in_db/view_tables", {
+                list_of_tables,
+                result
+            });
+        });
+    });
+});
 
 
 
@@ -232,38 +257,7 @@ app.get("/finishCreatingSubframeEntry", function(req, res){
 
 
 //#############################################################################
-// view tables and their content in the database
-app.post("/viewDBTables", function(req, res){
-    console.log('\nthe user attempts to view the tables and their entries...');
-    
-    let q = "SHOW TABLES";
-    connection.query(q, function(error, result){
-        if (error)
-            throw error;
-        
-        all_queries = "";
-        for(let index=0; index < result.length; index++){
-            if (index==0)
-                all_queries += "SHOW TABLES; SELECT * FROM " +
-                                result[index]['Tables_in_euxfeltargets_dev'] + 
-                                "; ";
-            else
-                all_queries += "SELECT * FROM " +
-                                result[index]['Tables_in_euxfeltargets_dev'] +
-                                "; ";
-        }
 
-        connection.query(all_queries, function(error, result){
-            if (error)
-                throw error;
-                
-            res.render("view_tables_in_db/view_tables",
-                            {
-                                result
-                            });
-        });
-    });
-});
 //#############################################################################
 // query the database
 var filters = "";
@@ -1638,10 +1632,6 @@ app.post("/removeFromTable", function(req, res){
         
         res.redirect("editTables");
     });
-});
-//#############################################################################
-app.post("/viewDBTables", function(req, res){ 
-    res.render("view_db_tables");      
 });
 //#############################################################################
 app.post("/submitSubframeInfoManually", function(req, res){
