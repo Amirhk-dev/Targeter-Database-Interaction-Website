@@ -1,0 +1,178 @@
+<%- include("../header") -%>
+   
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+        <b>Subframe holds all the information in the hierarchy.</b>
+        <br>
+        <br>
+        <div class="row">
+            <img class="center" src='subframe.jpg' alt="Subframe Photo">
+        </div>
+        <br>
+        <br>
+            Header Information for the Subframe <b><%= external_id %></b>
+        </h1>
+    </div>
+</div>
+
+<form action="/DEFAULT_URL" method="POST">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label class="label-text">Facility</label>
+                <input type="text" name="facility_name" class="form-control"
+                value="<%= subframe_header[0]['FacilityID'] %>" disabled>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label class="label-text">Subframe Type</label>
+                <input type="text" name="subframe_type_name" class="form-control"
+                value="<%= subframe_header[0]['SubframeTypeID'] %>" disabled>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label class="label-text">Serial Number</label>
+                <input type="text" name="serial_number" class="form-control"
+                value="<%= subframe_header[0]['SerialNumber'] %>" disabled>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="form-group">
+                <label class="label-text">Created Time</label>
+                <input type="text" name="created_time" class="form-control"
+                value="<%= subframe_header[0]['CreateTimeStamp'].toUTCString() %>" disabled>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="label-text">Comments</label>
+                <textarea type="text" name="comments" class="form-control"
+                <% if(subframe_header[0]['Comments']!=null && subframe_header[0]['Comments'] != ''){ %>
+                    placeholder="<%= subframe_header[0]['Comments'] %>">
+                <% } else { %>
+                    placeholder="Insert comments related to the Subframe...">
+                <% } %>
+                </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="form-check-label" for="subframe_validity">
+                    Subframe Validity
+                </label>
+                <input type="checkbox" class="form-check-input"
+                    id="subframe_validity" name="subframe_validity"
+                    onchange="toggleFunction(this.id)"
+                    <% if(subframe_header[0]['Validity']==1) { %>
+                        checked
+                    <% } %>
+                    >
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Invalidity Date (*)
+                </label>
+                <input class="form-control" type="date"
+                id="event_date" name="event_date" min="2012-01-01"
+                max="2040-12-31">
+            </div>
+        </div>
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Invalidity Time (*)
+                </label>
+                <input class="form-control" type="time"
+                id="event_time" name="event_time">
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/submitSubframeInformation"
+                id="submit_information_for_subframe"
+                name="submit_information_for_subframe" value="0">
+                    Submit the Information to the Database
+            </button>
+        </div>
+        <div class="col-lg-6">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/insertSubframeInformationManually"
+                id="create_target_for_subframe"
+                name="create_target_for_subframe" disabled>
+                    Cancel and Go Back
+            </button>
+        </div> 
+    </div>
+</form>
+
+<form action="/" method="get">
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                name="cancel_and_return_to_main" value="0">
+                    <b>Cancel and Return to the Main Page</b>
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function toggleButtonsFunction() {
+      let x = document.getElementById("subframe_validity");
+      const button_1 = document.getElementById("create_event_for_subframe");
+      const button_2 = document.getElementById("create_roi_for_subframe");
+      const button_3 = document.getElementById("create_target_for_subframe");
+
+      if (x.checked){
+        button_1.disabled = false;
+        button_2.disabled = false;
+        button_3.disabled = false;
+      } else {
+        button_1.disabled = true;
+        button_2.disabled = true;
+        button_3.disabled = true;
+      }
+    }
+
+    function checkValues() {
+        let x = document.getElementById("subframe_validity");
+
+        if (!x.checked){
+            let data_value = document.getElementById("subframe_invalid_date").value;
+            let time_value = document.getElementById("subframe_invalid_time").value;
+        
+            if (data_value == ""){
+                alert("Invalidity Date is not Inserted!");
+                event.preventDefault();
+            }
+            
+            if (time_value == ""){
+                alert("Invalidity Time is not Inserted!");
+                event.preventDefault();
+            }
+        }
+    }
+</script>
+
+<%- include("../footer") -%>

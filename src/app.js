@@ -28,8 +28,29 @@ app.get("/", function(_req, res){
     res.render("home");
 });
 //#############################################################################
-// generate the list of subframes available in the database
+// create subframe page
 var baseclass = new BaseClass();
+app.get("/createSubframe", function(req, res){
+    console.log('\nthe user attempts to create a subframe...');
+
+    let query = baseclass.getEnumTablesQuery();
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
+
+        baseclass.digestEnumValues(result);
+
+        let subframe_table = baseclass.enum_tables_list['SubframeType_Table'];
+        let facility_table = baseclass.enum_tables_list['Facility_Table'];      
+
+        res.render("create_subframe/get_subframe_id", {
+            subframe_table,
+            facility_table
+        });
+    });
+});
+//#############################################################################
+// generate the list of subframes available in the database
 var subframe = new Subframe();
 app.get("/submitDataManually", function(req, res){
     console.log('\nthe user attempts to submit the data manually...');
@@ -78,11 +99,9 @@ app.post("/insertSubframeInformationManually", function(req, res){
                                         result[0]);
         subframe.generateROIIDs(result[1]);
 
-        external_id = subframe.external_id;
-        subframe_header = subframe.header;
-        subframe_rois = subframe.rois;
-
-        console.log(subframe_header[0]['Comments']);
+        let external_id = subframe.external_id;
+        let subframe_header = subframe.header;
+        let subframe_rois = subframe.rois;
 
         res.render("manual_insertion/home_manually_subframe", {
             external_id,
@@ -91,7 +110,68 @@ app.post("/insertSubframeInformationManually", function(req, res){
         });
     });
 });
+//#############################################################################
+// add/edit subframe header information
+app.get("/addSubframeInformation", function(req, res){
+    console.log('\nthe user attempts to add/edit subframe header information');
 
+    let external_id = subframe.external_id;
+    let groups = baseclass.enum_tables_list['GroupInformation_Table'];
+    let subframe_header = subframe.header;
+
+    res.render("manual_insertion/add_subframe_information", {
+        external_id,
+        groups,
+        subframe_header
+    });
+});
+//#############################################################################
+// create subframe on the database
+app.post("/createSubframeOnDatabase", function(req, res){
+    console.log('\nprocessing the request (connecting to the database)...');
+
+    let facility_id = baseclass.getFacilityID(req.body['facility_name_select']);
+    let subframe_type_id = baseclass.getSubframeTypeID(req.body['subframe_type_select']);
+    
+    let query = "SELECT MAX(SerialNumber)+1 as serialnumber " + 
+        "FROM Subframe_Table WHERE SubframeTypeID=" + subframe_type_id +
+        " AND FacilityID=" + facility_id + "; ";
+
+    connection.query(query, function (error, result) {
+        if (error)
+            throw error;
+        
+        let serial_number = result[0].serialnumber;
+        let serial_number_text = baseclass.getSubframeSerialNumber(serial_number);
+
+        query = "INSERT INTO Subframe_Table (FacilityID, " +
+                "SubframeTypeID, SerialNumber, Validity) VALUES (" +
+                facility_id.toString() + ", " + subframe_type_id.toString() +
+                ", " + result[0].serialnumber.toString() + ", 1); ";
+        
+        connection.query(query, function (error, result) {
+            if (error)
+                throw error;
+
+            let facility_code_name = baseclass.getFacilityCodeName(facility_id);
+            let subframe_type_name = req.body['subframe_type_select'];
+            let final_id = facility_code_name + subframe_type_name + serial_number_text;
+            
+            res.render("create_subframe/show_subframe_id", {
+                serial_number,
+                facility_code_name,
+                subframe_type_name,
+                final_id
+            });
+        });
+    });
+});
+//#############################################################################
+app.get("/finishCreatingSubframeEntry", function(req, res){
+    console.log('\nthe user created a subframe...')
+    res.redirect("/");
+});
+//#############################################################################
 
 
 
@@ -150,72 +230,7 @@ app.post("/insertSubframeInformationManually", function(req, res){
 
 /*
 
-// create subframe page
-app.post("/createSubframe", function(req, res){ 
-    console.log('\nthe user attempts to create a subframe...')
-    res.render("create_subframe/get_subframe_id");      
-});
-//#############################################################################
-// create subframe on the databae
-app.post("/createSubframeOnDatabase", function(req, res){
-    console.log('\nprocessing the request (connecting to the database)...');
-    FacilityName = req.body.facility_name_select;
-    SubframeType = req.body.subframe_type_select;
 
-    var found_serialnumber = "SELECT MAX(SerialNumber)+1 as serialnumber " +
-    "FROM Subframe_Table WHERE SubframeTypeID=(SELECT ID FROM " +
-    "SubframeType_Table WHERE TypeName='" + SubframeType +
-    "') AND FacilityID=(SELECT ID FROM Facility_Table WHERE CodeName='" +
-    FacilityName + "');"
-    
-    var q = found_serialnumber; 
-
-    connection.query(q, function (error, result) {
-        if (error)
-            throw error;
-        
-        serial_number = result[0].serialnumber;
-
-        if (serial_number===null)
-            serial_number = 1;
-
-        var concat_zeros = 6 - serial_number.toString().length;
-        if(concat_zeros>0){
-            serial_number_text = serial_number.toString();
-            for(let i=0; i<concat_zeros; i++){
-                serial_number_text = '0' + serial_number_text;
-            }
-        }
-
-        var getFacilityID_query = "SELECT ID as facilityid FROM Facility_Table " +
-        "WHERE CodeName='" + FacilityName + "'; ";
-        var getSubframeTypeID_query = "SELECT ID as subframetypeid FROM " +
-        "SubframeType_Table WHERE TypeName='" + SubframeType + "'; ";
-        var createSubframeEntry = "INSERT INTO Subframe_Table (FacilityID, " +
-        "SubframeTypeID, SerialNumber, Validity) VALUES ((" + 
-        "SELECT ID as facilityid FROM Facility_Table WHERE CodeName='" +
-        FacilityName + "'), (SELECT ID as subframetypeid FROM SubframeType_Table" +
-        " WHERE TypeName='" + SubframeType + "'), " + serial_number + ", 1);"    
-    
-        q = getFacilityID_query + getSubframeTypeID_query + createSubframeEntry;
-        connection.query(q, function (error, result) { 
-            var facilityID = result[0][0].facilityid;
-            var subframeTypeID = result[1][0].subframetypeid;
-            var finalID = FacilityName + SubframeType + serial_number_text;
-            res.render("create_subframe/show_subframe_id",
-                        {
-                            serial_number,
-                            FacilityName,
-                            SubframeType,
-                            finalID
-                        }); 
-    });
-})});
-//#############################################################################
-app.post("/finishCreatingSubframeEntry", function(req, res){
-    console.log('\nthe user created a subframe...')
-    res.redirect("/");
-});
 //#############################################################################
 // view tables and their content in the database
 app.post("/viewDBTables", function(req, res){

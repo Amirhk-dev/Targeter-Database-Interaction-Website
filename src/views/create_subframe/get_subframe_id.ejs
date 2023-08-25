@@ -10,8 +10,9 @@
                     </label>
                     <select class="form-control" id="facility_name_select"
                     name="facility_name_select">
-                        <option>EXFEL</option>
-                        <option>ELIBL</option>
+                        <% for(let idx=0; idx < facility_table.length; idx++) { %>
+                            <option><%= facility_table[idx]['Name'] %></option>
+                        <% } %>
                     </select>
                 </div>
                 <div class="form-group">
@@ -20,12 +21,12 @@
                     </label>
                     <select class="form-control" id="subframe_type_select"
                     name="subframe_type_select">
-                        <option>4IN</option>
-                        <option>9X9</option>
-                        <option>FOI</option>
+                        <% for(let idx=0; idx < subframe_table.length; idx++) { %>
+                            <option><%= subframe_table[idx]['TypeName'] %></option>
+                        <% } %>
                     </select>
                 </div>
-                <button class="btn btn-secondary">Get the SubframeID</button>
+                <button class="btn btn-secondary">Generate the SubframeID in the Database</button>
             </form>
         </div>
     </div>
