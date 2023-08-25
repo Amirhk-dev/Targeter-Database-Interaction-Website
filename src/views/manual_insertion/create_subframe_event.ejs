@@ -11,7 +11,7 @@
         </div>
         <br>
         <br>
-            Information for the Subframe <%= insert_subframe_information[0]['value'] %>
+            Information for the Subframe <%= external_id %>
         </h1>
         <h2 class="site_msg" style="text-align: center;">
             Insert the Event Information for the Subframe
@@ -88,10 +88,10 @@
     <div class="row">
         <div class="form-group">
             <label for="EventComments">Comments Related to the Event</label>
-            <textarea class="form-control" id="EventComments" name="EventComments"
-                placeholder="Comments (at most 200 of characters are accepted)"
-                rows="2" minlength="0" maxlength="200">
-            </textarea>
+            <textarea class="form-control"
+                    id="EventComments" name="EventComments"
+                    placeholder="Insert comments related to the Subframe Event..."
+                    rows="1" maxlength="200"></textarea>
             <br>
         </div>
         <hr>
@@ -181,6 +181,7 @@
     
     <br>
 
+    <!--
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
@@ -191,7 +192,9 @@
             </button>
         </div>    
     </div>
+    -->
 
+    <!--
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
@@ -202,7 +205,9 @@
             </button>
         </div>
     </div>
+    -->
 
+    <!--
     <div class="row twopanel">
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
@@ -213,16 +218,27 @@
             </button>
         </div>
     </div>
+    -->
 
-    <div class="row twopanel">
-        <div class="row">
+    <div class="row">
+        <div class="col-lg-6">
             <button class="btn btn-outline-secondary" type="submit"
-                formaction="/submitAndReturnToMain"
-                onclick="checkValues(event)"
-                name="submit_the_data_to_db" value="1">
-                    Submit the Data to Database <em>and Return to the Main Page</em>
+                formaction="/submitSubframeEvent"
+                id="submit_event_for_subframe"
+                onclick="checkValues()"
+                name="submit_event_for_subframe" value="0">
+                    Submit the Subframe Event to the Database
             </button>
         </div>
+        <div class="col-lg-6">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/insertSubframeInformationManually"
+                id="insert_subframe_information"
+                name="insert_subframe_information"
+                value="1">
+                    Cancel and Go Back
+            </button>
+        </div> 
     </div>
 </form>
 
@@ -231,12 +247,13 @@
         <div class="row">
             <button class="btn btn-outline-secondary" type="submit"
                 name="cancel_and_return_to_main" value="0">
-                    Cancel <em>and Return to the Main Page</em>
+                    <b>Cancel and Return to the Main Page</b>
             </button>
         </div>
     </div>
 </form>
 
+<!--
 <script>
     function toggleFunction(id) {
       let x = document.getElementById(id);
@@ -431,5 +448,6 @@
         }
     }
 </script>
+-->
 
 <%- include("../footer") -%>

@@ -51,55 +51,81 @@
     <br>
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <div class="form-group">
                 <label class="label-text">Comments</label>
-                <textarea type="text" name="comments" class="form-control"
-                <% if(subframe_header[0]['Comments']!=null && subframe_header[0]['Comments'] != ''){ %>
-                    placeholder="<%= subframe_header[0]['Comments'] %>">
-                <% } else { %>
-                    placeholder="Insert comments related to the Subframe...">
-                <% } %>
-                </textarea>
+                <textarea class="form-control"
+                    id="comments" name="comments"
+                    placeholder="Insert comments related to the Subframe..."
+                    rows="1" maxlength="200"></textarea>
             </div>
+        </div>
+        <div class="col-lg-6">
+            <label class="label-text">
+                Choose the Group
+            </label>
+            <select class="form-control" id="filters_group"
+                name="filters_group">
+                <% if(subframe_header[0]['GroupID']==null) { %>
+                    <option selected>Not Specified</option>
+                    <% for(let idx=0; idx < groups.length; idx++) { %>
+                        <option><%= groups[idx]['GroupName'] %></option>
+                    <% } %>
+                <% } else { %>
+                    <% for(let idx=0; idx < groups.length; idx++) { %>
+                        <% if(subframe_header[0]['GroupID'] == groups[idx]['GroupName']) { %>
+                            <option selected><%= groups[idx]['GroupName'] %></option>
+                        <% } else { %>
+                            <option><%= groups[idx]['GroupName'] %></option>
+                        <% } %>
+                    <% } %>
+                <% } %>
+            </select>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-12">
+    <br>
+
+    <div class="row twopanel">
+        <div class="col-lg-2">
             <div class="form-group">
                 <label class="form-check-label" for="subframe_validity">
                     Subframe Validity
                 </label>
                 <input type="checkbox" class="form-check-input"
                     id="subframe_validity" name="subframe_validity"
-                    onchange="toggleFunction(this.id)"
-                    <% if(subframe_header[0]['Validity']==1) { %>
+                    onchange="toggleFunction()"
+                    <% if (subframe_header[0]["Validity"] == 1) { %>
                         checked
                     <% } %>
                     >
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6">    
+        <div class="col-lg-5">    
             <div class="form-group">
                 <label class="label-text">
                     Enter the Invalidity Date (*)
                 </label>
                 <input class="form-control" type="date"
-                id="event_date" name="event_date" min="2012-01-01"
-                max="2040-12-31">
+                id="invalidity_date" name="invalidity_date" min="2012-01-01"
+                max="2040-12-31"
+                <% if (subframe_header[0]["Validity"] == 1) { %>
+                    disabled
+                <% } %>
+                >
             </div>
         </div>
-        <div class="col-lg-6">    
+        <div class="col-lg-5">    
             <div class="form-group">
                 <label class="label-text">
                     Enter the Invalidity Time (*)
                 </label>
                 <input class="form-control" type="time"
-                id="event_time" name="event_time">
+                id="invalidity_time" name="invalidity_time"
+                <% if (subframe_header[0]["Validity"] == 1) { %>
+                    disabled
+                <% } %>
+                >
             </div>
         </div>
     </div>
@@ -111,6 +137,7 @@
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/submitSubframeInformation"
                 id="submit_information_for_subframe"
+                onclick="checkValues()"
                 name="submit_information_for_subframe" value="0">
                     Submit the Information to the Database
             </button>
@@ -118,8 +145,9 @@
         <div class="col-lg-6">
             <button class="btn btn-outline-secondary" type="submit"
                 formaction="/insertSubframeInformationManually"
-                id="create_target_for_subframe"
-                name="create_target_for_subframe" disabled>
+                id="insert_subframe_information"
+                name="insert_subframe_information"
+                value="1">
                     Cancel and Go Back
             </button>
         </div> 
@@ -138,20 +166,17 @@
 </form>
 
 <script>
-    function toggleButtonsFunction() {
+    function toggleFunction() {
       let x = document.getElementById("subframe_validity");
-      const button_1 = document.getElementById("create_event_for_subframe");
-      const button_2 = document.getElementById("create_roi_for_subframe");
-      const button_3 = document.getElementById("create_target_for_subframe");
+      const date_input = document.getElementById("invalidity_date");
+      const time_input = document.getElementById("invalidity_time");
 
       if (x.checked){
-        button_1.disabled = false;
-        button_2.disabled = false;
-        button_3.disabled = false;
+        date_input.disabled = true;
+        time_input.disabled = true;
       } else {
-        button_1.disabled = true;
-        button_2.disabled = true;
-        button_3.disabled = true;
+        date_input.disabled = false;
+        time_input.disabled = false;
       }
     }
 
@@ -159,17 +184,19 @@
         let x = document.getElementById("subframe_validity");
 
         if (!x.checked){
-            let data_value = document.getElementById("subframe_invalid_date").value;
-            let time_value = document.getElementById("subframe_invalid_time").value;
+            let data_value = document.getElementById("invalidity_date").value;
+            let time_value = document.getElementById("invalidity_time").value;
         
             if (data_value == ""){
                 alert("Invalidity Date is not Inserted!");
                 event.preventDefault();
+                return;
             }
             
             if (time_value == ""){
                 alert("Invalidity Time is not Inserted!");
                 event.preventDefault();
+                return;
             }
         }
     }

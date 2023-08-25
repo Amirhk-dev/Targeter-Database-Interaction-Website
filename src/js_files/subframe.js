@@ -54,7 +54,7 @@ class Subframe {
     generateSubframeHeader(enum_tables, values){
         if (values[0]['GroupID'] != null){
             for(let idx=0; idx < enum_tables['GroupInformation_Table'].length; idx++){
-                if(enum_tables['GroupInformation_Table']['ID'] == values[0]['GroupID']){
+                if(enum_tables['GroupInformation_Table'][idx]['ID'] == values[0]['GroupID']){
                     values[0]['GroupID'] = enum_tables['GroupInformation_Table'][idx]['GroupName'];
                     break;
                 }

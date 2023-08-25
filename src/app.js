@@ -83,7 +83,9 @@ app.get("/submitDataManually", function(req, res){
 app.post("/insertSubframeInformationManually", function(req, res){
     console.log('\nthe user attempts to insert the subframe data...');
 
-    subframe.external_id = req.body['filters_subframe'];
+    if(req.body['insert_subframe_information'] == 0)
+        subframe.external_id = req.body['filters_subframe'];
+    
     subframe.findSubframeInternalID();
      
     let query = "SELECT * FROM Subframe_Table WHERE ID=" +
@@ -125,6 +127,80 @@ app.get("/addSubframeInformation", function(req, res){
         subframe_header
     });
 });
+//#############################################################################
+// add/edit subframe header information
+app.post("/submitSubframeInformation", function(req, res){
+    console.log('\nthe user submits the subframe header information');
+
+    let query = "UPDATE Subframe_Table SET ";
+    if(typeof req.body['subframe_validity']==='undefined'){
+        query += "Validity=0, InvalidSinceTimeStamp='" +
+            req.body['invalidity_date'] + " " +
+            req.body['invalidity_time'] + ":00' ";
+    } else {
+        query += "Validity=1 ";
+    }
+
+    if(req.body['comments'] != '')
+        query += ", Comments='" + req.body['comments'] + "' ";
+
+    if(req.body['filters_group'] != 'Not Specified'){
+        query += ", GroupID=" + baseclass.getGroupID(req.body['filters_group']) + " ";
+    }
+
+    query += "WHERE ID=" + subframe.internal_id.toString();
+
+    connection.query(query, function(error, result){
+        if(error)
+            throw error;
+
+        res.redirect(307, '/insertSubframeInformationManually');
+    });
+});
+//#############################################################################
+// create subframe event
+app.get("/createSubframeEvent", function(req, res){
+    console.log('\nthe user attempts to create subframe event');
+
+    let external_id = subframe.external_id;
+    let device_lists = baseclass.enum_tables_list['DeviceList_Table'];
+    let event_types = baseclass.enum_tables_list['EventType_Table'];
+    let fiducial_positions = baseclass.enum_tables_list['FiducialPosition_Table'];
+
+    res.render("manual_insertion/create_subframe_event", {
+        external_id,
+        device_lists,
+        event_types,
+        fiducial_positions
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //#############################################################################
 // create subframe on the database
 app.post("/createSubframeOnDatabase", function(req, res){

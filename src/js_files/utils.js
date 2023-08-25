@@ -53,6 +53,17 @@ class BaseClass {
         return subframe_type_id;
     }
 
+    getGroupID(value) {
+        let group_id = '';
+        for(let idx=0; idx < this.enum_tables_list['GroupInformation_Table'].length; idx++){
+            if(this.enum_tables_list['GroupInformation_Table'][idx]['GroupName'] == value){
+                group_id = this.enum_tables_list['GroupInformation_Table'][idx]['ID'];
+                break;
+            }
+        }
+        return group_id;
+    }
+
     getSubframeSerialNumber(value){
         if (value===null)
             value = 1;
