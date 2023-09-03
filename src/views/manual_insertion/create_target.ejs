@@ -1,0 +1,159 @@
+<%- include("../header") -%>
+
+<div class="row twopanel">
+    <div class="col-lg-12">
+        <h1 class="site_msg" style="text-align: center;">
+        <b>Target represents points to shoot at.</b>
+        <br>
+        <br>
+        <div class="row">
+            <img class="center" src='target.jpg' alt="Target Photo">
+        </div>
+        <br>
+        <br>
+            <b>Target for the Subframe <%= external_id %></b>
+        </h1>
+        <h2 class="site_msg" style="text-align: center;">
+            Insert Target Information
+        </h2>
+    </div>
+</div>
+
+<form action="/DEFAULT_URL" method="POST">
+    
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter X Position (*)</label>
+                <input type="number" name="target_x_position" class="form-control"
+                    id="target_x_position"
+                    placeholder="values between 0 and 800 are accepted"
+                    min="0" max="800">
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter Y Position (*)</label>
+                <input type="number" name="target_y_position" class="form-control"
+                    id="target_y_position"
+                    placeholder="values between 0 and 800 are accepted"
+                    min="0" max="800">
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="label-text">Enter Z Position (*)</label>
+                <input type="number" name="target_z_position" class="form-control"
+                    id="target_z_position"
+                    placeholder="values between 0 and 800 are accepted"
+                    min="0" max="800">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Date of the Target Creation (*)
+                </label>
+                <input class="form-control" type="date"
+                id="target_date" name="target_date" min="2012-01-01"
+                max="2040-12-31">
+            </div>
+        </div>
+        <div class="col-lg-6">    
+            <div class="form-group">
+                <label class="label-text">
+                    Enter the Time of the Target Creation (*)
+                </label>
+                <input class="form-control" type="time"
+                id="target_time" name="target_time">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label class="label-text">Comments</label>
+            <textarea class="form-control"
+                id="target_comments" name="target_comments"
+                placeholder="Insert comments related to the Target..."
+                rows="1" maxlength="200"></textarea>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/submitTargetInformation"
+                id="submit_information_for_roi"
+                onclick="checkValues()"
+                name="submit_information_for_target" value="0">
+                    Submit the Information to the Database
+            </button>
+        </div>
+        <div class="col-lg-6">
+            <button class="btn btn-outline-secondary" type="submit"
+                formaction="/insertSubframeInformationManually"
+                id="insert_subframe_information"
+                name="insert_subframe_information"
+                value="1">
+                    Cancel and Go Back
+            </button>
+        </div> 
+    </div>
+</form>
+
+<form action="/" method="get">
+    <div class="row twopanel">
+        <div class="row">
+            <button class="btn btn-outline-secondary" type="submit"
+                name="cancel_and_return_to_main" value="0">
+                    <b>Cancel and Return to the Main Page</b>
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function checkValues() {
+        let x_position = document.getElementById("target_x_position").value;
+        let y_position = document.getElementById("target_y_position").value;
+        let z_position = document.getElementById("target_z_position").value;
+        let data_value = document.getElementById("target_date").value;
+        let time_value = document.getElementById("target_time").value;
+
+        if (x_position == ""){
+            alert("Target X Position is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+
+        if (y_position == ""){
+            alert("Target Y Position is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+
+        if (z_position == ""){
+            alert("Target Z Position is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+
+        if (data_value == ""){
+            alert("Target creation Date is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+            
+        if (time_value == ""){
+            alert("Target creation Time is not Inserted!");
+            event.preventDefault();
+            return;
+        }
+    }
+</script>
+
+<%- include("../footer") -%>

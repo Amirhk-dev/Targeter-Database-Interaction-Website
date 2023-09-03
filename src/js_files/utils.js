@@ -206,6 +206,52 @@ class BaseClass {
         }
         return subframe_ids;
     }
+
+    getFiducialPositionID(value){
+        let position_id = '';
+        for(let idx=0; idx < this.enum_tables_list['FiducialPosition_Table'].length; idx++){
+            if(this.enum_tables_list['FiducialPosition_Table'][idx]['PositionName'] == value){
+                position_id = this.enum_tables_list['FiducialPosition_Table'][idx]['ID'];
+                break;
+            }
+        }
+        return position_id;
+    }
+
+    getDeviceID(value){
+        let device_id = '';
+        for(let idx=0; idx < this.enum_tables_list['DeviceList_Table'].length; idx++){
+            if(this.enum_tables_list['DeviceList_Table'][idx]['VendorName'] == value){
+                device_id = this.enum_tables_list['DeviceList_Table'][idx]['ID'];
+                break;
+            }
+        }
+        return device_id;
+    }
+
+    getEventID(value){
+        let event_id = '';
+        for(let idx=0; idx < this.enum_tables_list['EventType_Table'].length; idx++){
+            if(this.enum_tables_list['EventType_Table'][idx]['EventType'] == value){
+                event_id = this.enum_tables_list['EventType_Table'][idx]['ID'];
+                break;
+            }
+        }
+        return event_id;
+    }
+
+    getROITypeID(value){
+        let roi_type_id = '';
+        for(let idx=0; idx < this.enum_tables_list['ROIType_Table'].length; idx++){
+            if(this.enum_tables_list['ROIType_Table'][idx]['Name'] == value){
+                roi_type_id = this.enum_tables_list['ROIType_Table'][idx]['ID'];
+                break;
+            }
+        }
+        return roi_type_id;
+    }
+
+
 }
 
 module.exports = {

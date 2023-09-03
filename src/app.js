@@ -175,8 +175,275 @@ app.get("/createSubframeEvent", function(req, res){
     });
 });
 
+//#############################################################################
+// submit subframe event
+app.post("/submitSubframeEvent", function(req, res){
+    console.log('\nthe user submitted the subframe event');
 
+    // ToDo: the codes in this section are redundant,
+    // create function for it...
 
+    let query = "";
+    if (req.body['fid1_validity'] == 'on'){
+        query += "INSERT INTO Fiducial_Table (";
+        let position_id = baseclass.getFiducialPositionID(req.body['fid1_position_name']);
+        query += "Validity, PositionID, X, Y, Z) VALUES (1, " + position_id.toString() +
+                ", " + req.body['fid1_x_position'].toString() + ", " +
+                req.body['fid1_y_position'].toString() + ", " +
+                req.body['fid1_z_position'].toString() + "); ";
+    }
+
+    if (req.body['fid2_validity'] == 'on'){
+        query += "INSERT INTO Fiducial_Table (";
+        let position_id = baseclass.getFiducialPositionID(req.body['fid2_position_name']);
+        query += "Validity, PositionID, X, Y, Z) VALUES (1, " + position_id.toString() +
+                ", " + req.body['fid2_x_position'].toString() + ", " +
+                req.body['fid2_y_position'].toString() + ", " +
+                req.body['fid2_z_position'].toString() + "); ";
+    }
+
+    if (req.body['fid3_validity'] == 'on'){
+        query += "INSERT INTO Fiducial_Table (";
+        let position_id = baseclass.getFiducialPositionID(req.body['fid3_position_name']);
+        query += "Validity, PositionID, X, Y, Z) VALUES (1, " + position_id.toString() +
+                ", " + req.body['fid3_x_position'].toString() + ", " +
+                req.body['fid3_y_position'].toString() + ", " +
+                req.body['fid3_z_position'].toString() + "); ";
+    }
+
+    if (req.body['fid4_validity'] == 'on'){
+        query += "INSERT INTO Fiducial_Table (";
+        let position_id = baseclass.getFiducialPositionID(req.body['fid4_position_name']);
+        query += "Validity, PositionID, X, Y, Z) VALUES (1, " + position_id.toString() +
+                ", " + req.body['fid4_x_position'].toString() + ", " +
+                req.body['fid4_y_position'].toString() + ", " +
+                req.body['fid4_z_position'].toString() + "); ";
+    }
+
+    connection.query(query, function(error, result){
+        if (error)
+            throw error;
+
+        if(result.length==4){
+            query = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3, FiducialID4) VALUES (" +
+                    result[0]['insertId'] + ", " + result[1]['insertId'] + ", " + result[2]['insertId'] + ", " +
+                    result[3]['insertId'] + "); ";
+        } else {
+            query = "INSERT INTO FiducialSet_Table (FiducialID1, FiducialID2, FiducialID3) VALUES (" +
+            result[0]['insertId'] + ", " + result[1]['insertId'] + ", " + result[2]['insertId'] + "); ";
+        }
+
+        connection.query(query, function(error, result){
+            if (error)
+                throw error;
+
+            let fiducialset_id = result['insertId'];
+            query = "INSERT INTO SubframeEvent_Table (SubframeID, FiducialSetID";
+            
+            let device_id = "";
+            if(req.body['device_name'] != "Choose..."){
+                query += ", DeviceID";
+                device_id = baseclass.getDeviceID(req.body['device_name']);
+            }
+
+            if(req.body['event_link_to_data'] != '')
+                query += ", LinkToData";
+
+            if(req.body['event_link_to_meta_data'] != '')
+                query += ", LinkToMetaData";
+
+            if(req.body['event_comments'] != '')
+                query += ", Comments";
+
+            let event_id = baseclass.getEventID(req.body['event_name']);
+
+            query += ", EventTypeID, CreateTimeStamp) VALUES (";
+
+            query += subframe.internal_id.toString() + ", " +
+                fiducialset_id.toString();
+            
+            if(device_id != "")
+                query +=  ", " + device_id.toString();
+
+            if(req.body['event_link_to_data'] != '')
+                query += ", " + req.body['event_link_to_data'];
+
+            if(req.body['event_link_to_meta_data'] != '')
+                query += ", " + req.body['event_link_to_meta_data'];
+
+            if(req.body['event_comments'] != '')
+                query += ", " + req.body['event_comments'];
+
+            query += ", " + event_id.toString() + ", '" + req.body['event_date'] +
+                    " " + req.body['event_time'] + ":00'); ";
+
+            connection.query(query, function(error, result){
+                if (error)
+                    throw error;
+
+                res.redirect(307, '/insertSubframeInformationManually');
+            });
+        });
+    });
+});
+//#############################################################################
+// create ROI
+app.get("/createSubframeROI", function(req, res){
+    console.log('\nthe user attempts to create ROI');
+
+    let external_id = subframe.external_id;
+    let roi_types = baseclass.enum_tables_list['ROIType_Table'];
+
+    res.render("manual_insertion/create_roi", {
+        external_id,
+        roi_types
+    });
+});
+//#############################################################################
+// submit ROI information
+app.post("/submitROIInformation", function(req, res){
+    console.log('\nthe user submits the ROI information');
+
+    let roi_type_id = baseclass.getROITypeID(req.body['roi_type']);
+    let query = "INSERT INTO ROI_Table (SubframeID, ROITypeID";
+
+    if(req.body['mask_directory'] != '')
+        query += ", MaskDirectory";
+    if(req.body['roi_x_position'] != '')
+        query += ", BoundingBoxPositionX";
+    if(req.body['roi_y_position'] != '')
+        query += ", BoundingBoxPositionY";
+    if(req.body['roi_width'] != '')
+        query += ", BoundingBoxWidth";
+    if(req.body['roi_height'] != '')
+        query += ", BoundingBoxHeight";
+    if(req.body['roi_comments'] != '')
+        query += ", Comments";
+    query += ", CreateTimeStamp) VALUES (";
+
+    query += subframe.internal_id.toString() + ", " +
+            roi_type_id.toString();
+    
+    if(req.body['mask_directory'] != '')
+        query += ", " + req.body['mask_directory'];
+    if(req.body['roi_x_position'] != '')
+        query += ", " + req.body['roi_x_position'];
+    if(req.body['roi_y_position'] != '')
+        query += ", " + req.body['roi_y_position'];
+    if(req.body['roi_width'] != '')
+        query += ", " + req.body['roi_width'];
+    if(req.body['roi_height'] != '')
+        query += ", " + req.body['roi_height'];
+    if(req.body['roi_comments'] != '')
+        query += ", " + req.body['roi_comments'];
+    query += ", '" + req.body['roi_date'] + " " + req.body['roi_time'] + ":00'); ";
+
+    console.log(query);
+
+    connection.query(query, function(error, result){
+        if(error)
+            throw error;
+
+        res.redirect(307, '/insertSubframeInformationManually');
+    });
+});
+//#############################################################################
+// create target
+app.get("/createTarget", function(req, res){
+    console.log('\nthe user attempts to create target directly on the Subframe');
+
+    let external_id = subframe.external_id;
+    
+    res.render("manual_insertion/create_target", {
+        external_id
+    });
+});
+//#############################################################################
+// submit target information
+app.post("/submitTargetInformation", function(req, res){
+    console.log('\nthe user submits the target information');
+
+    if(req.body['submit_information_for_target'] == 0){
+        console.log('\nthe user creates target directly on the subframe');
+
+        let query = "SELECT * FROM ROI_Table WHERE SubframeID=" + subframe.internal_id.toString() +
+                    " AND Comments='00000_DEFAULT'; ";
+
+        connection.query(query, function(error, result){
+            if(error)
+                throw error;
+
+            if(result.length == 0){
+                query = "INSERT INTO ROI_Table (SubframeID, ROITypeID, CreateTimeStamp, Comments) VALUES (" +
+                        subframe.internal_id.toString() + ", 1, '2023-08-30 00:00:00', '00000_DEFAULT'); ";
+                
+                connection.query(query, function(error, result){
+                    if(error)
+                        throw error;
+
+                    query = "INSERT INTO Sample_Table (ROIID, CreateTimeStamp, Comments) VALUES (" +
+                            result.insertId + ", '2023-08-30 00:00:00', '00000_DEFAULT'); ";
+                    
+                    connection.query(query, function(error, result){
+                        if(error)
+                            throw error;
+
+                        query = "INSERT INTO Target_Table (SampleID, X, Y, Z, CreateTimeStamp";
+
+                        if(req.body['target_comments'] != '')
+                            query += ", Comments";
+
+                        query += ") VALUES (" + result.insertId + ", " + req.body['target_x_position'] +
+                                ", " + req.body['target_y_position'] + ", " + req.body['target_z_position'] + ", '" +
+                                req.body['target_date'] + " " + req.body['target_time'] + ":00'";
+                        
+                        if(req.body['target_comments'] != '')
+                            query += ", '" + req.body['target_comments'] + "'";
+
+                        query += "); ";
+
+                        connection.query(query, function(error, result){
+                            if(error)
+                                throw error;
+
+                            res.redirect(307, '/insertSubframeInformationManually');
+                        });
+                    });
+                });
+            } else {
+                query = "SELECT ID FROM Sample_Table WHERE ROIID=" + result[0]['ID'] + " AND Comments='00000_DEFAULT'; ";
+
+                connection.query(query, function(error, result){
+                    if(error)
+                        throw error;
+                    
+                    query = "INSERT INTO Target_Table (SampleID, X, Y, Z, CreateTimeStamp";
+
+                    if(req.body['target_comments'] != '')
+                        query += ", Comments";
+
+                    query += ") VALUES (" + result[0]['ID'] + ", " + req.body['target_x_position'] +
+                            ", " + req.body['target_y_position'] + ", " + req.body['target_z_position'] + ", '" +
+                            req.body['target_date'] + " " + req.body['target_time'] + ":00'";
+                    
+                    if(req.body['target_comments'] != '')
+                        query += ", '" + req.body['target_comments'] + "'";
+
+                    query += "); ";
+
+                    connection.query(query, function(error, result){
+                        if(error)
+                            throw error;
+
+                        res.redirect(307, '/insertSubframeInformationManually');
+                    });
+                });
+            }
+        });
+    } else {
+        console.log("\nthe target is inserted from the Sample Page...");
+    }
+});
 
 
 
