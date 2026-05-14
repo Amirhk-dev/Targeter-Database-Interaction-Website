@@ -41,5 +41,3 @@ The GIF file below shows briefly the capability of the project for database inte
 
 ## Notice:
 It is not possible to access the database as the credentials are not provided!
-
-The website is under developement...
